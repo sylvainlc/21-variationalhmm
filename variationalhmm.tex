@@ -8,7 +8,7 @@
 \usepackage{times,ifthen}
 \usepackage{fancyhdr,xcolor}
 
-\title{Variational inference for hidden Markov models}
+\title{Variational inference based on backward decomposition for hidden Markov models}
 \date{}
 
 %\author[$\wr$]{Mathis Chagneux}
@@ -211,6 +211,10 @@
 \newcommand{\rme}{\mathrm{e}}
 \newcommand{\vois}{\mathcal{V}}
 
+\newcounter{example}[section]
+\newenvironment{example}[1][]{\refstepcounter{example}\par\medskip
+   \noindent \textbf{Example~\theexample:} \textit{#1} \text \rmfamily}{\medskip}
+
 \begin{document}
 
 \maketitle
@@ -219,6 +223,46 @@
 
 \end{abstract}
 
+\section{Introduction}
+Let $\parvec$ be a parameter lying in a $\Theta\subset \rset^q$ and consider a  \textit{state space model} where the hidden Markov chain  in $\rset^d$ is denoted by $(X_k)_{k\geqslant 0}$. The distribution of $X_0$ has density $\chi$ with respect to the Lebesgue measure and for all $0\leqslant k \leqslant n-1$, the conditional distribution of $X_{k+1} $ given $X_{0:k}$ has density $\hd{k+1;\parvec}(X_{k},\cdot)$, where $a_{u:v}$ is a short-hand notation for $(a_u,\ldots,a_v)$. 
+It is assumed that this state  is partially observed  through an observation process $(Y_k)_{0\leqslant k \leqslant n}$ taking values in $\rset^m$. 
+For all $0\leqslant k \leqslant n$, the distribution of $Y_k$ given $X_{0:n}$ depends on $X_k$ only and has density $\md{k;\parvec}(X_k,\cdot)$ with respect to the Lebesgue measure. 
+In this context, for any pair of indexes $0\leqslant k_1 \leqslant k_2 \leqslant n$, we define the \textit{joint smoothing distribution} as the conditional law of $X_{k_1:k_2}$ given $Y_{0:n}$. 
+In this framework, the likelihood of the observations $\llh{n,\parvec}(Y_{0:n})$, which is  in general intractable, is
+$$
+\llh{n,\parvec}(Y_{0:n})  = \int \chi(x_0)\md{0;\parvec}(x_{0},Y_{0})\prod_{k=0}^{n-1}\qg{k;\parvec}(x_{k},x_{k+1})\rmd x_{0:n}\eqsp,
+$$
+ where, for all $0\leqslant k \leqslant n$ and all $\parvec\in\parspace$,
+\begin{equation}
+\label{eq:def:elln}
+\qg{k;\parvec}(x_{k},x_{k+1}) = \hd{k+1;\parvec}(x_{k}, x_{k+1})\md{k+1;\parvec}(x_{k+1},Y_{k+1})\eqsp.
+\end{equation}
+In a large variety of situations, the loglikelihood of the observations is not available explicitly and obtaining approximate maximum likelihood estimators is computationally intensive, in particular in high dimensional settings. Standard approaches  aim at computing \textit{smoothing expectations of additive functionals} of the form $\pE \left[\af{0:n}(X_{0:n})\middle | Y_{0:n}\right]$,  where $\af{0:n}$ is an \textit{additive functional}, \textit{i.e.} a function from $\rset^{d \times (n + 1)}$ to $\rset^{d'}$ satisfying:
+\begin{equation}
+\label{eq:additive:functional}
+\af{0:n}: x_{0:n} \mapsto \sum_{k=0}^{n-1}\addf{k}(x_{k},x_{k+1})\eqsp,
+\end{equation}
+where $\addf{k}:\rset^{d} \times \rset^{d}\to\rset^{d'}$.
+Such expectations are the keystones of many common inference problems in state space models.
 
+\begin{example}[EM algorithm.]
+\label{ex:em:algorithm}
+In the usual case when $\theta$ is unknown, the maximum likelihood estimator is $\widehat \parvec = \mathrm{argmax}_{\parvec\in\parspace}\eqsp\llh{n,\parvec}(Y_{0:n})$. Expectation Maximization based algorithms are appealing solutions to obtain an estimator of $\hat \parvec$.
+The pivotal concept of the EM algorithm is that the intermediate quantity defined by
+\begin{equation*}
+\parvec\mapsto Q(\parvec,\parvec') = \pE_{\parvec'}\left[\sum_{k=0}^{n-1} \log \qg{k;\parvec}(X_{k}, X_{k+1})\middle | Y_{0:n}\right] 
+\end{equation*}
+may be used as a surrogate for $\llh{n}(\parvec)$ in the maximization procedure,  where $\pE_{\parvec'}$ is the expectation under the joint distribution of the latent states and the observations when the model is parameterized by $\parvec'$. 
+\end{example}
 
+\section{Variational backward decomposition}
+In variational approaches, instead of trying to design Monte Carlo estimators of such expectations (or equivalently of the conditional distribution of the states given the observations), the conditional law of $X_{0:n}$ given $Y_{0:n}$ is approaximated by choosing a candidate in a parametric family $\{q_\phi\}_{\phi \in \Phi}$, where $\Phi$ is a parameter set. Parameters are then estimated by maximizing the ELBO defined as:
+$$
+\mathcal{L}(\parvec,\phi) = \pE_{q_\phi}\left[\log \frac{p_\parvec(X_{0:n},Y_{0:n})}{q_\phi(X_{0:n}|Y_{0:n})}\right]\eqsp.
+$$
+Most works in the literature focus on mean field approximations which means that the family $\{q_\phi\}_{\phi \in \Phi}$ can be written as a product of independent distributions. However, such an assumption fails to hold in standard hidden Markov models which may lead to poor result in the approximation of the posterior distribution of some states given the observations. In this paper, we propose another solution to provide a decomposition of   $q_\phi$ which accounts for the hidden Markov structure of $p_\parvec$. Under the assumptions of this paper, conditionally on $\{Y_{0:n}\}$, the backward chain $(X_n,\ldots,X_0)$ is a Markov chain with inhomogeneous Markov transition kernel. This leads us to introduce a variational family where each $q_\phi$ is of the form,
+$$
+q_\phi: x_{0:n} \mapsto q_\phi(x_n|Y_{0:n})\prod_{k=0}^{n-1}q_\phi(x_k|x_{k+1},Y_{0:k})\eqsp.
+$$
+The variational family parameterizes the backward kernel which naturally appears in the decomposition of the law of $X_{0:n}$ given $Y_{0:n}$. 
 \end{document}
