@@ -256,7 +256,7 @@ may be used as a surrogate for $\llh{n}(\parvec)$ in the maximization procedure,
 \end{example}
 
 \section{Variational backward decomposition}
-In variational approaches, instead of trying to design Monte Carlo estimators of such expectations (or equivalently of the conditional distribution of the states given the observations), the conditional law of $X_{0:n}$ given $Y_{0:n}$ is approaximated by choosing a candidate in a parametric family $\{q_\phi\}_{\phi \in \Phi}$, where $\Phi$ is a parameter set. Parameters are then estimated by maximizing the ELBO defined as:
+In variational approaches, instead of trying to design Monte Carlo estimators of such expectations (or equivalently of the conditional distribution of the states given the observations), the conditional law of $X_{0:n}$ given $Y_{0:n}$ is approximated by choosing a candidate in a parametric family $\{q_\phi\}_{\phi \in \Phi}$, where $\Phi$ is a parameter set. Parameters are then estimated by maximizing the ELBO defined as:
 $$
 \mathcal{L}(\parvec,\phi) = \pE_{q_\phi}\left[\log \frac{p_\parvec(X_{0:n},Y_{0:n})}{q_\phi(X_{0:n}|Y_{0:n})}\right]\eqsp.
 $$
