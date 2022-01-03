@@ -4,7 +4,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage{authblk,url}
-\usepackage{amssymb,amsmath,amsthm,twoopt,xargs,mathtools}
+\usepackage{amssymb,amsmath,amsthm,twoopt,xargs,mathtools,dsfont}
 \usepackage{times,ifthen}
 \usepackage{fancyhdr,xcolor}
 
@@ -24,10 +24,40 @@
 \usepackage{geometry}
 \pagestyle{fancy}
 
+\newcommand{\Xfd}{\mathcal{X}}
+\newcommand{\uksymbol}{\ell}
+\newcommandx{\bkmod}[2][1=]{ 
+\ifthenelse{\equal{#1}{}}
+{\kernel{B}_{#2}^\precpar}
+{\kernel{B}_{#2}^\precpar}
+}
+
+\newcommand{\udlow}{\sigma_-}
+\newcommand{\udup}{\sigma_+}
+\newcommand{\retrok}{\boldsymbol{\mathcal{L}}}
+%\newcommand{\intvect}[2]{\llbracket #1, #2 \rrbracket}
+\newcommandx{\bkw}[2][1=]{ 
+\ifthenelse{\equal{#1}{}}
+{\kernel{B}_{#2}}
+{\kernel{B}_{#2}}
+}
+\newcommand{\retroknorm}{\bar{\boldsymbol{\mathcal{L}}}}
+\newcommand{\ud}[1]{\uksymbol_{#1}} 
+\newcommand{\nset}{\mathbb{N}}
+\newcommand{\nsetpos}{\mathbb{N}_{> 0}}
+\newcommand{\1}{\mathbbm{1}} 
+\newcommandx{\postmod}[2][1=]{
+\ifthenelse{\equal{#1}{}}
+	{\phi_{#2}^\parvec}
+	{\phi_{#2}^\N}
+}
+\newcommand{\retrokmod}{\boldsymbol{\mathcal{L}}^\parvec}
+\newcommand{\uk}[1]{\mathbf{L}_{#1}}
+\newcommand{\tensprod}{\otimes}
 \def\dimX{d}
 \def\dimY{m}
 %\def\Xset{\mathsf{X}}
-\def\Xset{\mathbb{R}^d}
+\newcommand{\Xset}{\mathsf{X}}
 \def\Yset{\mathsf{Y}}
 \newcommand{\mk}{\kernel{G}}
 \newcommand{\hk}{\kernel{Q}}
@@ -47,7 +77,7 @@
 \newcommand{\parvec}{\theta}
 \newcommand{\parspace}{\Theta}
 \newcommand{\tstatletter}{\kernel{T}}
-\newcommand{\retrok}{\kernel{D}}
+%\newcommand{\retrok}{\kernel{D}}
 \newcommandx\tstat[2][1=]{
 \ifthenelse{\equal{#1}{}}
 	{\tstatletter_{#2}}
@@ -83,7 +113,9 @@
 \newcommand{\hdhat}[1]{\widehat{q}_{#1}}
 
 
-\newcommand{\addf}[1]{\termletter_{#1}}
+\newcommandx{\addf}[2][1=]{
+\ifthenelse{\equal{#1}{}}{\termletter_{#2}}{\bar{h}_{#2 | #1}}
+}
 \newcommand{\addfc}[1]{\underline{\termletter}_{#1}}
 \newcommand{\adds}[1]{\af{#1}}
 \newcommand{\term}[1]{\termletter_{#1}}
@@ -227,7 +259,7 @@
 Let $\parvec$ be a parameter lying in a $\Theta\subset \rset^q$ and consider a  \textit{state space model} where the hidden Markov chain  in $\rset^d$ is denoted by $(X_k)_{k\geqslant 0}$. The distribution of $X_0$ has density $\chi$ with respect to the Lebesgue measure and for all $0\leqslant k \leqslant n-1$, the conditional distribution of $X_{k+1} $ given $X_{0:k}$ has density $\hd{k+1;\parvec}(X_{k},\cdot)$, where $a_{u:v}$ is a short-hand notation for $(a_u,\ldots,a_v)$. 
 It is assumed that this state  is partially observed  through an observation process $(Y_k)_{0\leqslant k \leqslant n}$ taking values in $\rset^m$. 
 For all $0\leqslant k \leqslant n$, the distribution of $Y_k$ given $X_{0:n}$ depends on $X_k$ only and has density $\md{k;\parvec}(X_k,\cdot)$ with respect to the Lebesgue measure. 
-In this context, for any pair of indexes $0\leqslant k_1 \leqslant k_2 \leqslant n$, we define the \textit{joint smoothing distribution} as the conditional law of $X_{k_1:k_2}$ given $Y_{0:n}$. 
+In this context, for any pair of indices $0\leqslant k_1 \leqslant k_2 \leqslant n$, we define the \textit{joint smoothing distribution} as the conditional law of $X_{k_1:k_2}$ given $Y_{0:n}$. 
 In this framework, the likelihood of the observations $\llh{n,\parvec}(Y_{0:n})$, which is  in general intractable, is
 $$
 \llh{n,\parvec}(Y_{0:n})  = \int \chi(x_0)\md{0;\parvec}(x_{0},Y_{0})\prod_{k=0}^{n-1}\qg{k;\parvec}(x_{k},x_{k+1})\rmd x_{0:n}\eqsp,
@@ -262,7 +294,155 @@ $$
 $$
 Most works in the literature focus on mean field approximations which means that the family $\{q_\phi\}_{\phi \in \Phi}$ can be written as a product of independent distributions. However, such an assumption fails to hold in standard hidden Markov models which may lead to poor result in the approximation of the posterior distribution of some states given the observations. In this paper, we propose another solution to provide a decomposition of   $q_\phi$ which accounts for the hidden Markov structure of $p_\parvec$. Under the assumptions of this paper, conditionally on $\{Y_{0:n}\}$, the backward chain $(X_n,\ldots,X_0)$ is a Markov chain with inhomogeneous Markov transition kernels. This leads us to introduce a variational family where each $q_\phi$ is of the form,
 $$
-q_\phi: x_{0:n} \mapsto q_\phi(x_n|Y_{0:n})\prod_{k=0}^{n-1}q_\phi(x_k|x_{k+1},Y_{0:k})\eqsp.
+q_\varphi: x_{0:n} \mapsto q_{\varphi,n}(x_n|Y_{0:n})\prod_{k=0}^{n-1}q_{\varphi,k}(x_k|x_{k+1},Y_{0:k})\eqsp.
 $$
 The variational family parameterizes the backward kernel which naturally appears in the decomposition of the law of $X_{0:n}$ given $Y_{0:n}$. 
+
+\section{Control of the variational error for additive functionals}
+Let $(\Xset_n, \Xfd_n)_{n \in \nset}$ be a sequence of general state spaces and let, for all $n \in \nset$, $\uk{n}$ defined on  $\Xset_n \times \Xfd_{n + 1}$ be bounded kernels in the sense that $\sup_{x \in \Xset_n} \uk{n}(x, \Xset_{n + 1}) < \infty$. We will assume a dominated model where each kernel $\uk{n}$ has a kernel density $\ud{n}$ with respect to some $\sigma$-finite reference measure $\mu_{n + 1}$ on $\Xfd_{n + 1}$. Finally, let $\chi$ be some bounded measure on $\Xfd_0$. In the following, we denote state-space product sets and $\sigma$-fields by $\Xset^n \eqdef \Xset_0 \times \cdots \times \Xset_n$ and $\Xfd^n \eqdef \Xfd_0 \tensprod \cdots \tensprod \Xfd_n$, respectively, and consider probability measures  
+\begin{equation} \label{eq:def:post}
+\post{0:n}(\rmd x_{0:n}) \propto \chi(\rmd x_0) \prod_{m = 0}^{n - 1} \uk{m}(x_m, \rmd x_{m + 1}), \quad n \in \nset, 
+\end{equation}
+on these product spaces.\footnote{We will always use the standard convention $\prod_{\varnothing} = 1$, implying that $\post{0} \propto \chi$.} The generality of the model \eqref{eq:def:post} is striking. In the special case where each $\uk{n}$ can be decomposed as $\uk{n}(x_n, \rmd x_{n + 1}) = \md{n}(x_n) \, \hk_n(x_n, \rmd x_{n + 1})$ for some Markov kernel $\hk_n$ and some nonnegative potential function $\md{n}$, \eqref{eq:def:post} yields the \emph{Feynman-Kac path models} \cite{delmoral:2004}, which are applied in a large variety of scientific and engineering disciplines, including statistics, physics, biology, and signal processing. 
+Given a sequence $(\addf{n})_{n \in \nset}$ of measurable functions $\addf{n} : \Xset_n \times \Xset_{n + 1} \to \rset$, the aim of this section is to control  the error between expectations of \emph{additive functionals}   
+\begin{equation} \label{eq:add:func}
+    h_n:  x_{0:n} \mapsto \sum_{m = 0}^{n - 1} \addf{m}(x_m, x_{m + 1})
+\end{equation}
+under the distribution flow $(\post{0:n})_{n \in \nset}$ and under the variational family.   For all $n\in\nset$, write $\post{0:n}^{\varphi}$ the joint smoothing distribution provided by the variational family. Then,
+$$
+ \post{0:n}^{\varphi}(d x_{0:n})= q_{\varphi,n}(dx_n)\prod_{k=0}^{n-1}q_{\varphi,k}(x_{k+1},dx_k)\eqsp.
+$$
+This joint probability distribution can be written:
+$$
+ \post{0:n}^{\varphi}(d x_{0:n})= q_{\varphi,n}(dx_0)\prod_{k=0}^{n-1}m_{\varphi,k}(x_{k},dx_{k+1})\eqsp,
+$$
+where $m_{\varphi,k}(x_{k},dx_{k+1}) =  q_{\varphi,k+1}(dx_{k+1})q_{\varphi,k}(x_{k+1},dx_k)/q_{\varphi,k}(x_k)$.
+
+\begin{hypH}
+\label{assum:bias:bound}
+There exists a function $c$ such that for all $n \in \mathbb{N}$, $\parvec$, $\varphi$, $h \in \bmf{\Xfd_n \tensprod \Xfd_{n + 1}}$, and $x \in \Xset_n$,   
+$$
+\left|\int m_{\varphi,n}(x,dx_{n+1}) h (x_{n+1})- \int\uk{n,\parvec}(x,dx_{n+1}) h (x_{n+1})\right| \leq c(\parvec,\varphi) \| h \|_\infty. 
+$$
+\end{hypH}
+
+
+\begin{hypH}
+\label{assum:strong:mixing}
+There exist constants $0 < \udlow < \udup < \infty$ such that for all $k \in \nset$ and $(x_k, x_{k + 1}) \in \Xset_k \times \Xset_{k + 1}$, 
+$$
+    \udlow \leq \ud{k,\theta}(x_k, x_{k + 1}) \leq \udup
+$$ 
+and 
+$$
+    \udlow \leq \inf_{\varphi} m_{\varphi,k}(x_k, x_{k + 1}), \quad \sup_{\varphi} m_{\varphi,k}(x_k, x_{k + 1}) \leq \udup. 
+$$ 
+\end{hypH}
+Under these assumptions, define the mixing rate 
+\begin{equation} \label{eq:def:rho}
+    \rho \eqdef 1 - \frac{\udlow}{\udup}
+\end{equation}
+Then for all $n \in \nset$, $\parvec$, $\varphi$, and $h_n$, 
+    \begin{align*}
+        \big| \postmod{0:n} h_n -  \post{0:n}^{\varphi} h_n \big| 
+        &\leq 2 c(\parvec,\varphi) \frac{\udup}{\udlow^2} \sum_{k = 0}^{n - 1} \| \addf{k} \|_\infty \left( \sum_{m = 1}^{n - 1} \rho^{|k - m| - 1} + 1 \right) \\
+        &\leq 2 c(\parvec,\varphi) n \frac{\udup}{\udlow^2} \left( 1 + \frac{1}{\rho} + \frac{2}{1 - \rho} \right) \sup_{0 \leq k \leq n - 1} \| \addf{k} \|_\infty\eqsp.
+    \end{align*}
+
+
+
+\clearpage
+\newpage
+
+For each $m \in \nset$, define the  backward Markov kernel 
+\begin{equation} \label{eq:def:backward:kernel}
+    \bkw{m}^\parvec(x_{m + 1}, \rmd x_m) \eqdef \frac{\post{m}^\parvec(\rmd x_m) \, \ud{m,\parvec}(x_m, x_{m + 1})}{\post{m}^\parvec[\ud{m,\parvec}(\cdot, x_{m + 1})]} = \frac{\post{m}^\parvec(\rmd x_m) \, \hd{m;\parvec}(x_{m}, x_{m+1})}{\post{m}^\parvec[\hd{m;\parvec}(\cdot, x_{m+1})]}
+\end{equation}
+on $\Xset_{m + 1} \times \Xfd_m$. In addition, for each $n \in \nsetpos$, let the Markov kernel   
+\begin{equation} \label{eq:def:tstat}
+\tstat{n}^\parvec(x_n, \rmd x_{0:n - 1}) \eqdef \prod_{m = 0}^{n - 1} \bkw{m}^\parvec(x_{m + 1}, \rmd x_m)
+\end{equation}
+on $\Xset_n \times \Xfd^{n - 1}$ denote the joint law of the backward Markov chain induced by the kernels \eqref{eq:def:backward:kernel} when initialised at $x_n \in \Xset_n$. 
+
+\begin{itemize} 
+\item[(i)]
+For all $n \in \nset$ and $h \in \bmf{\Xfd_n \tensprod \Xfd_{n + 1}}$, 
+\begin{equation} \label{eq:reversibility}
+\iint \post{n}^\parvec(\rmd x_n) \, \uk{n,\parvec}(x_n, \rmd x_{n + 1}) \, h(x_n, x_{n + 1}) = \iint \post{n}^\parvec \uk{n,\parvec}(\rmd x_{n + 1}) \, \bkw{n}^\parvec(x_{n + 1}, \rmd x_n) \, h(x_n, x_{n + 1}). 
+\end{equation}
+\item[(ii)]
+For all $n \in \nsetpos$ and $h \in \bmf{\Xfd^n}$, 
+$
+\post{0:n}^\parvec h = \post{n}^\parvec \tstat{n}^\parvec h. 
+$
+\end{itemize}
+In the case of state-space models, the identity (ii) above is a well-known result typically referred to as the \emph{backward decomposition} of the joint-smoothing distribution. Importantly, as noted in \cite{cappe:2009}, the functions $(\tstat{n} h_n)_{n \in \nsetpos}$ can be expressed recursively through  
+\begin{equation} \label{eq:forward:smoothing}
+\tstat{n + 1}^\parvec h_{n + 1}(x_{n + 1}) = \int (\tstat{n}^\parvec h_n(x_n) + \addf{n}(x_n, x_{n + 1})) \, \bkw{n}^\parvec(x_{n + 1}, \rmd x_n), \quad n \in \nset, 
+\end{equation}
+with, by convention, $\tstat{0}^\parvec h_0 \equiv 0$. Here the backward kernel $\bkw{n}^\parvec$ depends on the marginal $\post{n}^\parvec$; thus, the recursion is driven by the marginal flow $(\post{n}^\parvec)_{n \in \nset}$, which may again be expressed recursively. However, as these marginals are, as already mentioned, generally intractable, exact computations need typically to be replaced by approximations. 
+
+ For all $n\in\nset$, write $\post{0:n}^{\varphi}$ the joint smoothing distribution provided by the variational family. Then,
+$$
+\post{0:n}^\parvec h - \post{0:n}^{\varphi} h= \post{n}^\parvec \tstat{n}^\parvec h - \post{0:n}^{\varphi} h =  \post{n}^\parvec \left\{\prod_{m = 0}^{n - 1} \bkw{m}^\parvec\right\} h - q_{\varphi,n}\left\{\prod_{k=0}^{n-1}q_{\varphi,k}\right\} h\eqsp.
+$$
+Write 
+$$
+\postmod{0:n} h_n - \post{0:n}^{\varphi} h_n = \sum_{k = 0}^{n - 1} \left( \postmod{0:n} \addf[n]{k} - \post{0:n}^{\varphi} \addf[n]{k} \right), 
+$$
+where each term can be decomposed according to   
+\begin{equation*}
+\postmod{0:n} \addf[n]{k} - \post{0:n}^\varphi \addf[n]{k} = 
+\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} \right)  
+\end{equation*}
+
+
+
+
+
+
+
+
+
+
+
+\clearpage
+\newpage
+
+
+
+
+
+Define, for each $n \in \nset$ and $0\leq m \leq n$, the kernel  
+\begin{equation} \label{eq:def:retrok}
+    \retrok_{m, n}^\parvec(x_m', \rmd x_{0:n}) \eqdef \delta_{x_m'}(\rmd x_m) \,  
+    \tstat{n}^\parvec(x_m, \rmd x_{0:m - 1})
+    \prod_{\ell = m}^{n - 1} \uk{\ell}^\parvec(x_\ell, \rmd x_{\ell + 1})
+\end{equation}
+on $\Xset_m \times \Xfd^n$ as well as the centered version 
+$$
+\retroknorm_{m, n}^\parvec h (x_m) \eqdef  \retrok_{m, n}^\parvec(h - \post{0:n}^\parvec h)(x_m) 
+$$
+on the same space.  For all $0\leq m \leq n$ and $h \in \bmf{\Xfd^n}$, 
+\begin{equation} \label{eq:retro:prospective:id}
+\postmod{0:m} \uk{m, n - 1}^\parvec h = \postmod{m} \retrokmod_{m, n} h.  
+\end{equation}
+In addition, for each $0\leq k \leq n - 1$, let 
+\begin{equation} \label{eq:def:addf}
+\addf[n]{k}: x_{0:n} \mapsto \addf{k}(x_k, x_{k + 1})  
+\end{equation}
+denote the extension of $\addf{k}$ to $\Xset^n$.  For all $n\in\nset$, write $\post{0:n}^{\varphi}$ the joint smoothing distribution provided by the variational family. Then,
+$$
+\post{0:n}^\parvec h - \post{0:n}^{\varphi} h= \post{n}^\parvec \tstat{n}^\parvec h - \post{0:n}^{\varphi} h =  \post{n}^\parvec \left\{\prod_{m = 0}^{n - 1} \bkw{m}^\parvec\right\} h - q_{\varphi,n}\left\{\prod_{k=0}^{n-1}q_{\varphi,k}\right\} h\eqsp.
+$$
+Write 
+$$
+\postmod{0:n} h_n - \post{0:n}^{\varphi} h_n = \sum_{k = 0}^{n - 1} \left( \postmod{0:n} \addf[n]{k} - \post{0:n}^{\varphi} \addf[n]{k} \right), 
+$$
+where each term can be decomposed according to   
+\begin{equation*}
+\postmod{0:n} \addf[n]{k} - \post{0:n}^\varphi \addf[n]{k} = 
+\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} \right)  
+\end{equation*}
+ 
 \end{document}
