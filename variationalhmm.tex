@@ -7,6 +7,14 @@
 \usepackage{amssymb,amsmath,amsthm,twoopt,xargs,mathtools,dsfont}
 \usepackage{times,ifthen}
 \usepackage{fancyhdr,xcolor}
+\usepackage{hyperref}
+
+\newtheorem{axiom}{Axiom}
+\newtheorem{claim}[axiom]{Claim}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
 
 \title{Variational inference based on backward decomposition for hidden Markov models}
 \date{}
@@ -24,6 +32,12 @@
 \usepackage{geometry}
 \pagestyle{fancy}
 
+
+\newcommand{\retrokmodnorm}{\bar{\boldsymbol{\mathcal{L}}}^{\precpar}}
+\newcommand{\xarb}{x^\ast}
+\newcommand{\precparsp}{\mathcal{E}}
+\newcommand{\fk}[2]{\mathbf{F}_{#1 | #2}}
+\newcommand{\probmeas}[1]{\mathsf{M}_1(#1)}
 \newcommand{\Xfd}{\mathcal{X}}
 \newcommand{\uksymbol}{\ell}
 \newcommandx{\bkmod}[2][1=]{ 
@@ -32,6 +46,19 @@
 {\kernel{B}_{#2}^\precpar}
 }
 
+\newcommand{\cev}[1]{\reflectbox{\ensuremath{\vec{\reflectbox{\ensuremath{#1}}}}}}
+\newcommand{\ukmod}[1]{\mathbf{L}_{#1}^\precpar}
+\newcommand{\shiftbwd}{\cev{\shiftsymbol}^{\precpar}}
+\newcommand{\shiftfwd}{\vec{\shiftsymbol}^{\, \precpar}}
+\newcommand{\shiftsymbol}{\Phi}
+\newcommand{\precpar}{\varphi}
+\newcommand{\intvect}[2]{\{ #1, #2 \}}
+\newcommandx\tstatmod[2][1=]{
+\ifthenelse{\equal{#1}{}}
+	{\tstatletter^{\precpar}_{#2}}
+	{\tau^{\precpar}_{#2}^{#1}}
+}
+\newcommand{\noshift}{\shiftsymbol^{\precpar}}
 \newcommand{\udlow}{\sigma_-}
 \newcommand{\udup}{\sigma_+}
 \newcommand{\retrok}{\boldsymbol{\mathcal{L}}}
@@ -48,10 +75,10 @@
 \newcommand{\1}{\mathbbm{1}} 
 \newcommandx{\postmod}[2][1=]{
 \ifthenelse{\equal{#1}{}}
-	{\phi_{#2}^\parvec}
+	{\phi_{#2}^\varphi}
 	{\phi_{#2}^\N}
 }
-\newcommand{\retrokmod}{\boldsymbol{\mathcal{L}}^\parvec}
+\newcommand{\retrokmod}{\boldsymbol{\mathcal{L}}^\precpar}
 \newcommand{\uk}[1]{\mathbf{L}_{#1}}
 \newcommand{\tensprod}{\otimes}
 \def\dimX{d}
@@ -308,7 +335,9 @@ Given a sequence $(\addf{n})_{n \in \nset}$ of measurable functions $\addf{n} : 
 \begin{equation} \label{eq:add:func}
     h_n:  x_{0:n} \mapsto \sum_{m = 0}^{n - 1} \addf{m}(x_m, x_{m + 1})
 \end{equation}
-under the distribution flow $(\post{0:n})_{n \in \nset}$ and under the variational family.   For all $n\in\nset$, write $\post{0:n}^{\varphi}$ the joint smoothing distribution provided by the variational family. Then,
+under the distribution flow $(\post{0:n})_{n \in \nset}$ and under the variational family.   
+
+For all $n\in\nset$, write $\post{0:n}^{\varphi}$ the joint smoothing distribution provided by the variational family. Then,
 $$
  \post{0:n}^{\varphi}(d x_{0:n})= q_{\varphi,n}(dx_n)\prod_{k=0}^{n-1}q_{\varphi,k}(x_{k+1},dx_k)\eqsp.
 $$
@@ -344,12 +373,269 @@ Under these assumptions, define the mixing rate
 \end{equation}
 Then for all $n \in \nset$, $\parvec$, $\varphi$, and $h_n$, 
     \begin{align*}
-        \big| \postmod{0:n} h_n -  \post{0:n}^{\varphi} h_n \big| 
+        \big| \postmod{0:n} h_n -  \post{0:n}^{\parvec} h_n \big| 
         &\leq 2 c(\parvec,\varphi) \frac{\udup}{\udlow^2} \sum_{k = 0}^{n - 1} \| \addf{k} \|_\infty \left( \sum_{m = 1}^{n - 1} \rho^{|k - m| - 1} + 1 \right) \\
         &\leq 2 c(\parvec,\varphi) n \frac{\udup}{\udlow^2} \left( 1 + \frac{1}{\rho} + \frac{2}{1 - \rho} \right) \sup_{0 \leq k \leq n - 1} \| \addf{k} \|_\infty\eqsp.
     \end{align*}
 
+\begin{proof}
+We preface the proof by a few technical lemmas. For each $m \in \nset$, define the  backward Markov kernel 
+\begin{equation} \label{eq:def:backward:kernel}
+    \bkw{m}^\parvec(x_{m + 1}, \rmd x_m) \eqdef \frac{\post{m}^\parvec(\rmd x_m) \, \ud{m,\parvec}(x_m, x_{m + 1})}{\post{m}^\parvec[\ud{m,\parvec}(\cdot, x_{m + 1})]} %= \frac{\post{m}^\parvec(\rmd x_m) \, \hd{m;\parvec}(x_{m}, x_{m+1})}{\post{m}^\parvec[\hd{m;\parvec}(\cdot, x_{m+1})]}
+\end{equation}
+on $\Xset_{m + 1} \times \Xfd_m$. In addition, for each $n \in \nsetpos$, let the Markov kernel   
+\begin{equation} \label{eq:def:tstat}
+\tstat{n}^\parvec(x_n, \rmd x_{0:n - 1}) \eqdef \prod_{m = 0}^{n - 1} \bkw{m}^\parvec(x_{m + 1}, \rmd x_m)
+\end{equation}
+on $\Xset_n \times \Xfd^{n - 1}$ denote the joint law of the backward Markov chain induced by the kernels \eqref{eq:def:backward:kernel} when initialised at $x_n \in \Xset_n$.   In the following, the notation $\parvec$ may be dropped when there is no confusion.
 
+Define, for each $n \in \nset$ and $m \in \intvect{0}{n}$, the kernel 
+\begin{equation} \label{eq:def:uk:products}
+    \uk{m, n}(x_{0:m}', \rmd x_{0:n + 1}) \eqdef \delta_{x_{0:m}'}(\rmd x_{0:m}) \prod_{\ell = m}^n \uk{\ell}(x_\ell, \rmd x_{\ell + 1}) 
+\end{equation}
+on $\Xset^m \times \Xfd^{n + 1}$. In addition, let $\uk{n, n - 1} = \operatorname{id}$. Note that $\uk{n, n}$ is different from $\uk{n}$ in the sense that the former is defined on $\Xset^n \times \Xfd^{n + 1}$ whereas the latter is defined on $\Xset_n \times \Xfd_{n + 1}$. Define similarly, $\bkw{m}^\varphi(x_{m + 1}, \rmd x_m) = q_{\varphi,m}(x_{m+1},dx_m)$
+on $\Xset_{m + 1} \times \Xfd_m$. In addition, define for each $n \in \nsetpos$, the Markov kernel  $\tstat{n}^\varphi(x_n, \rmd x_{0:n - 1}) = \prod_{m = 0}^{n - 1} \bkw{m}^\varphi(x_{m + 1}, \rmd x_m)$ on $\Xset_n \times \Xfd^{n - 1}$ denote the joint law of the backward Markov chain induced by the kernels \eqref{eq:def:backward:kernel} when initialised at $x_n \in \Xset_n$.  In the following, the notation $\parvec$ may be dropped when there is no confusion. 
+%\begin{itemize} 
+%\item[(i)]
+%For all $n \in \nset$ and $h \in \bmf{\Xfd_n \tensprod \Xfd_{n + 1}}$, 
+%\begin{equation} \label{eq:reversibility}
+%\iint \post{n}^\parvec(\rmd x_n) \, \uk{n,\parvec}(x_n, \rmd x_{n + 1}) \, h(x_n, x_{n + 1}) = \iint \post{n}^\parvec \uk{n,\parvec}(\rmd x_{n + 1}) \, \bkw{n}^\parvec(x_{n + 1}, \rmd x_n) \, h(x_n, x_{n + 1}). 
+%\end{equation}
+%\item[(ii)]
+%For all $n \in \nsetpos$ and $h \in \bmf{\Xfd^n}$, 
+%$
+%\post{0:n}^\parvec h = \post{n}^\parvec \tstat{n}^\parvec h. 
+%$
+%\end{itemize}
+ For each $n \in \nset$ and $m \in \intvect{0}{n}$, define the kernel  
+\begin{equation} \label{eq:def:retrokmod}
+    \retrokmod_{m, n}(x_m', \rmd x_{0:n}) \eqdef \delta_{x_m'}(\rmd x_m) \, \tstatmod{m}(x_m, \rmd x_{0:m - 1}) \prod_{\ell = m}^{n - 1} \uk{\ell}(x_\ell, \rmd x_{\ell + 1}), 
+\end{equation}
+on $\Xset_m \times \Xfd^n$. 
+
+\begin{lemma} \label{lem:retro:prospective:id}
+For all $m \in \intvect{0}{n}$ and $h \in \bmf{\Xfd^n}$, 
+\begin{equation} \label{eq:retro:prospective:id}
+\postmod{0:m} \uk{m, n - 1} h = \postmod{m} \retrokmod_{m, n} h.  
+\end{equation}
+\end{lemma}
+The following probability measures play a key role in the following: for $h \in \bmf{\Xfd_m}$, 
+\begin{align}
+\noshift_{m, n} h &\eqdef \frac{\postmod{m} (h \times \retrokmod_{m, n} \1_{\Xset^n})}{\postmod{m} \retrokmod_{m, n} \1_{\Xset^n}}, \nonumber \\
+\shiftfwd_{m, n} h &\eqdef \frac{\postmod{m} (h \times \ukmod{m} \retrokmod_{m + 1, n} \1_{\Xset^n})}{\postmod{m} \ukmod{m} \retrokmod_{m + 1, n} \1_{\Xset^n}}, \nonumber \\
+\shiftbwd_{m, n} h &\eqdef \frac{\postmod{m - 1} \uk{m - 1}(h \times \retrokmod_{m, n} \1_{\Xset^n})}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{\Xset^n}}.  \nonumber 
+\end{align}
+In addition, for each $k \in \intvect{0}{n - 1}$, let 
+\begin{equation} \label{eq:def:addf}
+\addf[n]{k} : \Xset^n \ni x_{0:n} \mapsto \addf{k}(x_k, x_{k + 1})  
+\end{equation}
+denote the extension of $\addf{k}$ to $\Xset^n$. 
+
+\begin{lemma} \label{lemma:three:identities}
+Let $n \in \nset$ and $m \in \intvect{1}{n}$. Then the following holds true for all $k \in \intvect{0}{n - 1}$. 
+\begin{itemize}
+\item[(i)]  
+$
+\displaystyle \noshift_{m, n} \left( \frac{\retrokmod_{m, n} \addf[n]{k}}{\retrokmod_{m, n} \1_{\Xset^n}} \right) = \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{\Xset^n}}$ \quad for $m \in \intvect{1}{n}$, 
+\item[(ii)]  
+$
+\displaystyle \shiftfwd_{m, n} \left( \frac{\retrokmod_{m, n} \addf[n]{k}}{\retrokmod_{m, n} \1_{\Xset^n}} \right) = \frac{\postmod{m + 1} \retrokmod_{m + 1, n} \addf[n]{k}}{\postmod{m + 1} \retrokmod_{m + 1, n} \1_{\Xset^n}}
+$ \quad for $m \in \intvect{k + 1}{n}$, and 
+\item[(iii)] 
+$
+\displaystyle \shiftbwd_{m, n} \left( \frac{\retrokmod_{m, n} \addf[n]{k}}{\retrokmod_{m, n} \1_{\Xset^n}} \right) = \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{\Xset^n}}
+$ \quad for all $m \in \intvect{1}{k}$. 
+\end{itemize}
+\end{lemma}
+
+\begin{proof}
+The identity (i) follows straightforwardly by the definition of $\noshift_{m, n}$. We hence turn to (ii), which is established by first noting that for all $m \in \intvect{k + 1}{n}$, 
+$$
+\frac{\retrokmod_{m, n} \addf[n]{k}}{\retrokmod_{m, n} \1_{\Xset^n}} 
+= \bkmod[\postmod{m - 1}]{m - 1} \cdots \bkmod[\postmod{k + 1}]{k + 1} (\bkmod[\postmod{k}]{k} \addf{k}).  
+$$
+Now, 
+\begin{align}
+\shiftfwd_{m, n} h 
+&= \iint \frac{\postmod{m}(\rmd x_m) \, \ukmod{m}(x_m, \rmd x_{m + 1}) \, h(x_m) \retrokmod_{m + 1, n} \1_{\Xset^n}(x_{m + 1})}{\postmod{m} \ukmod{m} \retrokmod_{m + 1, n} \1_{\Xset^n}} \nonumber \\
+&= \iint \frac{\postmod{m} \ukmod{m}(\rmd x_{m + 1}) \, \bkmod[\postmod{m}]{m}(x_{m + 1}, \rmd x_m) \, h(x_m) \retrokmod_{m + 1, n} \1_{\Xset^n}(x_{m + 1})}{\postmod{m} \ukmod{m} \retrokmod_{m + 1, n} \1_{\Xset^n}} \nonumber \\
+&= \frac{\postmod{m + 1} (\bkmod[\postmod{m}]{m} h \times \retrokmod_{m + 1, n} \1_{\Xset^n})}{\postmod{m + 1} \retrokmod_{m + 1, n} \1_{\Xset^n}}, \nonumber 
+\end{align}
+we may establish the identity by proceeding like  
+\begin{align*}
+\lefteqn{\shiftfwd_{m, n} \left( \frac{\retrokmod_{m, n} \addf[n]{k}}{\retrokmod_{m, n} \1_{\Xset^n}} \right)} \\
+&= \iint \frac{\postmod{m + 1}(\rmd x_{m + 1}) \, \bkmod[\postmod{m}]{m}(x_{m + 1}, \rmd x_m) \, \bkmod[\postmod{m - 1}]{m - 1}  
+\cdots \bkmod[\postmod{k + 1}]{k + 1}(\bkmod[\postmod{k}]{k} \addf{k})(x_m) 
+\retrokmod_{m + 1, n} \1_{\Xset^n}(x_{m + 1})}{\postmod{m + 1} \retrokmod_{m + 1, n} \1_{\Xset^n}} \\
+&= \frac{\postmod{m + 1} \retrokmod_{m + 1, n} \addf[n]{k}}{\postmod{m + 1} \retrokmod_{m + 1, n} \1_{\Xset^n}}.  
+\end{align*}
+
+Finally, to check (iii), note that for all $m \in \intvect{1}{k}$, 
+$$
+\uk{m - 1} \retrokmod_{m, n} \addf[n]{k} = \retrokmod_{m - 1, n} \addf[n]{k}. 
+$$
+Thus, in this case 
+$$
+\shiftbwd_{m, n} \left( \frac{\retrokmod_{m, n} \addf[n]{k}}{\retrokmod_{m, n} \1_{\Xset^n}} \right) = \frac{\postmod{m - 1} \uk{m - 1} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{\Xset^n}} = \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{\Xset^n}}. 
+$$
+\end{proof}
+
+\begin{lemma} \label{lem:geo:bound}
+Assume H\ref{assum:strong:mixing}. Then for all $n \in \nset$, $m \in \intvect{0}{n}$, $k \in \intvect{0}{n - 1}$, and $(\lambda, \lambda') \in \probmeas{\Xfd_m}^2$, 
+$$
+\left|\frac{\lambda \retrokmod_{m, n} \addf[n]{k}}{\lambda \retrokmod_{m, n} \1_{\Xset^n}} - \frac{\lambda' \retrokmod_{m, n} \addf[n]{k}}{\lambda' \retrokmod_{m, n} \1_{\Xset^n}} \right| \leq \| \addf{k} \|_\infty \rho^{|k - m| - 1}. 
+$$
+\begin{proof}
+First, assume that $m \leq k$; then note that for all $x_m \in \Xset_m$, 
+\begin{multline} \label{eq:retrokmodnorm:vs:forward:kernel}
+\frac{\retrokmod_{m, n} \addf[n]{k}(x_m)}{\retrokmod_{m, n} \1_{\Xset^n}(x_m)} - \frac{\retrokmod_{m, n} \addf[n]{k}(x_m)}{\retrokmod_{m, n} \1_{\Xset^n}(x_m)}
+ = \fk{m}{n} \cdots \fk{k - 1}{n} (\fk{k}{n} \addf{k})(x_m) \\ 
+- \fk{m}{n} \cdots \fk{k - 1}{n} (\fk{k}{n} \addf{k})(x_m),    
+\end{multline}
+
+where we have introduced the \emph{forward kernels}
+$$
+\fk{m}{n} h (x_m) \eqdef \frac{\uk{m}(h \times \retrokmod_{m  + 1, n} \1_{\Xset^n})(x_m)}{\retrokmod_{m, n} \1_{\Xset^n} (x_m)}, \quad x_m \in \Xset_m, \quad h \in \bmf{\Xfd_{m + 1}}. 
+$$
+Under H\ref{assum:strong:mixing}, each forward kernel satisfies a global Doeblin condition in the form of the uniform lower bound 
+$$
+\fk{m}{n} h (x_m) \geq \frac{\udlow}{\udup} \mu_{m, n} h,  
+$$
+where we have defined the probability measure 
+$$
+\mu_{m, n} h \eqdef \frac{\mu_{m + 1}(h \times \retrokmod_{m  + 1, n} \1_{\Xset^n})}{\mu_{m + 1} \retrokmod_{m  + 1, n}  \1_{\Xset^n}}, \quad h \in \bmf{\Xfd_{m + 1}}. 
+$$
+Thus, by standard results for uniformly minorised Markov chains (see, \emph{e.g.}, \cite[Lemma~4.3.13]{Cappe:2005:IHM:1088883}), the Dobrushin coefficient of each $\fk{m}{n}$ is bounded by $\rho = 1 - \udlow / \udup$. Thus, \eqref{eq:retrokmodnorm:vs:forward:kernel} implies that 
+\begin{align*}
+\left| \frac{\lambda \retrokmod_{m, n} \addf[n]{k}}{\lambda \retrokmod_{m, n} \1_{\Xset^n}} - \frac{\lambda' \retrokmod_{m, n} \addf[n]{k}}{\lambda' \retrokmod_{m, n} \1_{\Xset^n}} \right| 
+&= \left| (\lambda_{m, n} - \lambda_{m, n}') \fk{m}{n} \cdots \fk{k - 1}{n} (\fk{k}{n} \addf{k})
+\right| \\
+&\leq \rho^{k - m} \| \fk{k}{n} \addf{k} \|_\infty \leq \rho^{k - m} \| \addf{k} \|_\infty, 
+\end{align*}
+where for $h \in \bmf{\Xfd_m}$, 
+$$
+\lambda_{m, n} h \eqdef \frac{\lambda(h \times \retrokmod_{m, n} \1_{\Xset^n})}{\lambda \retrokmod_{m, n} \1_{\Xset^n}}, \quad 
+\lambda_{m, n}' h \eqdef \frac{\lambda'(h \times \retrokmod_{m, n} \1_{\Xset^n})}{\lambda' \retrokmod_{m, n} \1_{\Xset^n}}. 
+$$
+Now, assume that $m > k$; then note that for all $x_m \in \Xset_m$, 
+\begin{multline} \label{eq:retrokmodnorm:vs:backward:kernel}
+\frac{\retrokmod_{m, n} \addf[n]{k}(x_m)}{\retrokmod_{m, n} \1_{\Xset^n}(x_m)} - \frac{\retrokmod_{m, n} \addf[n]{k}(x_m)}{\retrokmod_{m, n} \1_{\Xset^n}(x_m)} \\
+ = \bkmod{m - 1} \cdots \bkmod{k + 1}(\bkmod{k} \addf{k})(x_m) - \bkmod{m - 1} \cdots \bkmod{k + 1}(\bkmod{k} \addf{k})(x_m).     
+\end{multline}
+Under H\ref{assum:strong:mixing}, also each backward kernel satisfies a Doeblin condition, namely   
+$$
+\bkmod{m} h (x_{m + 1}) \geq \frac{\udlow}{\udup} \postmod{m} h,  
+$$
+with the marginal $\postmod{m}$ playing the role as minorising measure. Thus, the backward kernel Dobrushin coefficients are bounded by the same constant $\rho$, implying, via \eqref{eq:retrokmodnorm:vs:backward:kernel}, that 
+$$
+\left| \frac{\lambda \retrokmod_{m, n} \addf[n]{k}}{\lambda \retrokmod_{m, n} \1_{\Xset^n}} - \frac{\lambda' \retrokmod_{m, n} \addf[n]{k}}{\lambda' \retrokmod_{m, n} \1_{\Xset^n}} \right| 
+= \left| (\lambda_{m, n} - \lambda_{m, n}') \bkmod{m - 1} \cdots \bkmod{k + 1}(\bkmod{k} \addf{k}) \right| \leq \rho^{m - k - 1} \| \addf{k} \|_\infty. 
+$$
+This completes the proof. 
+\end{proof}
+\end{lemma}
+
+\begin{lemma} \label{lem:diff:bound} 
+Assume H\ref{assum:strong:mixing} and H\
+ref{assum:bias:bound}. Then the following holds. 
+\begin{itemize}
+\item[(i)] For all $n \in \nset$, $m \in \intvect{0}{n}$, $\precpar \in \precparsp$, and $h \in \bmf{\Xfd^n}$,   
+$$
+\left| \noshift_{m, n} h - \shiftbwd_{m, n} h \right| \vee \left| \shiftfwd_{m, n} h - \noshift_{m, n} h \right| \leq 2 c(\theta,\varphi)  \frac{\udup}{\udlow^2} \| h \|_\infty.   
+$$
+\item[(ii)] For all $n \in \nset$, $m \in \intvect{0}{n - 1}$, and $\precpar \in \precparsp$,
+$$
+\left| \frac{\postmod{m + 1} \retrokmod_{m + 1, n} \addf[n]{m}}{\postmod{m + 1} \retrokmod_{m + 1, n} \1_{\Xset^n}} - \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{m}}{\postmod{m} \retrokmod_{m, n} \1_{\Xset^n}} \right| \leq 2 c(\theta,\varphi)  \frac{\udup}{\udlow^2} \| h_m \|_\infty. 
+$$
+\end{itemize}
+In both cases, $c(\theta,\varphi)$ is the constant in H
+\ref{assum:bias:bound}. 
+\end{lemma}
+
+\begin{proof}
+We start with (i). Combining the decomposition 
+\begin{multline*}
+ \noshift_{m, n} h - \shiftbwd_{m, n} h = \varphi_{m, n}^\precpar h \left( \frac{\postmod{m - 1} \uk{m - 1} \retrokmod_{m, n} \1_{\Xset^n} - \postmod{m - 1} \ukmod{m - 1} \retrokmod_{m, n} \1_{\Xset^n}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{\Xset^n}} \right) \\
++ \frac{\postmod{m - 1} \ukmod{m - 1}(h \times \retrokmod_{m, n} \1_{\Xset^n}) - \postmod{m - 1} \uk{m - 1}(h \times \retrokmod_{m, n} \1_{\Xset^n})}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{\Xset^n}} 
+\end{multline*}
+with H\ref{assum:bias:bound} provides the bound 
+$$
+\left| \noshift_{m, n} h - \shiftbwd_{m, n} h \right| \leq 2 c(\theta,\varphi) \frac{\| \retrokmod_{m, n} \1_{\Xset^n} \|_\infty  \| h \|_\infty}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{\Xset^n}}.
+$$
+ Now, since for all $x_m \in \Xset_m$,  
+\begin{equation*}
+\retrokmod_{m, n} \1_{\Xset^n}(x_m) = \int \ud{m}(x_m, x_{m + 1}) \retrokmod_{m + 1, n} \1_{\Xset^n}(x_{m + 1}) \, \mu_{m + 1}(\rmd x_{m + 1}) \\
+\leq \udup \mu_{m + 1} \retrokmod_{m + 1, n} \1_{\Xset^n} 
+\end{equation*}
+and 
+\begin{align*}
+\lefteqn{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{\Xset^n}} \\
+&= \iint \postmod{m - 1}(\rmd x_{m - 1}) \, \ud{m - 1}(x_{m - 1}, x_m) \ud{m}(x_m, x_{m + 1}) \retrokmod_{m + 1, n} \1_{\Xset^n}(x_{m + 1}) \, \mu_m \tensprod \mu_{m + 1}(\rmd x_{m:m + 1}) \\ 
+&\geq \udlow^2 \mu_{m + 1} \retrokmod_{m + 1, n} \1_{\Xset^n}, 
+\end{align*}
+implying the bound
+\begin{equation} \label{eq:retrokmod:ratio:bd}
+ \frac{\| \retrokmod_{m, n} \1_{\Xset^n} \|_\infty}{\postmod{m - 1} \uk{m - 1} \retrokmod_{m, n} \1_{\Xset^n}} \leq \frac{\udup}{\udlow^2}, 
+\end{equation}
+we may conclude that 
+$| \noshift_{m, n} h - \shiftbwd_{m, n} h| \leq 2 c(\theta,\varphi) \udup \| h \|_\infty / \udlow^2
+$. 
+Along similar lines, the second difference can be bounded by the same quantity by writing   
+\begin{multline*}
+\shiftfwd_{m, n} h - \noshift_{m, n} h = \shiftfwd_{m, n} h \left( \frac{\postmod{m} \uk{m} \retrokmod_{m + 1, n} \1_{\Xset^n} - \postmod{m} \ukmod{m} \retrokmod_{m + 1, n} \1_{\Xset_n}}{\postmod{m} \uk{m} \retrokmod_{m + 1, n} \1_{\Xset^n}} \right) \\
++ \frac{\postmod{m} (h \times \ukmod{m} \retrokmod_{m + 1, n} \1_{\Xset^n}) - \postmod{m} (h \times \uk{m} \retrokmod_{m + 1, n} \1_{\Xset_n})}{\postmod{m} \uk{m} \retrokmod_{m + 1, n} \1_{\Xset^n}} 
+\end{multline*}
+and reapplying H\ref{assum:bias:bound} and \eqref{eq:retrokmod:ratio:bd}.  We turn to (ii). By definition \eqref{eq:def:retrokmod},  
+$$
+\retrokmod_{m + 1, n} \addf[n]{m}(x_{m + 1}) = \int \addf{m}(x_m, x_{m + 1}) \, \bkmod{m}(x_{m + 1}, \rmd x_m) \, \retrokmod_{m + 1, n} \1_{\Xset^n}(x_{m + 1});
+$$
+thus,
+\begin{align}
+\frac{\postmod{m + 1} \retrokmod_{m + 1, n} \addf[n]{m}}{\postmod{m + 1} \retrokmod_{m + 1, n} \1_{\Xset^n}} &= \iint \frac{\postmod{m} \ukmod{m}(\rmd x_{m + 1}) \, \addf{m}(x_m, x_{m + 1}) \, \bkmod{m}(x_{m + 1}, \rmd x_m) \, \retrokmod_{m + 1, n} \1_{\Xset^n}(x_{m + 1})}{\postmod{m} \ukmod{m} \retrokmod_{m + 1, n} \1_{\Xset^n}} \nonumber \\
+&= \iint \frac{\postmod{m}(\rmd x_m) \, \ukmod{m}(x_m, \rmd x_{m + 1}) \, \addf{m}(x_m, x_{m + 1}) \retrokmod_{m + 1, n} \1_{\Xset^n}(x_{m + 1})}{\postmod{m} \ukmod{m} \retrokmod_{m + 1, n} \1_{\Xset^n}}. \nonumber
+\end{align}
+We may thus decompose the quantity under consideration as  
+\begin{multline*}
+\frac{\postmod{m + 1} \retrokmod_{m + 1, n} \addf[n]{m}}{\postmod{m + 1} \retrokmod_{m + 1, n} \1_{\Xset^n}} - \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{m}}{\postmod{m} \retrokmod_{m, n} \1_{\Xset^n}}
+= \frac{\postmod{m + 1} \retrokmod_{m + 1, n} \addf[n]{m}}{\postmod{m + 1} \retrokmod_{m + 1, n} \1_{\Xset^n}} \left( \frac{\postmod{m} \uk{m} \retrokmod_{m + 1, n} \1_{\Xset^n} - \postmod{m} \ukmod{m} \retrokmod_{m + 1, n} \1_{\Xset^n}}{\postmod{m} \retrokmod_{m, n} \1_{\Xset^n}} \right) \\
++ \int \frac{\postmod{m}(\rmd x_m) \{ \ukmod{m}(\addf{m} \retrokmod_{m + 1, n} \1_{\Xset^n})(x_m) - \uk{m} (\addf{m} \retrokmod_{m + 1, n} \1_{\Xset^n})(x_m)\}}{\postmod{m} \retrokmod_{m, n} \1_{\Xset^n}} ,  
+\end{multline*}
+from which (ii) follows, as before, by a combination of H\ref{assum:bias:bound} and \eqref{eq:retrokmod:ratio:bd}.  
+\end{proof}
+
+
+
+Write 
+$$
+\postmod{0:n} h_n - \post{0:n} h_n = \sum_{k = 0}^{n - 1} \left( \postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} \right), 
+$$
+where each term can be decomposed according to   
+\begin{equation*}
+\postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} = 
+\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} \right).  
+\end{equation*}
+In order to bound each term of this decomposition, write, using Lemma~\ref{lem:retro:prospective:id},  
+$$
+\frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} 
+= \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{\Xset^n}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{\Xset^n}}. 
+$$
+Now, for all $m \in \intvect{1}{n}$, pick an arbitrary element $\xarb_m \in \Xset_m$ and define the kernel 
+\begin{equation} \label{eq:def:norm:objective:func}
+\retrokmodnorm_{m, n} h(x_m) \eqdef \frac{\retrokmod_{m, n} h(x_m)}{\retrokmod_{m, n} \1_{\Xset^n}(x_m)} - \frac{\retrokmod_{m, n} h (\xarb_m)}{\retrokmod_{m, n} \1_{\Xset^n} (\xarb_m)}, \quad x_m \in \Xset_m, \quad h \in \bmf{\Xfd^n}. 
+\end{equation}
+Combining this definition with Lemma~\ref{lemma:three:identities}, we may express the quantity of interest as 
+\begin{multline*}
+\postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} = \sum_{m = 1}^k \left( \noshift_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} - \shiftbwd_{m, n}  \retrokmodnorm_{m, n} \addf[n]{k} \right) \\ 
++ \frac{\postmod{k + 1} \retrokmod_{k + 1, n} \addf[n]{k}}{\postmod{k + 1} \retrokmod_{k + 1, n} \1_{\Xset^n}} - \frac{\postmod{k} \retrokmod_{k, n} \addf[n]{k}}{\postmod{k} \retrokmod_{k, n} \1_{\Xset^n}} + \sum_{m = k + 1}^{n - 1} \left( \shiftfwd_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} - \noshift_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} \right). 
+\end{multline*}
+Now, applying Lemmas~\ref{lem:geo:bound} and \ref{lem:diff:bound} to the previous decomposition yields
+$$
+\left| \postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} \right| \leq 2 c(\theta,\varphi) \frac{\udup }{\udlow^2} \sum_{k = 0}^{n - 1} \| \addf{k} \|_\infty \left( \sum_{m = 1}^{n - 1} \rho^{|k - m| - 1} + 1 \right).  
+$$
+which was to be established. 
+
+
+\end{proof}
 
 \clearpage
 \newpage
