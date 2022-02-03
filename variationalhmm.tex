@@ -470,7 +470,7 @@ with
     \tilde{q}_{1:t+1}(z_{t+1}|z_t) = \frac{\vbackward{t}\vfilt{t+1}}{\vfilt{t}}
 \end{equation}
 
-\subsection{A fully tractacle variational approximation}
+\subsubsection*{A fully tractacle variational approximation}
 This recursion is useful provided that we can compute the expectation of the $\log$ term (decomposed as the $\log$ difference) under the backward distribution $\vbackward{t}$. 
 
 In a general HMM, we know that:
@@ -579,7 +579,7 @@ And for $\log \vfilt{t+1}$ we have
 \end{multline*}
 
 
-\section{Extensions}
+\subsection{Extensions}
 
 In the linear Gaussian case, we were able to derive all results in closed-form without any approximation. For this model, optimal estimation of the smoothing distribution and the model parameters is already avaible via the Kalman smoothing recursions coupled with EM optimization or recursive likelihood maximization. 
 
@@ -591,10 +591,10 @@ As explained in introduction, identifiabilty results in ICA only exist for model
 
 In the VAE litterature, powerful variational families (e.g. normalizing flows) are now frequently considered to obtain expressive posteriors. However, we show in this section that many terms in section \ref{linear_gauss} become intractble even when sticking to Gaussian parameterization, and we provide an overview of the different tools which can be used to approximate the latter. 
 
-\subsection{Replacing the Kalman update with a learnt filtering recursion}
+\subsubsection*{Replacing the Kalman update with a learnt filtering recursion}
 \dots
 
-\subsection{Nonlinear observation model}
+\subsubsection*{Nonlinear observation model}
 
 We assume a similar transition model $p(z_t|z_{t-1})$ for the hidden states, but observations are nonlinear transformations of the components under Gaussian noise, ie. $$p(x_t|z_t) = p(x_t|s_t) \sim \gaussian{f_\theta(s_t)}{R^\theta}$$. 
 
