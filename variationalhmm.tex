@@ -309,7 +309,8 @@ $$
 \lim_{T\mapsto \infty}\frac{1}{T}{\cal L}(\theta,\phi; T) = M_{\infty}(\theta,\phi)=\int p^{\star}(y)\log p_{\theta}(y) dy - \int \log \left(\frac{q_{\varphi}(x\vert y)}{p_{\theta}(x \vert y) } \right)q_{\varphi}(x\vert y)\,.
 p^{\star}(y)dxdy
 $$
-The maximizers of this limit are investigated in \cite{koehler2021variational} in scenarii used in VAE. If we assume that the $q_{\varphi,t}$ indeed depend on $t$, then if we write for each $\theta$,
+The maximizers of this limit are investigated in \cite{koehler2021variational} in scenarii used in VAE.  The analysis of $(\widehat{\theta},\widehat{\phi})$ as $M-estimators$ with oracle inequalities and applications is in \cite{tang21a}.
+If we assume that the $q_{\varphi,t}$ indeed depend on $t$, then if we write for each $\theta$,
 $$
 \widehat{q}_{\theta,t}=q_{\widehat{\varphi}_{t}(\theta),t}= \underset{{q \text{ of form }q_{\varphi},t}}{\mathrm{argmin}} \int  \left[\log \left(\frac{q(x\vert Y_{t})}{p_{\theta}(x \vert Y_{t}) } \right)\right]q(x\vert Y_{t})dx,
 $$
