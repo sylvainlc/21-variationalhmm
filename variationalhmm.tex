@@ -262,7 +262,7 @@
 \newcommand{\X}{\mathbf{X}}
 \newcommand{\x}{\mathbf{x}}
 \newcommand{\y}{\mathbf{y}}
-\newcommand{\E}{\mathbf{E}}
+\newcommand{\E}{\mathbb{E}}
 \newcommand{\e}{\text{e}}
 \newcommand{\W}{\mathbf{W}}
 \newcommand{\Z}{\mathbf{Z}}
@@ -282,7 +282,81 @@
 
 \end{abstract}
 
-\section{Introduction}
+\section{Theoretical perspectives}
+
+Observations $(Y_{t})_{1\leq t \leq T}$, latent variables $(X_{t})_{1\leq t \leq T}$.\\
+True (unknown) density distribution $p^{\star}$.\\
+Decoding (= model) $p_{\theta}$: joint density of $(X_{t}, Y_{t})_{1\leq t \leq T}$. Write $\theta$ even if non parametric.\\
+Encoding $q_{\varphi}$: joint density of $(X_{t})_{1\leq t \leq T}$ given $(Y_{t})_{1\leq t \leq T}$, that is a joint density which is random, and $\sigma(Y_{1},\ldots,Y_{T})$-measurable. May also be non parametric.  The estimators $\widehat{\theta}$ and $\widehat{\phi}$ maximize the ELBO:
+$$
+{\cal L}(\theta,\phi; T)= \E_{q_{\varphi}} \left[ \log \left( \frac{p_{\theta}(X_{1},\ldots,X_{T},Y_{1},\ldots,Y_{T})}{q_{\varphi}(X_{1},\ldots,X_{T})}\right)\middle\vert Y_{1:T}\right].
+$$
+
+\subsection{Independent variables}
+
+We consider that the true distribution, decoder and encoder distributions are defined by:
+\begin{align*}
+p^{\star}(x_{1},\ldots,x_{T},y_{1},\ldots,y_{T})&=\prod_{t=1}^{T}p^{\star}(x_{t},y_{t})\,,\\
+p_{\theta}(x_{1},\ldots,x_{T},y_{1},\ldots,y_{T})&=\prod_{t=1}^{T}p_{\theta}(x_{t},y_{t})\,,\\
+q_{\varphi}(x_{1},\ldots,x_{T})&=\prod_{t=1}^{T}q_{\varphi,t}(x_{t})\,.
+\end{align*}
+Therefore,
+$$
+\frac{1}{T}{\cal L}(\theta,\phi; T) = \frac{1}{T}\sum_{t=1}^T\log p_\theta(Y_t) + \frac{1}{T}\sum_{t=1}^T\E_{q_{\varphi,t}}\left[\log \frac{p_\theta(X_t|Y_t)}{q_{\varphi,t}(X_t)}\right]\,.
+$$
+When $q_{\varphi,t}(x_{t})=q_{\varphi}(x_{t}|y_t)$ does not depend on $t$, then ${\cal L}(\theta,\phi; T)/T$ has a a.s. limit:
+$$
+\lim_{T\mapsto \infty}\frac{1}{T}{\cal L}(\theta,\phi; T) = M_{\infty}(\theta,\phi)=\int p^{\star}(y)\log p_{\theta}(y) dy - \int \log \left(\frac{q_{\varphi}(x\vert y)}{p_{\theta}(x \vert y) } \right)q_{\varphi}(x\vert y)\,.
+p^{\star}(y)dxdy
+$$
+The maximizers of this limit are investigated in \cite{koehler2021variational} in scenarii used in VAE. If we assume that the $q_{\varphi,t}$ indeed depend on $t$, then if we write for each $\theta$,
+$$
+\widehat{q}_{\theta,t}=q_{\widehat{\varphi}_{t}(\theta),t}= \underset{{q \text{ of form }q_{\varphi},t}}{\mathrm{argmin}} \int  \left[\log \left(\frac{q(x\vert Y_{t})}{p_{\theta}(x \vert Y_{t}) } \right)\right]q(x\vert Y_{t})dx,
+$$
+then $\widehat{\theta}$ maximizes
+$$
+\ell_{T}(\theta)-\sum_{t=1}^{T} D\left(\widehat{q}_{t,\theta} \vert p_{\theta}(\cdot \vert Y_{t})\right),
+$$
+where $\ell_{T}$ is the log-likelihood, thus something like a penalized likelihood. All of this is  interesting only if such VAE with so many parameters for the encoding   is used for computational convenience or so. If this is the case, then write a theory to investigate questions such as:
+\begin{itemize}
+\item If the encoder is a good approximating family then the penalization is small; can it be build so that the penalty is $o(T)$ ? 
+\item
+And then possible to analyse that for large $T$ (or asymptotically) if $p^{\star}$ is in the decoding class,  for large $t$ is close to $p_{\widehat{\theta}}(\cdot \vert Y)$ for $\widehat{\theta}$ having good asymptotic properties ?
+\end{itemize}
+
+ 
+\subsection{State space decoding}
+We consider that 
+
+$$p_{\theta}(x_{1},\ldots,x_{T},y_{1},\ldots,y_{T})=p_{\theta}(x_{1})g_{\theta}(y_{1}\vert x_{1})\prod_{t=2}^{T}p_{\theta}(x_{t-1},x_{t})g_{\theta}(y_{t} \vert x_{t}).
+$$ 
+
+
+\subsubsection{Mean-field encoding}
+The case where
+$$q_{\varphi}(x_{1},\ldots,x_{T})=\prod_{t=1}^{T}q_{\varphi}(x_{t}).$$
+Then ${\cal L}(\theta,\phi; T)/T$ has a limit (as soon as under $p^{\star}$ the $(Y_{t})_{t\geq 1}$ satisfy some dependence properties allowing laws of large numbers):
+$$
+\lim_{T\mapsto \infty}\frac{1}{T}{\cal L}(\theta,\phi; T) = M_{\infty}(\theta,\phi)=\int p^{\star}(y) q_{\varphi}(x_{1}\vert y)q_{\varphi}(x_{2}\vert y)
+ \left[\log \left(\frac{p_{\theta}(x_{1},x_{2} ) g_{\theta}(x_{2}\vert y)}{q_{\varphi}(x_{2}\vert y)} \right)\right]
+dx_{1}dx_{2}dy
+$$
+What can be said ?
+\begin{itemize}
+\item
+Write the $M$-estimator  oracle inequality theory. Or at least the asymptotic theory.
+\item
+Understand the bias (that is: the maximizers of $M_{\infty}$) in interesting examples.
+\end{itemize}
+
+\subsubsection{HMM encoding/ Forward / Backward encoding}
+
+Look at Mathis computations. Understand what are the good ways to write encoding so that the $M$-estimation theory can be written down. In \cite{campbell2021online} forward encoding, also with $\varphi$'s varying with $t$ in the examples ....
+
+
+\clearpage
+\newpage
+\section{Control of the variational error for additive functionals}
 Let $\parvec$ be a parameter lying in a $\Theta\subset \rset^q$ and consider a  \textit{state space model} where the hidden Markov chain  in $\rset^d$ is denoted by $(X_k)_{k\geqslant 0}$. The distribution of $X_0$ has density $\chi$ with respect to the Lebesgue measure and for all $0\leqslant k \leqslant n-1$, the conditional distribution of $X_{k+1} $ given $X_{0:k}$ has density $\hd{k+1;\parvec}(X_{k},\cdot)$, where $a_{u:v}$ is a short-hand notation for $(a_u,\ldots,a_v)$. 
 It is assumed that this state  is partially observed  through an observation process $(Y_k)_{0\leqslant k \leqslant n}$ taking values in $\rset^m$. 
 For all $0\leqslant k \leqslant n$, the distribution of $Y_k$ given $X_{0:n}$ depends on $X_k$ only and has density $\md{k;\parvec}(X_k,\cdot)$ with respect to the Lebesgue measure. 
@@ -314,7 +388,7 @@ The pivotal concept of the EM algorithm is that the intermediate quantity define
 may be used as a surrogate for $\llh{n}(\parvec)$ in the maximization procedure,  where $\pE_{\parvec'}$ is the expectation under the joint distribution of the latent states and the observations when the model is parameterized by $\parvec'$. 
 \end{example}
 
-\section{Variational backward decomposition}
+\subsection{Variational backward decomposition}
 In variational approaches, instead of trying to design Monte Carlo estimators of such expectations (or equivalently of the conditional distribution of the states given the observations), the conditional law of $X_{0:n}$ given $Y_{0:n}$ is approximated by choosing a candidate in a parametric family $\{q_\phi\}_{\phi \in \Phi}$, where $\Phi$ is a parameter set. Parameters are then estimated by maximizing the ELBO defined as:
 $$
 \mathcal{L}(\parvec,\phi) = \pE_{q_\phi}\left[\log \frac{p_\parvec(X_{0:n},Y_{0:n})}{q_\phi(X_{0:n}|Y_{0:n})}\right]\eqsp.
@@ -325,7 +399,7 @@ q_\varphi: x_{0:n} \mapsto q_{\varphi,n}(x_n|Y_{0:n})\prod_{k=0}^{n-1}q_{\varphi
 $$
 The variational family parameterizes the backward kernel which naturally appears in the decomposition of the law of $X_{0:n}$ given $Y_{0:n}$. 
 
-\section{Control of the variational error for additive functionals}
+\subsection{Control of the variational error}
 Let $(\Xset_n, \Xfd_n)_{n \in \nset}$ be a sequence of general state spaces and let, for all $n \in \nset$, $\uk{n}$ defined on  $\Xset_n \times \Xfd_{n + 1}$ be bounded kernels in the sense that $\sup_{x \in \Xset_n} \uk{n}(x, \Xset_{n + 1}) < \infty$. We will assume a dominated model where each kernel $\uk{n}$ has a kernel density $\ud{n}$ with respect to some $\sigma$-finite reference measure $\mu_{n + 1}$ on $\Xfd_{n + 1}$. Finally, let $\chi$ be some bounded measure on $\Xfd_0$. In the following, we denote state-space product sets and $\sigma$-fields by $\Xset^n \eqdef \Xset_0 \times \cdots \times \Xset_n$ and $\Xfd^n \eqdef \Xfd_0 \tensprod \cdots \tensprod \Xfd_n$, respectively, and consider probability measures  
 \begin{equation} \label{eq:def:post}
 \post{0:n}(\rmd x_{0:n}) \propto \chi(\rmd x_0) \prod_{m = 0}^{n - 1} \uk{m}(x_m, \rmd x_{m + 1}), \quad n \in \nset, 
@@ -730,5 +804,8 @@ where each term can be decomposed according to
 \postmod{0:n} \addf[n]{k} - \post{0:n}^\varphi \addf[n]{k} = 
 \sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} \right)  
 \end{equation*}
+
+\bibliographystyle{apalike}
+\bibliography{variationalhmm}
  
 \end{document}
