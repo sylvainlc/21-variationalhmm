@@ -270,9 +270,31 @@
 \newcommand{\rme}{\mathrm{e}}
 \newcommand{\vois}{\mathcal{V}}
 
+
+
+
 \newcounter{example}[section]
 \newenvironment{example}[1][]{\refstepcounter{example}\par\medskip
    \noindent \textbf{Example~\theexample:} \textit{#1} \text \rmfamily}{\medskip}
+
+\newcommand{\expect}[2]{\mathbb{E}_{#1}\left[#2\right]}
+\newcommand{\gaussian}[2]{\mathcal{N}\left( #1, #2 \right)}
+\newcommand{\backward}[1]{\overleftarrow{#1}}
+\newcommand{\vbackward}[1]{q_{1:#1}(z_{#1}|z_{#1 + 1})}
+\newcommand{\vfilt}[1]{q_{1:#1}(z_{#1})}
+\newcommand{\vbackwardparam}[2]{\backward{#1}_{1:#2}^\phi}
+\newcommand{\vbackwardmean}[1]{\vbackwardparam{\mu}{#1}}
+\newcommand{\vbackwardcov}[1]{\vbackwardparam{\Sigma}{#1}}
+\newcommand{\vfiltparam}[2]{#1_{1:#2}^\phi}
+\newcommand{\vfiltmean}[1]{\vfiltparam{\mu}{#1}}
+\newcommand{\vfiltcov}[1]{\vfiltparam{\Sigma}{#1}}
+\newcommand{\inv}[1]{{#1}^{-1}}
+\newcommand{\stateprec}{\inv{Q^\theta}}
+\newcommand{\vstateprec}{\inv{Q^\phi}}
+\newcommand{\quadform}[2]{#1^T #2 #1}
+
+
+\DeclareMathOperator*{\argmax}{arg\,max} 
 
 \begin{document}
 
@@ -354,9 +376,246 @@ Understand the bias (that is: the maximizers of $M_{\infty}$) in interesting exa
 
 Look at Mathis computations. Understand what are the good ways to write encoding so that the $M$-estimation theory can be written down. In \cite{campbell2021online} forward encoding, also with $\varphi$'s varying with $t$ in the examples ....
 
+\clearpage
+\newpage
+
+\section{Exact backward decomposition for ICA}
+
+%We now want to frame the multi-object tracking challenge as the downstream task of the more general problem of "disentenglement". In general terms and departing from the specific field of computer vision, we view our observations as random variables that arise from a generating process involving hidden/latent random variables. In disentenglement research, these latent variables are assumed to decompose into independent components (which, in the deep learning community, would be refered to as disentangled "representations"). For multi-object tracking, our goal is to infer latent variables whose independent components are "object-centric" representations, ie. each of them separetely describes an individual object. Many works exist that constrain VAEs to provide disentengled latent variables (e.g. via a special form of regularization, see \cite{betavae}) but \cite{unidentifiability} showed that most of them are actually trying to solve an ill-posed problem which is essentially unidentifiable. On the contrary, the Independant Component Analysis (ICA) litterature provides many identifiability results. In brief, in the nonlinear case, identifiability is only guaranteed if signals exhibit some structure (e.g. temporal dependencies), or if the inference is conditioned on an additionally observed process, which was shown in \cite{iVAE} for the specific case of VAEs. More recently, \cite{hermanni2021} proved identifiability when hidden states follow linear but flexible dynamics via regime switching: this is currently the most general setup that is still backed by identifiability proofs. However, in practice, inference is made with strong assumptions on the variational family. For sequential data, this is in contrast to the most recent works on VAEs, like \cite{campbell2021online}, which introduce flexible variational families that factorize according to the original model. We therefore attempt to merge ideas from these works.
+
+
+In all that follows, we use $\mathsf{X}$ to refer to a set with elements $\mathsf{x} \in \mathsf{X}$ and $\mathsf{X}^p$ the associated product space.  For any set $\mathsf{X}$ we always assume that we can build a $\sigma$-field $\sigma(\mathsf{X})$ and we define $\mathsf{M}_1(\mathsf{X})$ the space of probability measures on $(\mathsf{X},\sigma(\mathsf{X}))$. Let $(\mathsf{\Omega},\mathcal{F},\mathbb{P})$ a probability space, we denote $\mathsf{F(X)}$ the space of all measurable functions from $(\mathsf{\Omega},\mathcal{F})$ to $(\mathsf{X},\sigma(\mathsf{X}))$. We say that "$x$ is a random variable on $\mathsf{X}$ with distribution $p_x$" if $x \in \mathsf{F(X)}$ and $p_x \in \mathsf{M}_1(\mathsf{X})$ satisfies $p_x = \mathbb{P} \circ x^{-1}$.  We define a process $(x_t)_{t \in \mathsf{T}}$ on $\mathsf{X}$ as a collection of random variables indexed by $\mathsf{T}$ and taking values in $\mathsf{X}$. 
+
+When useful, we will sometimes stress on using sans-serif formatting $\mathsf{x}$ for non random objects as opposed to serif formatting $x$ for random objects. However we will often refer to objects and their expressions interchangeably. For example, if $x$ is a random variable in $\mathsf{X}$, we say "the function $f(x) = \ldots $" to refer to a function with input space $\mathsf{F(X)}$ having a given expression, and if $\mathsf{x} \in \mathsf{X}$, we say "the function $f(\mathsf{x}) = \ldots"$ to refer to a function with input space $\mathsf{X}$ having a given expression.We systematically overload the symbol $p$ by using $p(\rmd x)$ to refer to a distribution $p_x$ and interchangeably with its expression $p_x(\mathsf{\rmd x})$. If $x$ and $y$ are random variables on $\mathsf{X}$ and $\mathsf{Y}$, respectively, we write $p(\rmd y|x)$ for the conditional distribution of $y$ given that $x = \mathsf{x}$. In practise, we assume that all distributions $p(\rmd x)$ on $\mathsf{X}$ are dominated w.r.t some reference measure $\mu_x$ on $\sigma(\mathsf{X})$ and admit a probabiltiy density denoted as $p(x)$ (interchangeably with its expression $p(\mathsf{x})$ depending on the context) defined as the Radon-Nikodym derivative $p(x) = \frac{\rmd p_x}{\rmd \mu_x}$. Given all this, we often mix a distribution with its density and say that "$x$ is a random variable with distribution $p(x) = p(\mathsf{x})$" to mean that $x$ is a random variable on $\mathsf{X}$ admitting a density whose expression is $p(\mathsf{x})$. Similarly, we will refer to "$p(x_t|x_{t-1}) = p(x_t|\mathsf{x}_{t-1})$" when a Markovian process $(x_t)_{t \in \mathsf{T}}$ is defined by a Markov kernel which admits a density expressed by $p(x_t|\mathsf{x}_{t-1})$.
+
+
+
+\subsection{Nonlinear ICA with flexible dynamics}\label{nonlinear_ica}
+
+In this section, we introduce the setting of nonlinear ICA and define the models that form the basis of our work. Let $(x_t)_{t \geq 1}$ be a process in an $d_\mathsf{X}$-dimensional space $\mathsf{X}$ and for which we assume that:
+$$x_t = f(s_t) + \epsilon_t$$
+
+In the ICA setting, $(s_t)_{t \geq 1}$ is a process in $\mathsf{S}^I$ with $\dim(\mathsf{S}) = d_\mathsf{S}$ and $I \in \mathbb{N}^{*}$. In the nonlinear case, $f$ is a nonlinear mapping from $\mathsf{S}^I$ to $\mathsf{X}$ and is usually supposed to be injective. The central assumption is that the components $(s_t^i)_{i \leq I}$ are mutually independant random variables on $\mathsf{S}$.
+
+In a general setting, these variables can follow their own temporal dynamics. Transitions are defined component-wise and can also be conditioned on another (unobserved) process $(u_t)_{t \geq 1}$ on a space $\mathsf{U}^I$ for which each of the $(u_t^i)_{i \leq I}$ is a first order Markov chain in $\mathsf{U}$ with Markov kernel $p(u_t^i|u_{t-1}^i)$ and initial distribution $p(u_1^i)$. Finally, rich models with complex dependencies are allowed by prescribing the transitions in the augmented state space $\mathsf{H} = \mathsf{S}^D$ instead of $\mathsf{S}$, with $D > 1$. Denoting $(h_t)_{t \geq 1}$ the process in the augmented space, each $(h_t^i)_{t \geq 1}$ is a Markov chain in $\mathsf{H}$ conditonally on $(u_t^i)_{t \geq 1}$ with Markov kernel $p(h_t^i|h_{t-1}^i,u_t^i)$ and initial distribution $p(h_1^i|u_1^i)$.
+
+Denote $z_t = (z_t^i)_{i \leq I} \in \mathsf{Z}^I$ the full latent state at time $t$ defined by $z_t^i = (h_t^i, u_t^i)$, where $\mathsf{Z} = \mathsf{H} \times \mathsf{U}$. Each $(z_t^i)_{i \leq I}$ is also a Markov chain in $\mathsf{Z}$ with Markov kernel defined as $p(z_t^i|z_{t-1}^i) = p(h_t^i,u_t^i|h_{t-1}^i, u_{t-1}^i)$ = $p(h_t^i|h_{t-1}^i,u_t^i)p(u_t^i|u_{t-1}^i)$. With all that, $(z_t)_{t \geq 1}$ is a Markov chain in $\mathsf{Z}^I$ with inital distribution $p(z_1)$ and kernel
+
+\begin{equation}\label{kernel_z}
+    p(z_t|z_{t-1}) = \prod_{i=1}^I p(z_t^i|z_{t-1}^i)
+\end{equation}
+
+
+Simply put $(z_t)_{z \geq 1}$ is just a special form of autoregressive process with independant components. The full data model is given by the finite dimensional law $p(x_{1:T}, s_{1:T}, u_{1:T})$ which is a marginal of its counterpart in augmented space $p(x_{1:T}, z_{1:T}) = p(x_{1:T} \vert z_{1:T})p(z_{1:T})$. At each time $t$, $x_t$ only depends on $s_t$, and observations $(x_t)_{t \leq T}$ are conditionally independant given $(s_t)_{t \leq T}$, therefore $p(x_{1:T} \vert z_{1:T}) = \prod_{t=1}^T p(x_t|s_t)$. All in all, the full data model writes
+
+
+\begin{equation}\label{full_model}
+    p(x_{1:T}, z_{1:T}) = p(u_1)p(h_1|u_1) p(x_1|s_1) \prod_{t=2}^T p(x_t|s_t) \prod_{i=1}^I p(h_t^i|h_{t-1}^i,u_t^i)p(u_t^i|u_{t-1}^i)
+\end{equation} 
+
+\subsection{Variational inference for linear Gaussian HMMs}\label{linear_gauss}
+\subsubsection*{Small recap on variational inference}
+Given observation vectors $x_{1:T}$, we seek to compute the posterior distributions $p( z_{1:T}|x_{1:T})$. To cope with scenarios where $d_{\mathsf{S}}$ and/or $D$ may be large, we resort to variational inference and want to compute an approximation $q( z_{1:T}|x_{1:T}) \in \mathcal{Q}$ where $\mathcal{Q}$ is a family of distributions that we need to choose. 
+We consider an online setup where observations $x_t$ are provided sequentially. From now on we write $p_{1:t}$ for any distribution conditional on $x_{1:t} = \mathsf{x}_{1:t}$. We assume that the best approximation $q_{1:t}^*(z_{1:t}) \in \mathcal{Q}$ (in Kullback-Leibler sense) of $p_{1:t}( z_{1:t})$ can be approached by finding $\argmax\limits_{q \in \mathcal{Q}} \mathcal{L}_t(q)$ where $\mathcal{L}_t(q) = \expect{q(z_{1:t})}{\log\frac{p(z_{1:t}, \mathsf{x}_{1:t})}{q(z_{1:t})}}$. 
+Estimates of this optimum are usually available via gradient-based techniques which require assumptions on $\mathcal{Q}$. 
+Denoting $\mathcal{P}$ be the family of distributions in which the true posterior $p_{1:t}$ belongs, a sensible choice is to have $\mathcal{Q}$ that closely resembles $\mathcal{P}$ while making optimization tractable. 
+\subsubsection*{A simplified fully linear model}
+From section \ref{nonlinear_ica}, we start by restricting $\mathcal{P}$ to a much simpler family. We first assume that there is no switching process and that each of the $h_t^i$ follows separate linear Gaussian dynamics defined by parameters $A^i,a^i$ and a Gaussian noise $\eta^i \sim \gaussian{0}{Q^i}$, (the initial distribution is Gaussian with parameters $a_1^i$ and covariance matrix $Q_1^i$). In this case $z_t^i = h_t^i$ and we stick to using $z$ in the following. We also assume that the observation model is time-independant linear Gaussian with parameters $B$ and $b$ and covariance matrix $R$.
+Decomposing $z_t^i = \begin{bmatrix}
+    s_t^i \\
+    S_t^i
+    \end{bmatrix}$ 
+with each $S_t^i \in \mathsf{S}^{D-1}$, the model is therefore
+$$p(z_1^i) \sim \gaussian{a_1^i}{Q_1^i}, \eqsp p(z_1) = \prod_{i=1}^I p(z_1^i)$$
+$$p(z_t^i|z_{t-1}^i) \sim \gaussian{A^i z_{t-1}^i + a^i}{Q^i}, \eqsp p(z_t|z_{t-1}) = \prod_{i=1}^I p(z_t^i|z_{t-1}^i)$$
+$$p(x_t|z_t) \sim \gaussian{B s_t + b}{R}$$
+
+Since, $p_{1:t}( z_{1:t}) = \frac{p(\mathsf{x}_{1:t},  z_{1:t})}{\int p(\mathsf{x}_{1:t},  z'_{1:t})}$, $p_{1:t}$ is fully specified given parameters $\Theta = \{B, b, R, (A^i, a_1^i, a^i, Q_1^i, Q^i)_{i \leq I}\}$ of the joint model. 
+\subsubsection*{A recursion for the ELBO}
+The tower property of expectations is such that: 
+
+\begin{equation}
+    \mathcal{L}_t(q_{1:t}) = \expect{q_{1:t}( z_{1:t})}{\log \frac{p(x_{1:t},z_{1:t})}{q_{1:t}(z_{1:t})}} = \expect{q_{1:t}( z_t)}{V_t(z_{t})}
+\end{equation}
+
+where we have defined $$V_t(z_t) = \expect{q_{1:t}( z_{1:t-1}|z_t)}{\log \frac{p(x_{1:t},z_{1:t})}{q_{1:t}(z_{1:t})}}$$
+
+We denote the forward kernel $p_{(s)}(z_s|z_{s-1}) = p(z_s,x_s|z_{s-1}, x_{s-1}) = p(x_s|z_s)p(z_s|z_{s-1})$ (using the subscript $_{(s)}$ to avoid the confusion $p(z_s,x_s|z_{s-1}) \neq p(z_s|z_{s-1},x_s)$, together with $"s = s:s"$). Note that there is no dependency on $x_{s-1}$ because of HMM structure of our model, this is not true in the general case. Using this notation the numerator in the $\log$ becomes $\prod_{s=1}^t p_{(s)}( z_s|z_{s-1})$. 
+
+In the true model, the distributions $\left\{p_{1:t}(z_{1:t})\right\}_{t \geq 1}$ are the smoothing distributions, which verify the recursion $p_{1:t}(z_{1:t}) = \tilde{p}_{1:t}(z_t|z_{t-1}) p_{1:t-1}(z_{1:t-1})$ where we have defined $$\tilde{p}_{1:t}(z_t|z_{t-1}) = \frac{p_{(t)}(z_{t}|z_{t-1})}{\int p_{(t)}(z_{t}|z_{t-1})p_{1:t-1}(z_{1:t-1})\rmd z_{1:t}}$$
+
+Suppose we choose a variational family where we can define some $\tilde{q}$ that allows the same decomposition $q_{1:t}(z_{1:t}) = \tilde{q}_{1:t}(z_t|z_{t-1}) q_{1:t-1}(z_{1:t-1})$, then we have a recursion for $V_t$, because
+\begin{align*}
+V_{t+1}(z_{t+1}) &= \expect{q_{1:t}(z_{1:t}|z_{t+1})}{\log \frac{p(x_{1:t+1},z_{1:t+1})}{q_{1:t+1}(z_{1:t+1})}} \\
+                   &= \expect{q_{1:t}(z_{1:t}|z_{t+1})}{\log\frac{p_{(t+1)}(z_{t+1}|z_t)\prod_{s=1}^t p_{(s)}(z_s|z_{s-1})}{\tilde{q}_{1:t+1}(z_{t+1}|z_t)\prod_{s=1}^t \tilde{q}_{1:s}(z_s|z_{s-1})}}\\
+                   &= \expect{q_{1:t}(z_{1:t}|z_{t+1})}{\log\frac{p_{(t+1)}(z_{t+1}|z_t)}{\tilde{q}_{1:t+1}(z_{t+1}|z_t)} + \log\frac{\prod_{s=1}^t p_{(s)}(z_s|z_{s-1})}{\prod_{s=1}^t \tilde{q}_{1:s}(z_s|z_{s-1})}} \\
+                   &= \expect{q_{1:t}( z_t|z_{t+1})}{\expect{q_{1:t}(z_{1:t-1}|z_t,z_{t+1})}{
+                           \log\frac{p_{(t+1)}(z_{t+1}|z_t)}{\tilde{q}_{1:t+1}(z_{t+1}|z_t)} + \log\frac{\prod_{s=1}^t p_{(s)}(z_s|z_{s-1})}{\prod_{s=1}^t \tilde{q}_{1:s}(z_s|z_{s-1})}}}
+\end{align*}
+where the last equality is the tower rule applied once more. 
+
+Suppose that we choose a variational family such that 
+\begin{equation}\label{backward_fact}
+    q_{1:t}(z_{1:t}) = \vfilt{t}\prod_{s=1}^{t-1} q_{1:s}(z_s|z_{s+1})\eqsp,
+\end{equation}
+then and $q_{1:t}(z_{1:t-1}|z_t, z_{t+1}) = q_{1:t}(z_{1:t-1}|z_t)$ so
+
+\begin{equation}\label{v_t_recursion}
+    V_{t+1}(z_{t+1}) = \expect{\vbackward{t}}{V_t(z_t) + \log\frac{p_{(t+1)}(z_{t+1}|z_t)}{\tilde{q}_{1:t+1}(z_{t+1}|z_t)}}
+\end{equation}
+
+with 
+
+\begin{equation}
+    \tilde{q}_{1:t+1}(z_{t+1}|z_t) = \frac{\vbackward{t}\vfilt{t+1}}{\vfilt{t}}
+\end{equation}
+
+\subsection{A fully tractacle variational approximation}
+This recursion is useful provided that we can compute the expectation of the $\log$ term (decomposed as the $\log$ difference) under the backward distribution $\vbackward{t}$. 
+
+In a general HMM, we know that:
+
+\begin{itemize}
+    \item Conditionally on $(x_t)_{t \leq T}$, $(z_t)_{t \leq T}$ is a Markov chain backward in time with initial distribution $p_{1:t}(z_t)$, ie. the true smoothing distribution $p_{1:t}(z_{1:t})$ does factorize as in eq. \ref{backward_fact}.
+    \item The backward kernel is related to the filtering distribution via: $$p_{1:t}(z_t|z_{t+1}) = \frac{p(z_{t+1}|z_t)p_{1:t}(z_t)}{\int p(z_{t+1}|z_t)p_{1:t}(z_t)\rmd z_t}$$
+\end{itemize} 
+
+In the specific case of our more restricted (linear Gaussian) model, we further know, before detailing the computations, that:
+
+\begin{itemize}
+    \item The filtering distribution is a Gaussian $p_{1:t}(z_t) \sim \gaussian{\mu_{1:t}}{\Sigma_{1:t}}$
+    \item Since $p(z_{t+1}|z_t)$ is a Gaussian where only the mean depends on $z_t$, the numerator in eq. \ref{v_t_recursion} is a Gaussian in $z_t$ and the integral in the denominator is the expected value of that Gaussian distribution. Therefore the backward kernel is also a Gaussian distribution where only the mean depends on $z_{t+1}$. 
+\end{itemize} 
+
+With similar reasonings, $\log p_{(t+1)}(z_{t+1}|z_t)$ and $\log \tilde{p}_{1:t+1}(z_{t+1}|z_t)$ are both quadratic forms in $z_t$. This means that if we choose a variational family where this is also true for $\tilde{q}_{1:t+1}(z_{t+1}|z_t)$, then the expectation in the recursion \ref{v_t_recursion} will admit a closed form which is a quadratic form in $z_{t+1}$.
+                                                    
+One obvious way to choose a variational family that verifies the previous constraints is to define a variational model which mirrors exactly the true model but with different parameters. We start with this option and define the following distributions. We define $\Phi = \{B^\phi, b^\phi, R^\phi, (A^{\phi,i}, a_1^{\phi,i}, a^{\phi,i}, Q_1^{\phi,i}, Q^{\phi,i})_{i \leq I}\}$ the set of all variational parameters, and the following distributions:
+
+$$q(z_1^i) \sim \gaussian{a_1^{\phi,i}}{Q_1^{\phi,i}}, \eqsp q(z_1) = \prod_{i=1}^I q(z_1^i)$$
+$$q(z_t^i|z_{t-1}^i) \sim \gaussian{A^{\phi,i} z_{t-1}^i + a^{\phi,i}}{Q^{\phi,i}}, \eqsp q(z_t|z_{t-1}) = \prod_{i=1}^I q(z_t^i|z_{t-1}^i)$$
+$$q(x_t|z_t) \sim \gaussian{B^\phi s_t + b^\phi}{R}$$
+
+To facilitate computations, we define the block objects $M = diag(M^1, \ldots, M^I)$ for all relevant parameters. We denote $M^\theta$ the parameters of the true model. We now explicitely derive the closed forms for the expectation of all terms in $\ref{v_t_recursion}$ w.r.t parameters in $\Theta$ and $\Phi$. 
+
+Since the model of our variational approximation is also a linear Gaussian HMM, we can define: 
+
+\begin{itemize}
+    \item The variational filtering distribution as a Gaussian $\vfilt{t} \sim \gaussian{\mu_{1:t}^\phi}{\Sigma_{1:t}^\phi}$
+    \item The backward variational distribution as a Gaussian $\vbackward{t} \sim \gaussian{\vbackwardmean{t}(z_{t+1})}{\vbackwardcov{t}}$ where $\vbackwardmean{t}$ is linear in $z_{t+1}$ with $\vbackwardmean{t}(z_{t+1}) = \backward{A}_{1:t}^\phi z_{t+1} + \backward{a}_{1:t}^\phi$, where $\backward{A}_{1:t}^\phi$ and $\backward{a}_{1:t}^\phi$ can be entirely expressed in terms of $\mu_{1:t}^\phi, \Sigma_{1:t}^\phi$ and parameters in $\Phi$ (which is detailed below).
+\end{itemize} 
+
+We start with the terms from the true model $\log p_{(t+1)}(z_{t+1}|z_t) = \log p(x_{t+1}|z_{t+1}) + \log p(z_{t+1}|z_t)$. The first term on the right hand side is completely measured in $\ref{v_t_recursion}$ at $t+1$ and is therefore integrated later against the backward kernel at $t+2$. We first deal with the second term:
+
+\begin{align}
+    \log p(z_{t+1}|z_t) &= -\frac{1}{2}\left(d_\mathsf{Z} \log(2\pi) + \log |Q^\theta|\right) - \frac{1}{2}\left[\quadform{(z_{t+1} - A^\theta z_t - a^\theta)}{\stateprec}\right]
+\end{align}
+
+For a random variable $u \sim p(u)$ with $\expect{p(u)}{u} = \mu$ and $\mathbb{V}_{p(u)}[u] = \Sigma$, the following holds for any $\Lambda$:
+$$\expect{p(u)}{u^T \Lambda u} = tr(\Lambda \Sigma) + \mu^T \Sigma \mu$$
+
+We denote $u = u(z_t) = A^\theta z_t + a^\theta - z_{t+1}$ and $\Lambda = \stateprec$, and we have
+
+\begin{align*}
+    \expect{\vbackward{t}}{u^T \Lambda u} &= \expect{z_t \sim \gaussian{\vbackwardmean{t}}{\vbackwardcov{t}}}{u(z_t)^T \Lambda u(z_t)} \\
+    &=  \expect{u \sim \gaussian{A^\theta \vbackwardmean{t} + a^\theta - z_{t+1}}{A^\theta \vbackwardcov{t} {A^\theta}^T}}{u^T \Lambda u}
+\end{align*}
+
+
+which allows the computation of the whole term $\log p(z_{t+1}|z_t)$ against the backward kernel and leads to
+
+\begin{multline*}
+    \expect{\vbackward{t}}{\log p(z_{t+1}|z_t)} = -\frac{1}{2}\{d_\mathsf{Z} \log(2\pi) + \log |Q^\theta| + tr(\stateprec A^\theta \vbackwardcov{t} {A^\theta}^T) \\
+     + \quadform{(A^\theta \vbackwardmean{t}(z_{t+1}) + a^\theta - z_{t+1})}{\stateprec}\} 
+\end{multline*}
+
+Where we can see clearly that it is still a quadratic form in $z_{t+1}$ if $\vbackwardmean{t}(z_{t+1})$ is linear in $z_{t+1}$
+
+To express the parameters $\vbackwardmean{t}$ and $\vbackwardcov{t}$ of the variational backward in terms of parameters in $\Phi$ and $\vfiltmean{t},\vfiltcov{t}$, we just recall that: 
+
+\begin{equation*}
+    \vbackward{t} \propto q(z_{t+1}|z_t) \vfilt{t} \propto e^{-\frac{1}{2}\left[\quadform{\left(z_{t+1} - (A^\phi z_t + a^\phi)\right)}{\vstateprec} + \quadform{(z_t - \vfiltmean{t})}{\inv{\vfiltcov{t}}} \right]}
+\end{equation*}
+
+Quadratic forms develop into $\quadform{(u-b)}{\Omega} = \quadform{u}{\Omega} - 2b^T \Omega u +b^T \Omega b$ (for $\Omega$ symmetric), so for any $A,b_1,b_2,\Omega_1, \Omega_2$:
+
+\begin{align*}
+\quadform{(Au - b_1)}{\Omega_1} + \quadform{(u-b_2)}{\Omega_2} &= \quadform{u}{(A^T\Omega_1 A + \Omega_2)} - 2\left[b_1^T \Omega_1 A + b_2^T \Omega_2 \right]u + \quadform{b_1}{\Omega_1} + \quadform{b_2}{\Omega_2} \\
+    &= \quadform{u}{\Omega}
+\end{align*}
+
+With $\Omega = (\quadform{A}{\Omega_1}+ \Omega_2)$ and $b = \inv{\Omega}\left(\Omega_2 b_2 + A^T \Omega_1 b_1 \right)$.
+
+This operation is precisely what appears in the argument of the exponential in the previous equation with $A = A^\phi$, $b_1 = z_{t+1} - a^\phi$, $\Omega_1 = \vstateprec$, $b_2 = \vfiltmean{t}$, $\Omega_2 = \inv{\vfiltcov{t}}$, so we can identify the parameters of $\vbackward{t}$ as 
+
+$$\vbackwardcov{t} = \inv{\left(\quadform{{A^\phi}}{\vstateprec} + \inv{\vfiltcov{t}}\right)}$$
+
+$$\vbackwardmean{t} = \left(\quadform{{A^\phi}}{\vstateprec} + \inv{\vfiltcov{t}}\right)\left(\inv{\vfiltcov{t}}\vfiltmean{t} + {A^\phi}^T \vstateprec (z_{t+1} - a^\phi)\right)$$
+
+Therefore we do have the linearity in $z_{t+1}$ with $$\backward{A}_{1:t}^\phi = \left(\quadform{{A^\phi}}{\vstateprec} + \inv{\vfiltcov{t}}\right) {A^\phi}^T \vstateprec$$ and $$\backward{a}_{1:t}^\phi = \left(\quadform{{A^\phi}}{\vstateprec} + \inv{\vfiltcov{t}}\right)\left(\inv{\vfiltcov{t}}\vfiltmean{t} - {A^\phi}^T \vstateprec a^\phi \right)$$
+
+It remains to compute $\expect{\vbackward{t}}{\log \tilde{q}_{1:t+1}(z_{t+1}|z_t)}$ which develops into
+\begin{multline*}
+    \expect{\vbackward{t}}{\log \tilde{q}_{1:t+1}(z_{t+1}|z_t)}= \expect{\vbackward{t}}{\log \vbackward{t}} + \expect{\vbackward{t}}{\log \vfilt{t+1}} \\ 
+    - \expect{\vbackward{t}}{\log \vfilt{t}}
+\end{multline*}
+
+The second term is only measured at $t+2$ while the first and third term are expectations of quadratic forms with known parameters under a Gaussian with known parameters, so we apply again $$\expect{x \sim \gaussian{\mu}{\Sigma}}{\quadform{(Ax +b)}{\Lambda}} = tr(\Lambda A \Sigma A^T) + \quadform{(A\mu + b)}{\Lambda}$$ to these two terms and get
+
+\begin{multline*}
+\expect{\vbackward{t}}{\log \tilde{q}_{1:t+1}(z_{t+1}|z_t)} = \log \vfilt{t+1} - d_\mathsf{Z} \log(2\pi) - \frac{1}{2}\{\log |\vbackwardcov{t}| + \log |\vfiltcov{t}| \\ +  tr(\vfiltcov{t} {\vbackwardcov{t}}^T) +  tr(\vbackwardcov{t}{\vbackwardcov{t}}^T) 
+ + \quadform{(\vbackwardmean{t} - \vfiltmean{t})}{\vfiltcov{t}} \}
+\end{multline*}
+
+The terms at $t+2$ are treated likewise. For the observation model we have
+
+\begin{multline*}
+\expect{q_{1:t+1}(z_{t+1}|z_{t+2})}{\log p(x_{t+1}|z_{t+1})} = -\frac{1}{2}\{d_{\mathsf{X}}\log 2\pi + \log |R^\theta| + tr\left(\inv{R^\theta} B^\theta\vbackwardcov{t+1}{B^\theta}^T\right) \\ + \quadform{(B^\theta\vbackwardmean{t+1} + b^\theta - x_{t+1})}{\inv{R^\theta}}\}
+\end{multline*} 
+
+And for $\log \vfilt{t+1}$ we have
+
+\begin{multline*}
+\expect{q_{1:t+1}(z_{t+1}|z_{t+2})}{\log \vfilt{t+1}} = \frac{1}{2}\{d_{\mathsf{Z}} \log 2\pi + \log |\vfiltcov{t+1}| + tr(\inv{\vfiltcov{t+1}}\vbackwardcov{t+1}) \\ + \quadform{(\vbackwardmean{t+1} - \vfiltmean{t+1})}{\vfiltcov{t+1}}\}\\ 
+\end{multline*}
+
+
+\section{Extensions}
+
+In the linear Gaussian case, we were able to derive all results in closed-form without any approximation. For this model, optimal estimation of the smoothing distribution and the model parameters is already avaible via the Kalman smoothing recursions coupled with EM optimization or recursive likelihood maximization. 
+
+Provided that $(z_t,x_t)_{t \geq 1}$ is still a HMM, the backward factorization of the joint smoothing distribution always exists for the true model, and is therefore a theoretically motivated choice for constraining the variational family as in \ref{backward_fact}. Given this factorization, the recursion \ref{v_t_recursion} is always true. Therefore, for more general cases the variational family may be more conviently defined directly via the backward kernel. 
+
+In general, if the true model is not assumed to be linear Gaussian, none of the posterior distributions (joint and marginal smoothing or filtering) are Gaussian, and therefore the backward kernels (related to the filtering distributions) are not Gaussian either. Even if we prescribe Gaussianity for the variational terms, the log terms from the true model are not easily integrated against the variational backward because they are not quadratic forms anymore. 
+
+As explained in introduction, identifiabilty results in ICA only exist for models with linear dynamics (though with the possibility of regimes as in section \ref{nonlinear_ica}) so we do not consider nonlinear transitions for the hidden state. Yet, nonlinearity in the observation model alone still breaks the gaussianity of the posteriors. In this case, particle methods can be used to build discretely-supported unbiased and online approximators of the filtering distribution $p_{1:t}(z_t)$. However they suffer from the curse of dimensionality because the number of particle grows linearly with the $d_{\mathsf{Z}}$, which makes them unsuitable to estimate representions that are expressive enough for complex sources (e.g. visual descriptors of individual objects in computer vision, properties of individual speakers in audio, etc). What's more, even if $d_{\mathsf{Z}}$ is small enough, the support of the joint $p_{1:t}(z_{1:t})$ is increasing in $t$, and therefore particle methods can typically only provide estimators of expectations $\expect{p_{1:t}(z_{1:t})}{h(z_{1:t})}$. In this context, it therefore makes sense to stick to variational inference, which is the only tractable tool to provide an approximation of the full joint smoothing distribution. 
+
+In the VAE litterature, powerful variational families (e.g. normalizing flows) are now frequently considered to obtain expressive posteriors. However, we show in this section that many terms in section \ref{linear_gauss} become intractble even when sticking to Gaussian parameterization, and we provide an overview of the different tools which can be used to approximate the latter. 
+
+\subsection{Replacing the Kalman update with a learnt filtering recursion}
+\dots
+
+\subsection{Nonlinear observation model}
+
+We assume a similar transition model $p(z_t|z_{t-1})$ for the hidden states, but observations are nonlinear transformations of the components under Gaussian noise, ie. $$p(x_t|z_t) = p(x_t|s_t) \sim \gaussian{f_\theta(s_t)}{R^\theta}$$. 
+
+As stated above, in this case, $p_{1:t}(z_t|z_{t+1})$ is not Gaussian anymore, however we approximate it with a Gaussian variational backward $\vbackward{t} \sim \gaussian{\vbackwardmean{t}(z_{t+1})}{\vbackwardcov{t}}$ and define the variational joint smoothing distribution via the backward factorization given by equation \ref{backward_fact}. If we specify that $\vbackwardmean{t}(z_{t+1})$ is linear in $z_{t+1}$, then all quantities in the previous section except from the expectation of the observation model are tractable as before. For this latter term, at $t+2$, 
+
+\begin{multline*}
+\expect{q_{1:t+1}(z_{t+1}|z_{t+2})}{\log p(x_{t+1}|z_{t+1})} = -\frac{1}{2}\{d_{\mathsf{X}}\log 2\pi + \log |R^\theta| \\
+    + \expect{z_{t+1} \sim \gaussian{\vbackwardmean{t+1}}{\vbackwardcov{t+1}}}{\quadform{(f_\theta(z_{t+1}) - x_{t+1})}{\inv{R^\theta}}}\} \\
+\end{multline*}
+
+and the expectation that remains admits no closed-form. From \cite{johnson}, the following approximation may be a suitable alternative (where we write the equation at $t$ for readability)
+
+\begin{equation}
+    \expect{\vbackward{t}}{\log p(x_t|z_t)} \propto \eqsp \quadform{[z_{t+1} - v(x_t)]}{W(x_t)}
+\end{equation}
+
+where 
 
 \clearpage
 \newpage
+
 \section{Control of the variational error for additive functionals}
 Let $\parvec$ be a parameter lying in a $\Theta\subset \rset^q$ and consider a  \textit{state space model} where the hidden Markov chain  in $\rset^d$ is denoted by $(X_k)_{k\geqslant 0}$. The distribution of $X_0$ has density $\chi$ with respect to the Lebesgue measure and for all $0\leqslant k \leqslant n-1$, the conditional distribution of $X_{k+1} $ given $X_{0:k}$ has density $\hd{k+1;\parvec}(X_{k},\cdot)$, where $a_{u:v}$ is a short-hand notation for $(a_u,\ldots,a_v)$. 
 It is assumed that this state  is partially observed  through an observation process $(Y_k)_{0\leqslant k \leqslant n}$ taking values in $\rset^m$. 
