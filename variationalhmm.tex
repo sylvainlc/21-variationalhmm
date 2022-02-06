@@ -553,30 +553,20 @@ $$\vbackwardmean{t} = \left(\quadform{{A^\phi}}{\vstateprec} + \inv{\vfiltcov{t}
 
 Therefore we do have the linearity in $z_{t+1}$ with $$\backward{A}_{1:t}^\phi = \left(\quadform{{A^\phi}}{\vstateprec} + \inv{\vfiltcov{t}}\right) {A^\phi}^T \vstateprec$$ and $$\backward{a}_{1:t}^\phi = \left(\quadform{{A^\phi}}{\vstateprec} + \inv{\vfiltcov{t}}\right)\left(\inv{\vfiltcov{t}}\vfiltmean{t} - {A^\phi}^T \vstateprec a^\phi \right)$$
 
+
 It remains to compute $\expect{\vbackward{t}}{\log \tilde{q}_{1:t+1}(z_{t+1}|z_t)}$ which develops into
 \begin{multline*}
     \expect{\vbackward{t}}{\log \tilde{q}_{1:t+1}(z_{t+1}|z_t)}= \expect{\vbackward{t}}{\log \vbackward{t}} + \expect{\vbackward{t}}{\log \vfilt{t+1}} \\ 
     - \expect{\vbackward{t}}{\log \vfilt{t}}
 \end{multline*}
 
-The second term is only measured at $t+2$ while the first and third term are expectations of quadratic forms with known parameters under a Gaussian with known parameters, so we apply again $$\expect{x \sim \gaussian{\mu}{\Sigma}}{\quadform{(Ax +b)}{\Lambda}} = tr(\Lambda A \Sigma A^T) + \quadform{(A\mu + b)}{\Lambda}$$ to these two terms and get
+The second term is only integrated at $t+2$ but cancels out with the third term (from $t+2$) ie. the $\log$ of the filtering distributions form a telecoping series. Therefore we only need to integrate the third term at the $t=2$ and evaluate the second one at $t=T$. The first term is the expectation of the log-backward under the backward, ie. the expectation of the log of a Gaussian under iself which yields $-\frac{1}{2}\left(d_{\mathsf{Z}}(\log 2\pi + 1) + \log |\vbackwardcov{t}|\right)$
 
-\begin{multline*}
-\expect{\vbackward{t}}{\log \tilde{q}_{1:t+1}(z_{t+1}|z_t)} = \log \vfilt{t+1} - d_\mathsf{Z} \log(2\pi) - \frac{1}{2}\{\log |\vbackwardcov{t}| + \log |\vfiltcov{t}| \\ +  tr(\vfiltcov{t} {\vbackwardcov{t}}^T) +  tr(\vbackwardcov{t}{\vbackwardcov{t}}^T) 
- + \quadform{(\vbackwardmean{t} - \vfiltmean{t})}{\vfiltcov{t}} \}
-\end{multline*}
-
-The terms at $t+2$ are treated likewise. For the observation model we have
+For the observation model at $t+2$ we have
 
 \begin{multline*}
 \expect{q_{1:t+1}(z_{t+1}|z_{t+2})}{\log p(x_{t+1}|z_{t+1})} = -\frac{1}{2}\{d_{\mathsf{X}}\log 2\pi + \log |R^\theta| + tr\left(\inv{R^\theta} B^\theta\vbackwardcov{t+1}{B^\theta}^T\right) \\ + \quadform{(B^\theta\vbackwardmean{t+1} + b^\theta - x_{t+1})}{\inv{R^\theta}}\}
 \end{multline*} 
-
-And for $\log \vfilt{t+1}$ we have
-
-\begin{multline*}
-\expect{q_{1:t+1}(z_{t+1}|z_{t+2})}{\log \vfilt{t+1}} = \frac{1}{2}\{d_{\mathsf{Z}} \log 2\pi + \log |\vfiltcov{t+1}| + tr(\inv{\vfiltcov{t+1}}\vbackwardcov{t+1}) \\ + \quadform{(\vbackwardmean{t+1} - \vfiltmean{t+1})}{\vfiltcov{t+1}}\}\\ 
-\end{multline*}
 
 
 \subsection{Extensions}
