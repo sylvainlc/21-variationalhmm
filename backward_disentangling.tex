@@ -587,6 +587,7 @@ Given a sequence $(\addf{n})_{n \in \nset}$ of measurable functions $\addf{n} : 
 \end{equation}
 under the distribution flow $(\post{0:n})_{n \in \nset}$ and under the variational family.   
 
+\paragraph{Variational family. }
 For all $n\in\nset$, write $\post{0:n}^{\varphi}$ the joint smoothing distribution provided by the variational family. Then,
 $$
  \post{0:n}^{\varphi}(d x_{0:n})= q_{\varphi,n}(dx_n)\prod_{k=0}^{n-1}q_{\varphi,k}(x_{k+1},dx_k)\eqsp.
@@ -595,7 +596,7 @@ This joint probability distribution can be written:
 $$
  \post{0:n}^{\varphi}(d x_{0:n})= q_{\varphi,n}(dx_0)\prod_{k=0}^{n-1}m_{\varphi,k}(x_{k},dx_{k+1})\eqsp,
 $$
-where $m_{\varphi,k}(x_{k},dx_{k+1}) =  q_{\varphi,k+1}(dx_{k+1})q_{\varphi,k}(x_{k+1},dx_k)/q_{\varphi,k}(x_k)$.
+where $m_{\varphi,k}(x_{k},dx_{k+1}) =  q_{\varphi,k+1}(dx_{k+1})q_{\varphi,k}(x_{k+1},dx_k)/q_{\varphi,k}(x_k)$. \textcolor{red}{Here $q_{\varphi,k+1}(dx_{k+1})$, $q_{\varphi,k}(dx_{k})$ and $q_{\varphi,n}(dx_0)$ are not really $ q_{\varphi,\ell}$ but the marginals  of $ \post{0:n}^{\varphi}$ ?}
 
 \begin{hypH}
 \label{assum:bias:bound}
@@ -604,7 +605,7 @@ $$
 \left|\int m_{\varphi,n}(x,dx_{n+1}) h (x_{n+1})- \int\uk{n,\parvec}(x,dx_{n+1}) h (x_{n+1})\right| \leq c(\parvec,\varphi) \| h \|_\infty. 
 $$
 \end{hypH}
-
+\textcolor{red}{In the case of HMM/ICA models, etc. the kernels $ m_{\varphi,n}$ and $\uk{n,\parvec}$ depend on the observations. Then, the upper bound $c(\parvec,\varphi)$ depends is random and depend on the observations. This should be detailed in}
 
 \begin{hypH}
 \label{assum:strong:mixing}
@@ -617,18 +618,67 @@ $$
     \udlow \leq \inf_{\varphi} m_{\varphi,k}(x_k, x_{k + 1}), \quad \sup_{\varphi} m_{\varphi,k}(x_k, x_{k + 1}) \leq \udup. 
 $$ 
 \end{hypH}
-Under these assumptions, define the mixing rate 
-\begin{equation} \label{eq:def:rho}
-    \rho \eqdef 1 - \frac{\udlow}{\udup}
-\end{equation}
-Then for all $n \in \nset$, $\parvec$, $\varphi$, and $h_n$, 
+%Under these assumptions, define the mixing rate 
+%\begin{equation} \label{eq:def:rho}
+%    \rho \eqdef 1 - \frac{\udlow}{\udup}
+%\end{equation}
+\textcolor{red}{Here we follow the proofs of \cite{} using strong mixing for both the original model and the variational family. Should see if this can be relaxed.}
+
+\begin{proposition}
+\label{prop:bias}
+Assume that H\ref{assum:bias:bound} and H\ref{assum:strong:mixing} hold. Then for all $n \in \nset$, $\parvec$, $\varphi$, and $h_n$,  
     \begin{align*}
         \big| \postmod{0:n} h_n -  \post{0:n}^{\parvec} h_n \big| 
         &\leq 2 c(\parvec,\varphi) \frac{\udup}{\udlow^2} \sum_{k = 0}^{n - 1} \| \addf{k} \|_\infty \left( \sum_{m = 1}^{n - 1} \rho^{|k - m| - 1} + 1 \right) \\
-        &\leq 2 c(\parvec,\varphi) n \frac{\udup}{\udlow^2} \left( 1 + \frac{1}{\rho} + \frac{2}{1 - \rho} \right) \sup_{0 \leq k \leq n - 1} \| \addf{k} \|_\infty\eqsp.
+        &\leq 2 c(\parvec,\varphi) n \frac{\udup}{\udlow^2} \left( 1 + \frac{1}{\rho} + \frac{2}{1 - \rho} \right) \sup_{0 \leq k \leq n - 1} \| \addf{k} \|_\infty\eqsp,
     \end{align*}
+where $\rho \eqdef 1 - \udlow/\udup$.
+\end{proposition}
 
 \begin{proof}
+The proof is postponed to Section~\ref{sec:assumptions}.
+\end{proof}
+
+\subsection{Commments on assumption H\ref{assum:bias:bound} and H~\ref{assum:strong:mixing}}
+\label{sec:assumptions}
+
+\subsection{Proof of Proposition~\ref{prop:bias}}
+\label{sec:proof}
+
+\begin{proof}
+Write 
+$$
+\postmod{0:n} h_n - \post{0:n} h_n = \sum_{k = 0}^{n - 1} \left( \postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} \right), 
+$$
+where each term can be decomposed according to   
+\begin{equation*}
+\postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} = 
+\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} \right).  
+\end{equation*}
+In order to bound each term of this decomposition, write, using Lemma~\ref{lem:retro:prospective:id},  
+$$
+\frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} 
+= \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{\Xset^n}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{\Xset^n}}. 
+$$
+Now, for all $m \in \intvect{1}{n}$, pick an arbitrary element $\xarb_m \in \Xset_m$ and define the kernel 
+\begin{equation} \label{eq:def:norm:objective:func}
+\retrokmodnorm_{m, n} h(x_m) \eqdef \frac{\retrokmod_{m, n} h(x_m)}{\retrokmod_{m, n} \1_{\Xset^n}(x_m)} - \frac{\retrokmod_{m, n} h (\xarb_m)}{\retrokmod_{m, n} \1_{\Xset^n} (\xarb_m)}, \quad x_m \in \Xset_m, \quad h \in \bmf{\Xfd^n}. 
+\end{equation}
+Combining this definition with Lemma~\ref{lemma:three:identities}, we may express the quantity of interest as 
+\begin{multline*}
+\postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} = \sum_{m = 1}^k \left( \noshift_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} - \shiftbwd_{m, n}  \retrokmodnorm_{m, n} \addf[n]{k} \right) \\ 
++ \frac{\postmod{k + 1} \retrokmod_{k + 1, n} \addf[n]{k}}{\postmod{k + 1} \retrokmod_{k + 1, n} \1_{\Xset^n}} - \frac{\postmod{k} \retrokmod_{k, n} \addf[n]{k}}{\postmod{k} \retrokmod_{k, n} \1_{\Xset^n}} + \sum_{m = k + 1}^{n - 1} \left( \shiftfwd_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} - \noshift_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} \right). 
+\end{multline*}
+Now, applying Lemmas~\ref{lem:geo:bound} and \ref{lem:diff:bound} to the previous decomposition yields
+$$
+\left| \postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} \right| \leq 2 c(\theta,\varphi) \frac{\udup }{\udlow^2} \sum_{k = 0}^{n - 1} \| \addf{k} \|_\infty \left( \sum_{m = 1}^{n - 1} \rho^{|k - m| - 1} + 1 \right).  
+$$
+which was to be established. 
+
+
+\medskip
+\medskip
+
 We preface the proof by a few technical lemmas. For each $m \in \nset$, define the  backward Markov kernel 
 \begin{equation} \label{eq:def:backward:kernel}
     \bkw{m}^\parvec(x_{m + 1}, \rmd x_m) \eqdef \frac{\post{m}^\parvec(\rmd x_m) \, \ud{m,\parvec}(x_m, x_{m + 1})}{\post{m}^\parvec[\ud{m,\parvec}(\cdot, x_{m + 1})]} %= \frac{\post{m}^\parvec(\rmd x_m) \, \hd{m;\parvec}(x_{m}, x_{m+1})}{\post{m}^\parvec[\hd{m;\parvec}(\cdot, x_{m+1})]}
@@ -855,131 +905,104 @@ from which (ii) follows, as before, by a combination of H\ref{assum:bias:bound} 
 
 
 
-Write 
-$$
-\postmod{0:n} h_n - \post{0:n} h_n = \sum_{k = 0}^{n - 1} \left( \postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} \right), 
-$$
-where each term can be decomposed according to   
-\begin{equation*}
-\postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} = 
-\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} \right).  
-\end{equation*}
-In order to bound each term of this decomposition, write, using Lemma~\ref{lem:retro:prospective:id},  
-$$
-\frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} 
-= \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{\Xset^n}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{\Xset^n}}. 
-$$
-Now, for all $m \in \intvect{1}{n}$, pick an arbitrary element $\xarb_m \in \Xset_m$ and define the kernel 
-\begin{equation} \label{eq:def:norm:objective:func}
-\retrokmodnorm_{m, n} h(x_m) \eqdef \frac{\retrokmod_{m, n} h(x_m)}{\retrokmod_{m, n} \1_{\Xset^n}(x_m)} - \frac{\retrokmod_{m, n} h (\xarb_m)}{\retrokmod_{m, n} \1_{\Xset^n} (\xarb_m)}, \quad x_m \in \Xset_m, \quad h \in \bmf{\Xfd^n}. 
-\end{equation}
-Combining this definition with Lemma~\ref{lemma:three:identities}, we may express the quantity of interest as 
-\begin{multline*}
-\postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} = \sum_{m = 1}^k \left( \noshift_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} - \shiftbwd_{m, n}  \retrokmodnorm_{m, n} \addf[n]{k} \right) \\ 
-+ \frac{\postmod{k + 1} \retrokmod_{k + 1, n} \addf[n]{k}}{\postmod{k + 1} \retrokmod_{k + 1, n} \1_{\Xset^n}} - \frac{\postmod{k} \retrokmod_{k, n} \addf[n]{k}}{\postmod{k} \retrokmod_{k, n} \1_{\Xset^n}} + \sum_{m = k + 1}^{n - 1} \left( \shiftfwd_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} - \noshift_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} \right). 
-\end{multline*}
-Now, applying Lemmas~\ref{lem:geo:bound} and \ref{lem:diff:bound} to the previous decomposition yields
-$$
-\left| \postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} \right| \leq 2 c(\theta,\varphi) \frac{\udup }{\udlow^2} \sum_{k = 0}^{n - 1} \| \addf{k} \|_\infty \left( \sum_{m = 1}^{n - 1} \rho^{|k - m| - 1} + 1 \right).  
-$$
-which was to be established. 
+
 
 
 \end{proof}
-
-\clearpage
-\newpage
-
-For each $m \in \nset$, define the  backward Markov kernel 
-\begin{equation} \label{eq:def:backward:kernel}
-    \bkw{m}^\parvec(x_{m + 1}, \rmd x_m) \eqdef \frac{\post{m}^\parvec(\rmd x_m) \, \ud{m,\parvec}(x_m, x_{m + 1})}{\post{m}^\parvec[\ud{m,\parvec}(\cdot, x_{m + 1})]} = \frac{\post{m}^\parvec(\rmd x_m) \, \hd{m;\parvec}(x_{m}, x_{m+1})}{\post{m}^\parvec[\hd{m;\parvec}(\cdot, x_{m+1})]}
-\end{equation}
-on $\Xset_{m + 1} \times \Xfd_m$. In addition, for each $n \in \nsetpos$, let the Markov kernel   
-\begin{equation} \label{eq:def:tstat}
-\tstat{n}^\parvec(x_n, \rmd x_{0:n - 1}) \eqdef \prod_{m = 0}^{n - 1} \bkw{m}^\parvec(x_{m + 1}, \rmd x_m)
-\end{equation}
-on $\Xset_n \times \Xfd^{n - 1}$ denote the joint law of the backward Markov chain induced by the kernels \eqref{eq:def:backward:kernel} when initialised at $x_n \in \Xset_n$. 
-
-\begin{itemize} 
-\item[(i)]
-For all $n \in \nset$ and $h \in \bmf{\Xfd_n \tensprod \Xfd_{n + 1}}$, 
-\begin{equation} \label{eq:reversibility}
-\iint \post{n}^\parvec(\rmd x_n) \, \uk{n,\parvec}(x_n, \rmd x_{n + 1}) \, h(x_n, x_{n + 1}) = \iint \post{n}^\parvec \uk{n,\parvec}(\rmd x_{n + 1}) \, \bkw{n}^\parvec(x_{n + 1}, \rmd x_n) \, h(x_n, x_{n + 1}). 
-\end{equation}
-\item[(ii)]
-For all $n \in \nsetpos$ and $h \in \bmf{\Xfd^n}$, 
-$
-\post{0:n}^\parvec h = \post{n}^\parvec \tstat{n}^\parvec h. 
-$
-\end{itemize}
-In the case of state-space models, the identity (ii) above is a well-known result typically referred to as the \emph{backward decomposition} of the joint-smoothing distribution. Importantly, as noted in \cite{cappe:2009}, the functions $(\tstat{n} h_n)_{n \in \nsetpos}$ can be expressed recursively through  
-\begin{equation} \label{eq:forward:smoothing}
-\tstat{n + 1}^\parvec h_{n + 1}(x_{n + 1}) = \int (\tstat{n}^\parvec h_n(x_n) + \addf{n}(x_n, x_{n + 1})) \, \bkw{n}^\parvec(x_{n + 1}, \rmd x_n), \quad n \in \nset, 
-\end{equation}
-with, by convention, $\tstat{0}^\parvec h_0 \equiv 0$. Here the backward kernel $\bkw{n}^\parvec$ depends on the marginal $\post{n}^\parvec$; thus, the recursion is driven by the marginal flow $(\post{n}^\parvec)_{n \in \nset}$, which may again be expressed recursively. However, as these marginals are, as already mentioned, generally intractable, exact computations need typically to be replaced by approximations. 
-
- For all $n\in\nset$, write $\post{0:n}^{\varphi}$ the joint smoothing distribution provided by the variational family. Then,
-$$
-\post{0:n}^\parvec h - \post{0:n}^{\varphi} h= \post{n}^\parvec \tstat{n}^\parvec h - \post{0:n}^{\varphi} h =  \post{n}^\parvec \left\{\prod_{m = 0}^{n - 1} \bkw{m}^\parvec\right\} h - q_{\varphi,n}\left\{\prod_{k=0}^{n-1}q_{\varphi,k}\right\} h\eqsp.
-$$
-Write 
-$$
-\postmod{0:n} h_n - \post{0:n}^{\varphi} h_n = \sum_{k = 0}^{n - 1} \left( \postmod{0:n} \addf[n]{k} - \post{0:n}^{\varphi} \addf[n]{k} \right), 
-$$
-where each term can be decomposed according to   
-\begin{equation*}
-\postmod{0:n} \addf[n]{k} - \post{0:n}^\varphi \addf[n]{k} = 
-\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} \right)  
-\end{equation*}
-
-
-
-
-
-
-
-
-
-
-
-\clearpage
-\newpage
-
-
-
-
-
-Define, for each $n \in \nset$ and $0\leq m \leq n$, the kernel  
-\begin{equation} \label{eq:def:retrok}
-    \retrok_{m, n}^\parvec(x_m', \rmd x_{0:n}) \eqdef \delta_{x_m'}(\rmd x_m) \,  
-    \tstat{n}^\parvec(x_m, \rmd x_{0:m - 1})
-    \prod_{\ell = m}^{n - 1} \uk{\ell}^\parvec(x_\ell, \rmd x_{\ell + 1})
-\end{equation}
-on $\Xset_m \times \Xfd^n$ as well as the centered version 
-$$
-\retroknorm_{m, n}^\parvec h (x_m) \eqdef  \retrok_{m, n}^\parvec(h - \post{0:n}^\parvec h)(x_m) 
-$$
-on the same space.  For all $0\leq m \leq n$ and $h \in \bmf{\Xfd^n}$, 
-\begin{equation} \label{eq:retro:prospective:id}
-\postmod{0:m} \uk{m, n - 1}^\parvec h = \postmod{m} \retrokmod_{m, n} h.  
-\end{equation}
-In addition, for each $0\leq k \leq n - 1$, let 
-\begin{equation} \label{eq:def:addf}
-\addf[n]{k}: x_{0:n} \mapsto \addf{k}(x_k, x_{k + 1})  
-\end{equation}
-denote the extension of $\addf{k}$ to $\Xset^n$.  For all $n\in\nset$, write $\post{0:n}^{\varphi}$ the joint smoothing distribution provided by the variational family. Then,
-$$
-\post{0:n}^\parvec h - \post{0:n}^{\varphi} h= \post{n}^\parvec \tstat{n}^\parvec h - \post{0:n}^{\varphi} h =  \post{n}^\parvec \left\{\prod_{m = 0}^{n - 1} \bkw{m}^\parvec\right\} h - q_{\varphi,n}\left\{\prod_{k=0}^{n-1}q_{\varphi,k}\right\} h\eqsp.
-$$
-Write 
-$$
-\postmod{0:n} h_n - \post{0:n}^{\varphi} h_n = \sum_{k = 0}^{n - 1} \left( \postmod{0:n} \addf[n]{k} - \post{0:n}^{\varphi} \addf[n]{k} \right), 
-$$
-where each term can be decomposed according to   
-\begin{equation*}
-\postmod{0:n} \addf[n]{k} - \post{0:n}^\varphi \addf[n]{k} = 
-\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} \right)  
-\end{equation*}
+%
+%\clearpage
+%\newpage
+%
+%For each $m \in \nset$, define the  backward Markov kernel 
+%\begin{equation} \label{eq:def:backward:kernel}
+%    \bkw{m}^\parvec(x_{m + 1}, \rmd x_m) \eqdef \frac{\post{m}^\parvec(\rmd x_m) \, \ud{m,\parvec}(x_m, x_{m + 1})}{\post{m}^\parvec[\ud{m,\parvec}(\cdot, x_{m + 1})]} = \frac{\post{m}^\parvec(\rmd x_m) \, \hd{m;\parvec}(x_{m}, x_{m+1})}{\post{m}^\parvec[\hd{m;\parvec}(\cdot, x_{m+1})]}
+%\end{equation}
+%on $\Xset_{m + 1} \times \Xfd_m$. In addition, for each $n \in \nsetpos$, let the Markov kernel   
+%\begin{equation} \label{eq:def:tstat}
+%\tstat{n}^\parvec(x_n, \rmd x_{0:n - 1}) \eqdef \prod_{m = 0}^{n - 1} \bkw{m}^\parvec(x_{m + 1}, \rmd x_m)
+%\end{equation}
+%on $\Xset_n \times \Xfd^{n - 1}$ denote the joint law of the backward Markov chain induced by the kernels \eqref{eq:def:backward:kernel} when initialised at $x_n \in \Xset_n$. 
+%
+%\begin{itemize} 
+%\item[(i)]
+%For all $n \in \nset$ and $h \in \bmf{\Xfd_n \tensprod \Xfd_{n + 1}}$, 
+%\begin{equation} \label{eq:reversibility}
+%\iint \post{n}^\parvec(\rmd x_n) \, \uk{n,\parvec}(x_n, \rmd x_{n + 1}) \, h(x_n, x_{n + 1}) = \iint \post{n}^\parvec \uk{n,\parvec}(\rmd x_{n + 1}) \, \bkw{n}^\parvec(x_{n + 1}, \rmd x_n) \, h(x_n, x_{n + 1}). 
+%\end{equation}
+%\item[(ii)]
+%For all $n \in \nsetpos$ and $h \in \bmf{\Xfd^n}$, 
+%$
+%\post{0:n}^\parvec h = \post{n}^\parvec \tstat{n}^\parvec h. 
+%$
+%\end{itemize}
+%In the case of state-space models, the identity (ii) above is a well-known result typically referred to as the \emph{backward decomposition} of the joint-smoothing distribution. Importantly, as noted in \cite{cappe:2009}, the functions $(\tstat{n} h_n)_{n \in \nsetpos}$ can be expressed recursively through  
+%\begin{equation} \label{eq:forward:smoothing}
+%\tstat{n + 1}^\parvec h_{n + 1}(x_{n + 1}) = \int (\tstat{n}^\parvec h_n(x_n) + \addf{n}(x_n, x_{n + 1})) \, \bkw{n}^\parvec(x_{n + 1}, \rmd x_n), \quad n \in \nset, 
+%\end{equation}
+%with, by convention, $\tstat{0}^\parvec h_0 \equiv 0$. Here the backward kernel $\bkw{n}^\parvec$ depends on the marginal $\post{n}^\parvec$; thus, the recursion is driven by the marginal flow $(\post{n}^\parvec)_{n \in \nset}$, which may again be expressed recursively. However, as these marginals are, as already mentioned, generally intractable, exact computations need typically to be replaced by approximations. 
+%
+% For all $n\in\nset$, write $\post{0:n}^{\varphi}$ the joint smoothing distribution provided by the variational family. Then,
+%$$
+%\post{0:n}^\parvec h - \post{0:n}^{\varphi} h= \post{n}^\parvec \tstat{n}^\parvec h - \post{0:n}^{\varphi} h =  \post{n}^\parvec \left\{\prod_{m = 0}^{n - 1} \bkw{m}^\parvec\right\} h - q_{\varphi,n}\left\{\prod_{k=0}^{n-1}q_{\varphi,k}\right\} h\eqsp.
+%$$
+%Write 
+%$$
+%\postmod{0:n} h_n - \post{0:n}^{\varphi} h_n = \sum_{k = 0}^{n - 1} \left( \postmod{0:n} \addf[n]{k} - \post{0:n}^{\varphi} \addf[n]{k} \right), 
+%$$
+%where each term can be decomposed according to   
+%\begin{equation*}
+%\postmod{0:n} \addf[n]{k} - \post{0:n}^\varphi \addf[n]{k} = 
+%\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} \right)  
+%\end{equation*}
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%\clearpage
+%\newpage
+%
+%
+%
+%
+%
+%Define, for each $n \in \nset$ and $0\leq m \leq n$, the kernel  
+%\begin{equation} \label{eq:def:retrok}
+%    \retrok_{m, n}^\parvec(x_m', \rmd x_{0:n}) \eqdef \delta_{x_m'}(\rmd x_m) \,  
+%    \tstat{n}^\parvec(x_m, \rmd x_{0:m - 1})
+%    \prod_{\ell = m}^{n - 1} \uk{\ell}^\parvec(x_\ell, \rmd x_{\ell + 1})
+%\end{equation}
+%on $\Xset_m \times \Xfd^n$ as well as the centered version 
+%$$
+%\retroknorm_{m, n}^\parvec h (x_m) \eqdef  \retrok_{m, n}^\parvec(h - \post{0:n}^\parvec h)(x_m) 
+%$$
+%on the same space.  For all $0\leq m \leq n$ and $h \in \bmf{\Xfd^n}$, 
+%\begin{equation} \label{eq:retro:prospective:id}
+%\postmod{0:m} \uk{m, n - 1}^\parvec h = \postmod{m} \retrokmod_{m, n} h.  
+%\end{equation}
+%In addition, for each $0\leq k \leq n - 1$, let 
+%\begin{equation} \label{eq:def:addf}
+%\addf[n]{k}: x_{0:n} \mapsto \addf{k}(x_k, x_{k + 1})  
+%\end{equation}
+%denote the extension of $\addf{k}$ to $\Xset^n$.  For all $n\in\nset$, write $\post{0:n}^{\varphi}$ the joint smoothing distribution provided by the variational family. Then,
+%$$
+%\post{0:n}^\parvec h - \post{0:n}^{\varphi} h= \post{n}^\parvec \tstat{n}^\parvec h - \post{0:n}^{\varphi} h =  \post{n}^\parvec \left\{\prod_{m = 0}^{n - 1} \bkw{m}^\parvec\right\} h - q_{\varphi,n}\left\{\prod_{k=0}^{n-1}q_{\varphi,k}\right\} h\eqsp.
+%$$
+%Write 
+%$$
+%\postmod{0:n} h_n - \post{0:n}^{\varphi} h_n = \sum_{k = 0}^{n - 1} \left( \postmod{0:n} \addf[n]{k} - \post{0:n}^{\varphi} \addf[n]{k} \right), 
+%$$
+%where each term can be decomposed according to   
+%\begin{equation*}
+%\postmod{0:n} \addf[n]{k} - \post{0:n}^\varphi \addf[n]{k} = 
+%\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} \right)  
+%\end{equation*}
 
 \bibliographystyle{apalike}
 \bibliography{variationalhmm}
