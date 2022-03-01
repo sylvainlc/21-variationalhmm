@@ -689,10 +689,14 @@ denote the extension of $\addf{k}$ to $\Xset^n$.  Define, for each $n \in \nset$
 \end{equation}
 on $\Xset^m \times \Xfd^{n + 1}$. In addition, let $\uk{n, n - 1} = \operatorname{id}$. 
 Each term can be decomposed according to   
-\begin{equation*}
+\begin{multline*}
 \postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} = 
-\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} \right).
-\end{equation*}
+\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} \right) \\ + \textcolor{red}{\frac{\postmod{0} \uk{0, n - 1} \addf[n]{k}}{\postmod{0} \uk{0, n - 1} \1_{\Xset^n}} - \frac{\chi \uk{0, n - 1} \addf[n]{k}}{\chi\uk{0, n - 1} \1_{\Xset^n}}},
+\end{multline*}
+since 
+$$
+\frac{\chi \uk{0, n - 1} \addf[n]{k}}{\chi\uk{0, n - 1} \1_{\Xset^n}} = \post{0:n} \addf[n]{k}.
+$$
 For all $m \in \intvect{0}{n}$ and $h \in \bmf{\Xfd^n}$, 
 \begin{equation} \label{eq:retro:prospective:id}
 \postmod{0:m} \uk{m, n - 1} h = \postmod{m} \retrokmod_{m, n} h.  
