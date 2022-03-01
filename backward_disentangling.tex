@@ -33,7 +33,7 @@
 \pagestyle{fancy}
 
 
-\newcommand{\retrokmodnorm}{\bar{\boldsymbol{\mathcal{L}}}^{\precpar}}
+\newcommand{\retrokmodnorm}{\bar{\boldsymbol{\mathcal{L}}}^{\precpar,\theta}}
 \newcommand{\xarb}{x^\ast}
 \newcommand{\precparsp}{\mathcal{E}}
 \newcommand{\fk}[2]{\mathbf{F}_{#1 | #2}}
@@ -78,7 +78,7 @@
 	{\phi_{#2}^\varphi}
 	{\phi_{#2}^\N}
 }
-\newcommand{\retrokmod}{\boldsymbol{\mathcal{L}}^\precpar}
+\newcommand{\retrokmod}{\boldsymbol{\mathcal{L}}^{\precpar,\theta}}
 \newcommand{\uk}[1]{\mathbf{L}_{#1}}
 \newcommand{\tensprod}{\otimes}
 \def\dimX{d}
@@ -576,11 +576,11 @@ $$
 The variational family parameterizes the backward kernel which naturally appears in the decomposition of the law of $X_{0:n}$ given $Y_{0:n}$. 
 
 \subsection{Control of the variational error}
-In this section we propose an upper bound for the error $|\mathbb{E}_{q_\varphi}[\af{0:n}(X_{0:n})]-\mathbb{E}_\theta[\af{0:n}(X_{0:n})|Y_{0:n}]|$  when $\af{0:n}$ is an additive functional of the hidden states as in \eqref{eq:additive:functional}. Following \cite{gloaguen2019pseudo} this control can be obtained in a broader framework than the HMM setting. Let $(\Xset_n, \Xfd_n)_{n \in \nset}$ be a sequence of general state spaces and let, for all $n \in \nset$, $\uk{n}$ defined on  $\Xset_n \times \Xfd_{n + 1}$ be bounded kernels in the sense that $\sup_{x \in \Xset_n} \uk{n}(x, \Xset_{n + 1}) < \infty$. We will assume a dominated model where each kernel $\uk{n}$ has a kernel density $\ud{n}$ with respect to some $\sigma$-finite reference measure $\mu_{n + 1}$ on $\Xfd_{n + 1}$. Finally, let $\chi$ be some bounded measure on $\Xfd_0$. In the following, we denote state-space product sets and $\sigma$-fields by $\Xset^n \eqdef \Xset_0 \times \cdots \times \Xset_n$ and $\Xfd^n \eqdef \Xfd_0 \tensprod \cdots \tensprod \Xfd_n$, respectively, and consider probability measures  
+In this section we propose an upper bound for the error $|\mathbb{E}_{q_\varphi}[\af{0:n}(X_{0:n})]-\mathbb{E}_\theta[\af{0:n}(X_{0:n})|Y_{0:n}]|$  when $\af{0:n}$ is an additive functional of the hidden states as in \eqref{eq:additive:functional}. Following \cite{gloaguen2019pseudo} this control can be obtained in a broader framework than the HMM setting. Let $(\Xset_n, \Xfd_n)_{n \in \nset}$ be a sequence of general state spaces and let, for all $n \in \nset$ and all $\theta$, $\uk{n,\theta}$ defined on  $\Xset_n \times \Xfd_{n + 1}$ be bounded kernels in the sense that $\sup_{x \in \Xset_n} \uk{n,\theta}(x, \Xset_{n + 1}) < \infty$. We will assume a dominated model where each kernel $\uk{n,\theta}$ has a kernel density $\ud{n,\theta}$ with respect to some $\sigma$-finite reference measure $\mu_{n + 1}$ on $\Xfd_{n + 1}$. Finally, let $\chi$ be some bounded measure on $\Xfd_0$. In the following, we denote state-space product sets and $\sigma$-fields by $\Xset^n \eqdef \Xset_0 \times \cdots \times \Xset_n$ and $\Xfd^n \eqdef \Xfd_0 \tensprod \cdots \tensprod \Xfd_n$, respectively, and consider probability measures  
 \begin{equation} \label{eq:def:post}
-\post{0:n}(\rmd x_{0:n}) \propto \chi(\rmd x_0) \prod_{m = 0}^{n - 1} \uk{m}(x_m, \rmd x_{m + 1}), \quad n \in \nset, 
+\post{0:n}^\theta(\rmd x_{0:n}) \propto \chi(\rmd x_0) \prod_{m = 0}^{n - 1} \uk{m,\theta}(x_m, \rmd x_{m + 1}), \quad n \in \nset, 
 \end{equation}
-on these product spaces.\footnote{We will always use the standard convention $\prod_{\varnothing} = 1$, implying that $\post{0} \propto \chi$.}  In the special case where each $\uk{n}$ can be decomposed as $\uk{n}(x_n, \rmd x_{n + 1}) = \md{n}(x_n) \, \hk_n(x_n, \rmd x_{n + 1})$ for some Markov kernel $\hk_n$ and some nonnegative potential function $\md{n}$, \eqref{eq:def:post} yields the the HMM setting discussed in this section. 
+on these product spaces.\footnote{We will always use the standard convention $\prod_{\varnothing} = 1$, implying that $\post{0} \propto \chi$.}  In the special case where each $\uk{n,\theta}$ can be decomposed as $\uk{n,\theta}(x_n, \rmd x_{n + 1}) = \md{n,\theta}(x_n) \, \hk_{n,\theta}(x_n, \rmd x_{n + 1})$ for some Markov kernel $\hk_{n,\theta}$ and some nonnegative potential function $\md{n,\theta}$, \eqref{eq:def:post} yields the the HMM setting discussed in this section. 
 
 \paragraph{Variational family. }
 For all $n\in\nset$, write $\post{0:n}^{\varphi}$ the joint smoothing distribution provided by the variational family. Then,
@@ -600,11 +600,12 @@ $$
 \left|\int m_{\varphi,n}(x,dx_{n+1}) h (x_{n+1})- \int\uk{n,\parvec}(x,dx_{n+1}) h (x_{n+1})\right| \leq c(\parvec,\varphi) \| h \|_\infty. 
 $$
 \end{hypH}
-\textcolor{red}{In the case of HMM/ICA models, etc. the kernels $ m_{\varphi,n}$ and $\uk{n,\parvec}$ depend on the observations. Then, the upper bound $c(\parvec,\varphi)$ depends is random and depend on the observations. This should be detailed in}
+\textcolor{red}{In the case of HMM/ICA models, etc. the kernels $ m_{\varphi,n}$ and $\uk{n,\parvec}$ depend on the observations. Then, the upper bound $c(\parvec,\varphi)$ is random and depend on the observations. This should be detailed in the specific case of HMM.}
+\textcolor{red}{Discuss also an assumption which depends on the backwad kernels and not the forward kernels.}
 
 \begin{hypH}
 \label{assum:strong:mixing}
-There exist constants $0 < \udlow < \udup < \infty$ such that for all $k \in \nset$ and $(x_k, x_{k + 1}) \in \Xset_k \times \Xset_{k + 1}$, 
+There exist constants $0 < \udlow < \udup < \infty$ such that for all $k \in \nset$, $\theta\in\Theta$, and $(x_k, x_{k + 1}) \in \Xset_k \times \Xset_{k + 1}$, 
 $$
     \udlow \leq \ud{k,\theta}(x_k, x_{k + 1}) \leq \udup
 $$ 
@@ -621,19 +622,28 @@ $$
 
 \begin{proposition}
 \label{prop:bias}
-Assume that H\ref{assum:bias:bound} and H\ref{assum:strong:mixing} hold. Then for all $n \in \nset$, $\parvec$, $\varphi$, and $h_n$,  
-    \begin{align*}
-        \big| \postmod{0:n} h_n -  \post{0:n}^{\parvec} h_n \big| 
-        &\leq 2 c(\parvec,\varphi) \frac{\udup}{\udlow^2} \sum_{k = 0}^{n - 1} \| \addf{k} \|_\infty \left( \sum_{m = 1}^{n - 1} \rho^{|k - m| - 1} + 1 \right) \\
-        &\leq 2 c(\parvec,\varphi) n \frac{\udup}{\udlow^2} \left( 1 + \frac{1}{\rho} + \frac{2}{1 - \rho} \right) \sup_{0 \leq k \leq n - 1} \| \addf{k} \|_\infty\eqsp,
-    \end{align*}
-where $\rho \eqdef 1 - \udlow/\udup$.
+Assume that H\ref{assum:bias:bound} and H\ref{assum:strong:mixing} hold. Then, there exists a constant $\upsilon$ such that for all $n \in \nset$, $\parvec$, $\varphi$, and all additive functional $h_{0:n}$,  
+%    \begin{align*}
+%        \big| \postmod{0:n} h_n -  \post{0:n}^{\parvec} h_n \big| 
+%        &\leq 2 c(\parvec,\varphi) \frac{\udup}{\udlow^2} \sum_{k = 0}^{n - 1} \| \addf{k} \|_\infty \left( \sum_{m = 1}^{n - 1} \rho^{|k - m| - 1} + 1 \right) \\
+%        &\leq 2 c(\parvec,\varphi) n \frac{\udup}{\udlow^2} \left( 1 + \frac{1}{\rho} + \frac{2}{1 - \rho} \right) \sup_{0 \leq k \leq n - 1} \| \addf{k} \|_\infty\eqsp,
+%    \end{align*}
+$$
+        \big| \postmod{0:n} h_{0:n} -  \post{0:n}^{\parvec} h_{0:n} \big| 
+        \leq \upsilon\sup_{0 \leq k \leq n - 1}\!\!\!\! \| \addf{k} \|_\infty  c(\parvec,\varphi) n\eqsp.
+$$
 \end{proposition}
 
 \begin{proof}
 The proof is postponed to Section~\ref{sec:assumptions}.
 \end{proof}
 
+\subsection{Commments on assumption H\ref{assum:bias:bound} and H~\ref{assum:strong:mixing}}
+\label{sec:assumptions}
+\textcolor{red}{Add here explicit computations of $c(\theta,\varphi)$ in the ICA case.}
+
+\subsection{Proof of Proposition~\ref{prop:bias}}
+\label{sec:proof}
 For each $m \in \nset$, define the  backward Markov kernel 
 \begin{equation} \label{eq:def:backward:kernel}
     \bkw{m}^\parvec(x_{m + 1}, \rmd x_m) \eqdef \frac{\post{m}^\parvec(\rmd x_m) \, \ud{m,\parvec}(x_m, x_{m + 1})}{\post{m}^\parvec[\ud{m,\parvec}(\cdot, x_{m + 1})]} %= \frac{\post{m}^\parvec(\rmd x_m) \, \hd{m;\parvec}(x_{m}, x_{m+1})}{\post{m}^\parvec[\hd{m;\parvec}(\cdot, x_{m+1})]}
@@ -658,21 +668,13 @@ on $\Xset_{m + 1} \times \Xfd_m$. In addition, define for each $n \in \nsetpos$,
 %\end{itemize}
  For each $n \in \nset$ and $m \in \intvect{0}{n}$, define the kernel  
 \begin{equation} \label{eq:def:retrokmod}
-    \retrokmod_{m, n}(x_m', \rmd x_{0:n}) \eqdef \delta_{x_m'}(\rmd x_m) \, \tstatmod{m}(x_m, \rmd x_{0:m - 1}) \prod_{\ell = m}^{n - 1} \uk{\ell}(x_\ell, \rmd x_{\ell + 1}), 
+    \retrokmod_{m, n}(x_m', \rmd x_{0:n}) \eqdef \delta_{x_m'}(\rmd x_m) \, \tstatmod{m}(x_m, \rmd x_{0:m - 1}) \prod_{\ell = m}^{n - 1} \uk{\ell,\theta}(x_\ell, \rmd x_{\ell + 1}), 
 \end{equation}
 on $\Xset_m \times \Xfd^n$. 
-
-\subsection{Commments on assumption H\ref{assum:bias:bound} and H~\ref{assum:strong:mixing}}
-\label{sec:assumptions}
-\textcolor{red}{Add here explicit computations of $c(\theta,\varphi)$ in the ICA case.}
-
-\subsection{Proof of Proposition~\ref{prop:bias}}
-\label{sec:proof}
-
 \begin{proof}
 Following \cite{gloaguen2019pseudo} , write 
 $$
-\postmod{0:n} h_n - \post{0:n} h_n = \sum_{k = 0}^{n - 1} \left( \postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} \right), 
+\postmod{0:n} h_n - \post{0:n}^\theta h_n = \sum_{k = 0}^{n - 1} \left( \postmod{0:n} \addf[n]{k} - \post{0:n}^\theta \addf[n]{k} \right), 
 $$
 where, for each $k \in \intvect{0}{n - 1}$, 
 \begin{equation} \label{eq:def:addf}
@@ -680,25 +682,22 @@ where, for each $k \in \intvect{0}{n - 1}$,
 \end{equation}
 denote the extension of $\addf{k}$ to $\Xset^n$.  Define, for each $n \in \nset$ and $m \in \intvect{0}{n}$, the kernel 
 \begin{equation} \label{eq:def:uk:products}
-    \uk{m, n}(x_{0:m}', \rmd x_{0:n + 1}) \eqdef \delta_{x_{0:m}'}(\rmd x_{0:m}) \prod_{\ell = m}^n \uk{\ell}(x_\ell, \rmd x_{\ell + 1}) 
+    \uk{m, n}^\theta(x_{0:m}', \rmd x_{0:n + 1}) \eqdef \delta_{x_{0:m}'}(\rmd x_{0:m}) \prod_{\ell = m}^n \uk{\ell,\theta}(x_\ell, \rmd x_{\ell + 1}) 
 \end{equation}
-on $\Xset^m \times \Xfd^{n + 1}$. In addition, let $\uk{n, n - 1} = \operatorname{id}$. 
+on $\Xset^m \times \Xfd^{n + 1}$. In addition, let $\uk{n, n - 1}^\theta = \operatorname{id}$. 
 Each term can be decomposed according to   
 \begin{multline*}
-\postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} = 
-\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} \right) \\ + \textcolor{red}{\frac{\postmod{0} \uk{0, n - 1} \addf[n]{k}}{\postmod{0} \uk{0, n - 1} \1_{\Xset^n}} - \frac{\chi \uk{0, n - 1} \addf[n]{k}}{\chi\uk{0, n - 1} \1_{\Xset^n}}},
+\postmod{0:n} \addf[n]{k} - \post{0:n}^\theta \addf[n]{k} = 
+\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1}^\theta \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1}^\theta \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1}^\theta \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1}^\theta \1_{\Xset^n}} \right) \\ + \textcolor{red}{\frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{\Xset^n}} - \frac{\chi \uk{0, n - 1}^\theta \addf[n]{k}}{\chi\uk{0, n - 1}^\theta \1_{\Xset^n}}},
 \end{multline*}
-since 
-$$
-\frac{\chi \uk{0, n - 1} \addf[n]{k}}{\chi\uk{0, n - 1} \1_{\Xset^n}} = \post{0:n} \addf[n]{k}.
-$$
+since $\chi \uk{0, n - 1}^\theta \addf[n]{k}/\chi\uk{0, n - 1}^\theta \1_{\Xset^n} = \post{0:n}^\theta \addf[n]{k}$. 
 As for all $m \in \intvect{0}{n}$ and $h \in \bmf{\Xfd^n}$, 
 %\begin{equation} \label{eq:retro:prospective:id}
- $\postmod{0:m} \uk{m, n - 1} h = \postmod{m} \retrokmod_{m, n} h$.   
+ $\postmod{0:m} \uk{m, n - 1}^\theta h = \postmod{m} \retrokmod_{m, n} h$.   
 %\end{equation}
 In order to bound each term of this decomposition, write, using Lemma~\ref{lem:retro:prospective:id},  
 $$
-\frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} 
+\frac{\postmod{0:m} \uk{m, n - 1}^\theta \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1}^\theta \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1}^\theta \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1}^\theta \1_{\Xset^n}} 
 = \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{\Xset^n}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{\Xset^n}}. 
 $$
 Now, for all $m \in \intvect{1}{n}$, pick an arbitrary element $\xarb_m \in \Xset_m$ and define the kernel 
