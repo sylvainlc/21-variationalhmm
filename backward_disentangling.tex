@@ -639,22 +639,64 @@ where $\rho \eqdef 1 - \udlow/\udup$.
 The proof is postponed to Section~\ref{sec:assumptions}.
 \end{proof}
 
+For each $m \in \nset$, define the  backward Markov kernel 
+\begin{equation} \label{eq:def:backward:kernel}
+    \bkw{m}^\parvec(x_{m + 1}, \rmd x_m) \eqdef \frac{\post{m}^\parvec(\rmd x_m) \, \ud{m,\parvec}(x_m, x_{m + 1})}{\post{m}^\parvec[\ud{m,\parvec}(\cdot, x_{m + 1})]} %= \frac{\post{m}^\parvec(\rmd x_m) \, \hd{m;\parvec}(x_{m}, x_{m+1})}{\post{m}^\parvec[\hd{m;\parvec}(\cdot, x_{m+1})]}
+\end{equation}
+on $\Xset_{m + 1} \times \Xfd_m$. In addition, for each $n \in \nsetpos$, let the Markov kernel   
+\begin{equation} \label{eq:def:tstat}
+\tstat{n}^\parvec(x_n, \rmd x_{0:n - 1}) \eqdef \prod_{m = 0}^{n - 1} \bkw{m}^\parvec(x_{m + 1}, \rmd x_m)
+\end{equation}
+on $\Xset_n \times \Xfd^{n - 1}$ denote the joint law of the backward Markov chain induced by the kernels \eqref{eq:def:backward:kernel} when initialised at $x_n \in \Xset_n$.   In the following, the notation $\parvec$ may be dropped when there is no confusion. Define similarly, $\bkw{m}^\varphi(x_{m + 1}, \rmd x_m) = q_{\varphi,m}(x_{m+1},dx_m)$
+on $\Xset_{m + 1} \times \Xfd_m$. In addition, define for each $n \in \nsetpos$, the Markov kernel  $\tstat{n}^\varphi(x_n, \rmd x_{0:n - 1}) = \prod_{m = 0}^{n - 1} \bkw{m}^\varphi(x_{m + 1}, \rmd x_m)$ on $\Xset_n \times \Xfd^{n - 1}$ denote the joint law of the backward Markov chain induced by the kernels \eqref{eq:def:backward:kernel} when initialised at $x_n \in \Xset_n$.  In the following, the notation $\parvec$ may be dropped when there is no confusion. 
+%\begin{itemize} 
+%\item[(i)]
+%For all $n \in \nset$ and $h \in \bmf{\Xfd_n \tensprod \Xfd_{n + 1}}$, 
+%\begin{equation} \label{eq:reversibility}
+%\iint \post{n}^\parvec(\rmd x_n) \, \uk{n,\parvec}(x_n, \rmd x_{n + 1}) \, h(x_n, x_{n + 1}) = \iint \post{n}^\parvec \uk{n,\parvec}(\rmd x_{n + 1}) \, \bkw{n}^\parvec(x_{n + 1}, \rmd x_n) \, h(x_n, x_{n + 1}). 
+%\end{equation}
+%\item[(ii)]
+%For all $n \in \nsetpos$ and $h \in \bmf{\Xfd^n}$, 
+%$
+%\post{0:n}^\parvec h = \post{n}^\parvec \tstat{n}^\parvec h. 
+%$
+%\end{itemize}
+ For each $n \in \nset$ and $m \in \intvect{0}{n}$, define the kernel  
+\begin{equation} \label{eq:def:retrokmod}
+    \retrokmod_{m, n}(x_m', \rmd x_{0:n}) \eqdef \delta_{x_m'}(\rmd x_m) \, \tstatmod{m}(x_m, \rmd x_{0:m - 1}) \prod_{\ell = m}^{n - 1} \uk{\ell}(x_\ell, \rmd x_{\ell + 1}), 
+\end{equation}
+on $\Xset_m \times \Xfd^n$. 
+
 \subsection{Commments on assumption H\ref{assum:bias:bound} and H~\ref{assum:strong:mixing}}
 \label{sec:assumptions}
+\textcolor{red}{Add here explicit computations of $c(\theta,\varphi)$ in the ICA case.}
 
 \subsection{Proof of Proposition~\ref{prop:bias}}
 \label{sec:proof}
 
 \begin{proof}
-Write 
+Following \cite{gloaguen2019pseudo} , write 
 $$
 \postmod{0:n} h_n - \post{0:n} h_n = \sum_{k = 0}^{n - 1} \left( \postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} \right), 
 $$
-where each term can be decomposed according to   
+where, for each $k \in \intvect{0}{n - 1}$, 
+\begin{equation} \label{eq:def:addf}
+\addf[n]{k} : \Xset^n \ni x_{0:n} \mapsto \addf{k}(x_k, x_{k + 1}) .
+\end{equation}
+denote the extension of $\addf{k}$ to $\Xset^n$.  Define, for each $n \in \nset$ and $m \in \intvect{0}{n}$, the kernel 
+\begin{equation} \label{eq:def:uk:products}
+    \uk{m, n}(x_{0:m}', \rmd x_{0:n + 1}) \eqdef \delta_{x_{0:m}'}(\rmd x_{0:m}) \prod_{\ell = m}^n \uk{\ell}(x_\ell, \rmd x_{\ell + 1}) 
+\end{equation}
+on $\Xset^m \times \Xfd^{n + 1}$. In addition, let $\uk{n, n - 1} = \operatorname{id}$. 
+Each term can be decomposed according to   
 \begin{equation*}
 \postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} = 
-\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} \right).  
+\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} \right).
 \end{equation*}
+For all $m \in \intvect{0}{n}$ and $h \in \bmf{\Xfd^n}$, 
+\begin{equation} \label{eq:retro:prospective:id}
+\postmod{0:m} \uk{m, n - 1} h = \postmod{m} \retrokmod_{m, n} h.  
+\end{equation}
 In order to bound each term of this decomposition, write, using Lemma~\ref{lem:retro:prospective:id},  
 $$
 \frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} 
@@ -679,39 +721,7 @@ which was to be established.
 \medskip
 \medskip
 
-We preface the proof by a few technical lemmas. For each $m \in \nset$, define the  backward Markov kernel 
-\begin{equation} \label{eq:def:backward:kernel}
-    \bkw{m}^\parvec(x_{m + 1}, \rmd x_m) \eqdef \frac{\post{m}^\parvec(\rmd x_m) \, \ud{m,\parvec}(x_m, x_{m + 1})}{\post{m}^\parvec[\ud{m,\parvec}(\cdot, x_{m + 1})]} %= \frac{\post{m}^\parvec(\rmd x_m) \, \hd{m;\parvec}(x_{m}, x_{m+1})}{\post{m}^\parvec[\hd{m;\parvec}(\cdot, x_{m+1})]}
-\end{equation}
-on $\Xset_{m + 1} \times \Xfd_m$. In addition, for each $n \in \nsetpos$, let the Markov kernel   
-\begin{equation} \label{eq:def:tstat}
-\tstat{n}^\parvec(x_n, \rmd x_{0:n - 1}) \eqdef \prod_{m = 0}^{n - 1} \bkw{m}^\parvec(x_{m + 1}, \rmd x_m)
-\end{equation}
-on $\Xset_n \times \Xfd^{n - 1}$ denote the joint law of the backward Markov chain induced by the kernels \eqref{eq:def:backward:kernel} when initialised at $x_n \in \Xset_n$.   In the following, the notation $\parvec$ may be dropped when there is no confusion.
 
-Define, for each $n \in \nset$ and $m \in \intvect{0}{n}$, the kernel 
-\begin{equation} \label{eq:def:uk:products}
-    \uk{m, n}(x_{0:m}', \rmd x_{0:n + 1}) \eqdef \delta_{x_{0:m}'}(\rmd x_{0:m}) \prod_{\ell = m}^n \uk{\ell}(x_\ell, \rmd x_{\ell + 1}) 
-\end{equation}
-on $\Xset^m \times \Xfd^{n + 1}$. In addition, let $\uk{n, n - 1} = \operatorname{id}$. Note that $\uk{n, n}$ is different from $\uk{n}$ in the sense that the former is defined on $\Xset^n \times \Xfd^{n + 1}$ whereas the latter is defined on $\Xset_n \times \Xfd_{n + 1}$. Define similarly, $\bkw{m}^\varphi(x_{m + 1}, \rmd x_m) = q_{\varphi,m}(x_{m+1},dx_m)$
-on $\Xset_{m + 1} \times \Xfd_m$. In addition, define for each $n \in \nsetpos$, the Markov kernel  $\tstat{n}^\varphi(x_n, \rmd x_{0:n - 1}) = \prod_{m = 0}^{n - 1} \bkw{m}^\varphi(x_{m + 1}, \rmd x_m)$ on $\Xset_n \times \Xfd^{n - 1}$ denote the joint law of the backward Markov chain induced by the kernels \eqref{eq:def:backward:kernel} when initialised at $x_n \in \Xset_n$.  In the following, the notation $\parvec$ may be dropped when there is no confusion. 
-%\begin{itemize} 
-%\item[(i)]
-%For all $n \in \nset$ and $h \in \bmf{\Xfd_n \tensprod \Xfd_{n + 1}}$, 
-%\begin{equation} \label{eq:reversibility}
-%\iint \post{n}^\parvec(\rmd x_n) \, \uk{n,\parvec}(x_n, \rmd x_{n + 1}) \, h(x_n, x_{n + 1}) = \iint \post{n}^\parvec \uk{n,\parvec}(\rmd x_{n + 1}) \, \bkw{n}^\parvec(x_{n + 1}, \rmd x_n) \, h(x_n, x_{n + 1}). 
-%\end{equation}
-%\item[(ii)]
-%For all $n \in \nsetpos$ and $h \in \bmf{\Xfd^n}$, 
-%$
-%\post{0:n}^\parvec h = \post{n}^\parvec \tstat{n}^\parvec h. 
-%$
-%\end{itemize}
- For each $n \in \nset$ and $m \in \intvect{0}{n}$, define the kernel  
-\begin{equation} \label{eq:def:retrokmod}
-    \retrokmod_{m, n}(x_m', \rmd x_{0:n}) \eqdef \delta_{x_m'}(\rmd x_m) \, \tstatmod{m}(x_m, \rmd x_{0:m - 1}) \prod_{\ell = m}^{n - 1} \uk{\ell}(x_\ell, \rmd x_{\ell + 1}), 
-\end{equation}
-on $\Xset_m \times \Xfd^n$. 
 
 \begin{lemma} \label{lem:retro:prospective:id}
 For all $m \in \intvect{0}{n}$ and $h \in \bmf{\Xfd^n}$, 
@@ -725,11 +735,7 @@ The following probability measures play a key role in the following: for $h \in 
 \shiftfwd_{m, n} h &\eqdef \frac{\postmod{m} (h \times \ukmod{m} \retrokmod_{m + 1, n} \1_{\Xset^n})}{\postmod{m} \ukmod{m} \retrokmod_{m + 1, n} \1_{\Xset^n}}, \nonumber \\
 \shiftbwd_{m, n} h &\eqdef \frac{\postmod{m - 1} \uk{m - 1}(h \times \retrokmod_{m, n} \1_{\Xset^n})}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{\Xset^n}}.  \nonumber 
 \end{align}
-In addition, for each $k \in \intvect{0}{n - 1}$, let 
-\begin{equation} \label{eq:def:addf}
-\addf[n]{k} : \Xset^n \ni x_{0:n} \mapsto \addf{k}(x_k, x_{k + 1})  
-\end{equation}
-denote the extension of $\addf{k}$ to $\Xset^n$. 
+
 
 \begin{lemma} \label{lemma:three:identities}
 Let $n \in \nset$ and $m \in \intvect{1}{n}$. Then the following holds true for all $k \in \intvect{0}{n - 1}$. 
