@@ -601,22 +601,26 @@ There exist functions $c_k$, $0\leqslant k \leqslant n$, such that for all $0\le
 $$
 \left|\int m_{\varphi,n}(x,x_{k+1}) h (x_{k+1})dx_{k+1}- \int\qg{k,\parvec}(x,x_{k+1}) h (x_{k+1})dx_{k+1}\right| \leqslant c(\parvec,\varphi) \| h_k \|_\infty. 
 $$
+\textcolor{red}{The previous assumption should be replaced by
+$$
+\left|\int  \post{k}^{\varphi}(x_k) q_{\varphi,k-1}(x_{k},x_{k-1}) h_k (x_{k-1:k})dx_{k-1:k}- \int \post{k-1}^{\varphi}(x_{k-1}) \qg{k-1,\parvec}(x_{k-1},x_{k}) h_k (x_{k-1:k})dx_{k-1:k}\right| \leqslant c(\parvec,\varphi) \| h_k \|_\infty. 
+$$}
 and 
 $$
 \left|\chi \md{0;\parvec}h_0 - \postmod{0} h_0\right|\leqslant c_0(\theta,\varphi)\|h_0\|_\infty\eqsp.
 $$
 \end{hypH}
-\begin{remark}
-In the linear and Gaussian case, $\qg{k,\parvec}(x,x_{k+1}) = \Psi_{Ax+b,\Sigma}(x_{k+1})\Psi_{Cx_{k+1}+d,\Omega}(Y_{k+1})$ where $\Psi_{\mu,\lambda}$ is the Gaussian probability function with mean $\mu$ and variance $\Lambda$. Assume that $q_{\varphi,k}$ is the backward kernel of a linear and Gaussian model with parameters $\tilde A$, $\tilde b$, $\tilde \Sigma$, $\tilde C$ $\tilde d$, $\tilde \Omega$. Therefore,
-\begin{multline*}
-m_{\varphi,k}(x_{k},x_{k+1}) =   \frac{\post{k+1}^{\varphi}(x_{k+1})q_{\varphi,k}(x_{k+1},x_k)}{\post{k}^{\varphi}(x_k)} =   \frac{\post{k+1}^{\varphi}(x_{k+1})\post{k}^{\varphi}(x_k)\Psi_{\tilde Ax_k+\tilde b,\Sigma}(x_{k+1})}{\post{k}^{\varphi}(x_k)\int \post{k}^{\varphi}(x)\Psi_{Ax+b,\Sigma}(x_{k+1})d x}\\
-= \frac{\post{k+1}^{\varphi}(x_{k+1})\Psi_{\tilde Ax_k+\tilde b,\Sigma}(x_{k+1})}{\int \post{k}^{\varphi}(x)\Psi_{\tilde Ax+\tilde b,\tilde \Sigma}(x_{k+1})d x} = \frac{\Psi_{\mu_{k+1},\Sigma_{k+1}}(x_{k+1})\Psi_{\tilde Ax_k+\tilde b,\tilde \Sigma}(x_{k+1})}{\Psi_{\tilde A \mu_k+ \tilde b,\tilde\Sigma}(x_{k+1})}, 
-\end{multline*}
-where $\mu_k$ and $\Sigma_k$ are the mean and variances of the filtering distribution at time $k$ under the variational distribution. Therefore,
-$$
-\left|\int \left(m_{\varphi,n}(x,x_{n+1})-\qg{n,\parvec}(x,x_{n+1})\right) h (x_{n+1})dx_{n+1}\right| 
-$$
-\end{remark}
+%\begin{remark}
+%In the linear and Gaussian case, $\qg{k,\parvec}(x,x_{k+1}) = \Psi_{Ax+b,\Sigma}(x_{k+1})\Psi_{Cx_{k+1}+d,\Omega}(Y_{k+1})$ where $\Psi_{\mu,\lambda}$ is the Gaussian probability function with mean $\mu$ and variance $\Lambda$. Assume that $q_{\varphi,k}$ is the backward kernel of a linear and Gaussian model with parameters $\tilde A$, $\tilde b$, $\tilde \Sigma$, $\tilde C$ $\tilde d$, $\tilde \Omega$. Therefore,
+%\begin{multline*}
+%m_{\varphi,k}(x_{k},x_{k+1}) =   \frac{\post{k+1}^{\varphi}(x_{k+1})q_{\varphi,k}(x_{k+1},x_k)}{\post{k}^{\varphi}(x_k)} =   \frac{\post{k+1}^{\varphi}(x_{k+1})\post{k}^{\varphi}(x_k)\Psi_{\tilde Ax_k+\tilde b,\Sigma}(x_{k+1})}{\post{k}^{\varphi}(x_k)\int \post{k}^{\varphi}(x)\Psi_{Ax+b,\Sigma}(x_{k+1})d x}\\
+%= \frac{\post{k+1}^{\varphi}(x_{k+1})\Psi_{\tilde Ax_k+\tilde b,\Sigma}(x_{k+1})}{\int \post{k}^{\varphi}(x)\Psi_{\tilde Ax+\tilde b,\tilde \Sigma}(x_{k+1})d x} = \frac{\Psi_{\mu_{k+1},\Sigma_{k+1}}(x_{k+1})\Psi_{\tilde Ax_k+\tilde b,\tilde \Sigma}(x_{k+1})}{\Psi_{\tilde A \mu_k+ \tilde b,\tilde\Sigma}(x_{k+1})}, 
+%\end{multline*}
+%where $\mu_k$ and $\Sigma_k$ are the mean and variances of the filtering distribution at time $k$ under the variational distribution. Therefore,
+%$$
+%\left|\int \left(m_{\varphi,n}(x,x_{n+1})-\qg{n,\parvec}(x,x_{n+1})\right) h (x_{n+1})dx_{n+1}\right| 
+%$$
+%\end{remark}
 \textcolor{red}{In the case of HMM/ICA models, etc. the kernels $ m_{\varphi,n}$ and $\uk{n,\parvec}$ depend on the observations. Then, the upper bound $c(\parvec,\varphi)$ is random and depend on the observations. This should be detailed in the specific case of HMM.}
 \textcolor{red}{Discuss also an assumption which depends on the backwad kernels and not the forward kernels.}
 
@@ -744,6 +748,9 @@ which yields
 $$
 \left|\frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{\Xset^n}} - \frac{\chi \md{0;\parvec}\uk{0, n - 1}^\theta \addf[n]{k}}{\chi\md{0;\parvec}\uk{0, n - 1}^\theta \1_{\Xset^n}}\right|\leqslant 2c_0(\theta,\varphi)\frac{\sigma_+}{\sigma_-}\eqsp.
 $$
+
+\clearpage
+\newpage
 
 Now, for all $m \in \intvect{1}{n}$, pick an arbitrary element $\xarb_m \in \Xset_m$ and define the kernel 
 \begin{equation} \label{eq:def:norm:objective:func}
