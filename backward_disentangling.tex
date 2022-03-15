@@ -578,7 +578,7 @@ Most works in the literature focus on mean field approximations which means that
 $$
  \post{0:n}^{\varphi}(x_{0:n})=  \post{n}^{\varphi}(x_n)\prod_{k=0}^{n-1}q_{\varphi,k}(x_{k+1},x_k)\eqsp.
 $$
-The variational family parameterizes the backward kernel which naturally appears in the decomposition of the law of $X_{0:n}$ given $Y_{0:n}$. 
+The variational family parameterizes the backward kernel which naturally appears in the decomposition of the law of $X_{0:n}$ given $Y_{0:n}$. In the following, we write $Q_{\varphi,k}(x_{k+1}, \rmd x_k) = q_{\varphi,k}(x_{k+1},x_k) \mu(\rmd x_k)$.
 
 \subsection{Control of the variational error}
 %In this section we propose an upper bound for the error $|\mathbb{E}_{q_\varphi}[\af{0:n}(X_{0:n})]-\mathbb{E}_\theta[\af{0:n}(X_{0:n})|Y_{0:n}]|$  when $\af{0:n}$ is an additive functional of the hidden states as in \eqref{eq:additive:functional}. %Following \cite{gloaguen2019pseudo} this control can be obtained in a broader framework than the HMM setting. Let $(\Xset_n, \Xfd_n)_{n \in \nset}$ be a sequence of general state spaces and let, for all $n \in \nset$ and all $\theta$, $\uk{n,\theta}$ defined on  $\Xset_n \times \Xfd_{n + 1}$ be bounded kernels in the sense that $\sup_{x \in \Xset_n} \uk{n,\theta}(x, \Xset_{n + 1}) < \infty$. We will assume a dominated model where each kernel $\uk{n,\theta}$ has a kernel density $\ud{n,\theta}$ with respect to some $\sigma$-finite reference measure $\mu_{n + 1}$ on $\Xfd_{n + 1}$. Finally, let $\chi$ be some bounded measure on $\Xfd_0$. In the following, we denote state-space product sets and $\sigma$-fields by $\Xset^n \eqdef \Xset_0 \times \cdots \times \Xset_n$ and $\Xfd^n \eqdef \Xfd_0 \tensprod \cdots \tensprod \Xfd_n$, respectively, and consider probability measures  
@@ -593,22 +593,18 @@ The variational family parameterizes the backward kernel which naturally appears
  %\post{0:n}^{\varphi}(x_{0:n})=  \post{n}^{\varphi}(x_n)\prod_{k=0}^{n-1}q_{\varphi,k}(x_{k+1},x_k)\eqsp.
 %$$
 %with the convention $\post{0:n}^{\varphi}(x_{n}) = \post{n}^{\varphi}(x_{n})$. 
-The joint probability distribution $\post{0:n}^{\varphi}$ can be written:
-$$
- \post{0:n}^{\varphi}(x_{0:n})=  \post{0}^{\varphi}(x_0)\prod_{k=0}^{n-1}m_{\varphi,k}(x_{k},x_{k+1})\eqsp,
-$$
-where $m_{\varphi,k}(x_{k},x_{k+1}) =   \post{k+1}^{\varphi}(x_{k+1})q_{\varphi,k}(x_{k+1},x_k)/ \post{k}^{\varphi}(x_k)$. %\textcolor{red}{Here $q_{\varphi,k+1}(dx_{k+1})$, $q_{\varphi,k}(dx_{k})$ and $q_{\varphi,n}(dx_0)$ are not really $ q_{\varphi,\ell}$ but the marginals  of $ \post{0:n}^{\varphi}$ ?}
+ %\textcolor{red}{Here $q_{\varphi,k+1}(dx_{k+1})$, $q_{\varphi,k}(dx_{k})$ and $q_{\varphi,n}(dx_0)$ are not really $ q_{\varphi,\ell}$ but the marginals  of $ \post{0:n}^{\varphi}$ ?}
 
 \begin{hypH}
 \label{assum:bias:bound}
-There exist functions $c_k$, $0\leqslant k \leqslant n$, such that for all $0\leqslant k \leqslant n$, $\parvec$, $\varphi$, all bounded measurable functions $h_k$, and $x \in \Xset_k$,   
+There exist functions $c_k$, $0\leqslant k \leqslant n$, such that for all $0\leqslant k \leqslant n$, $\parvec$, $\varphi$, all bounded measurable functions $h_k$, %and $x \in \Xset_k$,   
+%$$
+%\left|\int m_{\varphi,n}(x,x_{k+1}) h (x_{k+1})dx_{k+1}- \int\qg{k,\parvec}(x,x_{k+1}) h (x_{k+1})dx_{k+1}\right| \leqslant c_k(\parvec,\varphi) \| h_k \|_\infty. 
+%$$
+%The previous assumption should be replaced by
 $$
-\left|\int m_{\varphi,n}(x,x_{k+1}) h (x_{k+1})dx_{k+1}- \int\qg{k,\parvec}(x,x_{k+1}) h (x_{k+1})dx_{k+1}\right| \leqslant c_k(\parvec,\varphi) \| h_k \|_\infty. 
-$$
-\textcolor{red}{The previous assumption should be replaced by
-$$
-\left|\int  \post{k}^{\varphi}(x_k) q_{\varphi,k-1}(x_{k},x_{k-1}) h_k (x_{k-1:k})dx_{k-1:k}- \int \post{k-1}^{\varphi}(x_{k-1}) \qg{k-1,\parvec}(x_{k-1},x_{k}) h_k (x_{k-1:k})dx_{k-1:k}\right| \leqslant c_k(\parvec,\varphi) \| h_k \|_\infty. 
-$$}
+\left|\post{k}^{\varphi}Q_{\varphi,k-1} h_k - \post{k-1}^{\varphi} \uk{k-1,\theta}h_k\right| \leqslant c_k(\parvec,\varphi) \| h_k \|_\infty. 
+$$ 
 and 
 $$
 \left|\chi \md{0;\parvec}h_0 - \postmod{0} h_0\right|\leqslant c_0(\theta,\varphi)\|h_0\|_\infty\eqsp.
@@ -625,8 +621,19 @@ $$
 %\left|\int \left(m_{\varphi,n}(x,x_{n+1})-\qg{n,\parvec}(x,x_{n+1})\right) h (x_{n+1})dx_{n+1}\right| 
 %$$
 %\end{remark}
-\textcolor{red}{In the case of HMM/ICA models, etc. the kernels $ m_{\varphi,n}$ and $\uk{n,\parvec}$ depend on the observations. Then, the upper bound $c(\parvec,\varphi)$ is random and depend on the observations. This should be detailed in the specific case of HMM.}
-\textcolor{red}{Discuss also an assumption which depends on the backwad kernels and not the forward kernels.}
+\textcolor{red}{
+\begin{itemize}
+\item In the case of HMM/ICA models, etc. the kernels depend on the observations. Then, the upper bound $c(\parvec,\varphi)$ is random and depend on the observations. This should be detailed in the specific case of HMM.
+\item The joint probability distribution $\post{0:n}^{\varphi}$ can also be written:
+$$
+ \post{0:n}^{\varphi}(x_{0:n})=  \post{0}^{\varphi}(x_0)\prod_{k=0}^{n-1}m_{\varphi,k}(x_{k},x_{k+1})\eqsp,
+$$
+where $m_{\varphi,k}(x_{k},x_{k+1}) =   \post{k+1}^{\varphi}(x_{k+1})q_{\varphi,k}(x_{k+1},x_k)/ \post{k}^{\varphi}(x_k)$. We could discuss other assumptions such as 
+$$
+\left|\int m_{\varphi,n}(x,x_{k+1}) h (x_{k+1})dx_{k+1}- \int\qg{k,\parvec}(x,x_{k+1}) h (x_{k+1})dx_{k+1}\right| \leqslant c_k(\parvec,\varphi) \| h_k \|_\infty. 
+$$
+But less useful in practice as we directly parameterize the backward variational kernel and not $ m_{\varphi,n}(x,x_{k+1}) $.
+\end{itemize}}
 
 \begin{hypH}
 \label{assum:strong:mixing}
