@@ -727,12 +727,13 @@ $$
 = \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}. 
 $$
 Therefore,
-\begin{multline*}
+\begin{multline}
+\label{eq:error:decomp}
 \postmod{0:n} \addf[n]{k} - \post{0:n}^\theta \addf[n]{k} = 
 \sum_{m = 1}^n \left( \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \right) \\ + \frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} - \frac{\chi \md{0;\parvec}\uk{0, n - 1}^\theta \addf[n]{k}}{\chi\md{0;\parvec}\uk{0, n - 1}^\theta \1_{}},
-\end{multline*}
+\end{multline}
 
-\paragraph{Error term at time $m=0$. }Consider the following decomposition of the first term:
+\paragraph{Error term at time $m=0$ in \eqref{eq:error:decomp}. }Consider the following decomposition of the first term:
 \begin{multline*}
 \frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} - \frac{\chi \md{0;\parvec}\uk{0, n - 1}^\theta \addf[n]{k}}{\chi\md{0;\parvec}\uk{0, n - 1}^\theta \1_{}} = \frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}-\chi \md{0;\parvec}\uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} \\
 +  \frac{\chi \md{0;\parvec}\uk{0, n - 1}^\theta \addf[n]{k}}{\chi\md{0;\parvec}\uk{0, n - 1}^\theta \1_{}}\frac{\chi \md{0;\parvec}\uk{0, n - 1}^\theta \1_{} - \postmod{0} \uk{0, n - 1}^\theta \1_{}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} \eqsp.
@@ -754,29 +755,84 @@ $$
 \left|\frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{\Xset^n}} - \frac{\chi \md{0;\parvec}\uk{0, n - 1}^\theta \addf[n]{k}}{\chi\md{0;\parvec}\uk{0, n - 1}^\theta \1_{\Xset^n}}\right|\leqslant 2c_0(\theta,\varphi)\frac{\sigma_+}{\sigma_-}\|\addf[n]{k}\|_\infty\eqsp.
 $$
 
+\paragraph{Error term at time $m\leqslant k$ in \eqref{eq:error:decomp}. } For all bounded measurable function $h$ and $m \in \intvect{1}{k}$, define the kernel  
+\begin{equation} \label{eq:def:retrokmod:joint}
+    \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}(x'_{m-1},x_m', \rmd x_{0:n}) \eqdef \delta_{x'_{m-1}}(\rmd x_{m-1})\delta_{x_m'}(\rmd x_m) \, \tstatmod{m-1}(x_{m-1}, \rmd x_{0:m - 2}) \prod_{\ell = m}^{n - 1} \uk{\ell,\theta}(x_\ell, \rmd x_{\ell + 1}), 
+\end{equation}
+on  $(\mathbb{R}^d)^2 \times \mathcal{B}((\mathbb{R}^d)^{n+1})$.  Then, write
+$$
+ \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}  = \frac{\postmod{m} \bkw{m-1}^\parvec \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \uk{m-1,\theta} \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \eqsp.
+$$
+Let $x_{m-1}^*$ and $x_m^*$ be arbitrary elements in $\mathbb{R}^d$ and define the kernel
+$$
+\mathcal{L}^{*,\varphi,\theta}_{m, n}h(x_{m-1},x_m) = \frac{\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}h(x_{m-1},x_m) }{\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1(x_{m-1},x_m)} - \frac{\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}h(x^*_{m-1},x^*_m) }{\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1(x^*_{m-1},x^*_m)}\eqsp,
+$$
+so that
+\begin{align*}
+ \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} &- \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}  \\
+&= \frac{\postmod{m} \bkw{m-1}^\parvec \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \uk{m-1,\theta} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \\ 
+&= \frac{\postmod{m} \bkw{m-1}^\parvec \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\} - \postmod{m - 1} \uk{m-1,\theta} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \\
+&\hspace{2.5cm}+  \frac{\postmod{m} \bkw{m-1}^\parvec \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}}\left(\frac{\postmod{m-1} \retrokmod_{m-1, n} \1_{}-\postmod{m} \retrokmod_{m, n} \1_{}}{\postmod{m-1} \retrokmod_{m-1, n} \1_{}}\right)\eqsp.
+\end{align*}
+Then, using that
+$$
+\left|\frac{\postmod{m} \bkw{m-1}^\parvec \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}}\right|\leqslant \left\|\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\right\|_\infty\eqsp,
+$$
+and by H\ref{assum:bias:bound},
+\begin{align*}
+\left|\frac{\postmod{m-1} \retrokmod_{m-1, n} \1_{}-\postmod{m} \retrokmod_{m, n} \1_{}}{\postmod{m-1} \retrokmod_{m-1, n} \1_{}}\right|&\leqslant c_m(\theta,\varphi)\frac{\left\|\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\|_\infty}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}\eqsp,\\
+\left|\frac{\postmod{m} \bkw{m-1}^\parvec \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\} - \postmod{m - 1} \uk{m-1,\theta} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}\right| &\leqslant c_m(\theta,\varphi)\frac{\left\|\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\right\|_\infty\left\|\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\|_\infty}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}\eqsp,
+\end{align*}
+yields
+$$
+\left| \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \right|\leqslant 2c_m(\theta,\varphi)\frac{\left\|\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\right\|_\infty\left\|\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\|_\infty}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}\eqsp.
+$$
+Note also that by H\ref{assum:strong:mixing},
+$$
+\postmod{m - 1} \retrokmod_{m - 1, n} \1_{} \geqslant \sigma_-^2 \mu  \uk{m+1, n-1}^\theta\1\eqsp,
+$$ 
+and for all $x,x'\in\mathbb{R}^d$,
+$$
+\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1(x,x')\leqslant  \sigma_+\mu  \uk{m+1, n-1}^\theta\1\eqsp.
+$$
+Therefore,
+
+$$
+\left| \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \right|\leqslant 2\frac{\sigma_+}{\sigma_-^2}c_m(\theta,\varphi) \left\|\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\right\|_\infty\eqsp.
+$$
+
+\noindent \textcolor{red}{It remains to prove an equivalent of Lemma~\ref{lem:geo:bound}.}
+
+
+
+%\paragraph{Error term at time $m> k+1$ in \eqref{eq:error:decomp}. } Write
+%$$
+% \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}  = 
+%$$
+
 \clearpage
 \newpage
 
-Now, for all $m \in \intvect{1}{n}$, pick an arbitrary element $\xarb_m \in \Xset_m$ and define the kernel 
-\begin{equation} \label{eq:def:norm:objective:func}
-\retrokmodnorm_{m, n} h(x_m) \eqdef \frac{\retrokmod_{m, n} h(x_m)}{\retrokmod_{m, n} \1_{\Xset^n}(x_m)} - \frac{\retrokmod_{m, n} h (\xarb_m)}{\retrokmod_{m, n} \1_{\Xset^n} (\xarb_m)}, \quad x_m \in \Xset_m, \quad h \in \bmf{\Xfd^n},
-\end{equation}
-We may express the quantity of interest as 
-\begin{multline*}
-\postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} = \frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{\Xset^n}} - \frac{\chi \uk{0, n - 1}^\theta \addf[n]{k}}{\chi\uk{0, n - 1}^\theta \1_{\Xset^n}} + \sum_{m = 1}^k \left( \noshift_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} - \shiftbwd_{m, n}  \retrokmodnorm_{m, n} \addf[n]{k} \right) \\ 
-+ \frac{\postmod{k + 1} \retrokmod_{k + 1, n} \addf[n]{k}}{\postmod{k + 1} \retrokmod_{k + 1, n} \1_{\Xset^n}} - \frac{\postmod{k} \retrokmod_{k, n} \addf[n]{k}}{\postmod{k} \retrokmod_{k, n} \1_{\Xset^n}} + \sum_{m = k + 1}^{n - 1} \left( \shiftfwd_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} - \noshift_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} \right),
-\end{multline*}
-where, for $h \in \bmf{\Xfd_m}$, 
-\begin{align}
-\noshift_{m, n} h &\eqdef \frac{\postmod{m} (h \times \retrokmod_{m, n} \1_{\Xset^n})}{\postmod{m} \retrokmod_{m, n} \1_{\Xset^n}}, \nonumber \\
-\shiftfwd_{m, n} h &\eqdef \frac{\postmod{m} (h \times \ukmod{m} \retrokmod_{m + 1, n} \1_{\Xset^n})}{\postmod{m} \ukmod{m} \retrokmod_{m + 1, n} \1_{\Xset^n}}, \nonumber \\
-\shiftbwd_{m, n} h &\eqdef \frac{\postmod{m - 1} \uk{m - 1}(h \times \retrokmod_{m, n} \1_{\Xset^n})}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{\Xset^n}}.  \nonumber 
-\end{align}
-Now, applying Lemmas~\ref{lem:geo:bound} and \ref{lem:diff:bound} to the previous decomposition yields
-$$
-\left| \postmod{0:n} \addf[n]{k} - \post{0:n}^\theta \addf[n]{k} \right| \leq 2 c(\theta,\varphi) \frac{\udup }{\udlow^2} \sum_{k = 0}^{n - 1} \| \addf{k} \|_\infty \left( \sum_{m = 1}^{n - 1} \rho^{|k - m| - 1} + 1 \right),
-$$
-which concludes the proof. 
+%Now, for all $m \in \intvect{1}{n}$, pick an arbitrary element $\xarb_m \in \Xset_m$ and define the kernel 
+%\begin{equation} \label{eq:def:norm:objective:func}
+%\retrokmodnorm_{m, n} h(x_m) \eqdef \frac{\retrokmod_{m, n} h(x_m)}{\retrokmod_{m, n} \1_{\Xset^n}(x_m)} - \frac{\retrokmod_{m, n} h (\xarb_m)}{\retrokmod_{m, n} \1_{\Xset^n} (\xarb_m)}, \quad x_m \in \Xset_m, \quad h \in \bmf{\Xfd^n},
+%\end{equation}
+%We may express the quantity of interest as 
+%\begin{multline*}
+%\postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} = \frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{\Xset^n}} - \frac{\chi \uk{0, n - 1}^\theta \addf[n]{k}}{\chi\uk{0, n - 1}^\theta \1_{\Xset^n}} + \sum_{m = 1}^k \left( \noshift_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} - \shiftbwd_{m, n}  \retrokmodnorm_{m, n} \addf[n]{k} \right) \\ 
+%+ \frac{\postmod{k + 1} \retrokmod_{k + 1, n} \addf[n]{k}}{\postmod{k + 1} \retrokmod_{k + 1, n} \1_{\Xset^n}} - \frac{\postmod{k} \retrokmod_{k, n} \addf[n]{k}}{\postmod{k} \retrokmod_{k, n} \1_{\Xset^n}} + \sum_{m = k + 1}^{n - 1} \left( \shiftfwd_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} - \noshift_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} \right),
+%\end{multline*}
+%where, for $h \in \bmf{\Xfd_m}$, 
+%\begin{align}
+%\noshift_{m, n} h &\eqdef \frac{\postmod{m} (h \times \retrokmod_{m, n} \1_{\Xset^n})}{\postmod{m} \retrokmod_{m, n} \1_{\Xset^n}}, \nonumber \\
+%\shiftfwd_{m, n} h &\eqdef \frac{\postmod{m} (h \times \ukmod{m} \retrokmod_{m + 1, n} \1_{\Xset^n})}{\postmod{m} \ukmod{m} \retrokmod_{m + 1, n} \1_{\Xset^n}}, \nonumber \\
+%\shiftbwd_{m, n} h &\eqdef \frac{\postmod{m - 1} \uk{m - 1}(h \times \retrokmod_{m, n} \1_{\Xset^n})}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{\Xset^n}}.  \nonumber 
+%\end{align}
+%Now, applying Lemmas~\ref{lem:geo:bound} and \ref{lem:diff:bound} to the previous decomposition yields
+%$$
+%\left| \postmod{0:n} \addf[n]{k} - \post{0:n}^\theta \addf[n]{k} \right| \leq 2 c(\theta,\varphi) \frac{\udup }{\udlow^2} \sum_{k = 0}^{n - 1} \| \addf{k} \|_\infty \left( \sum_{m = 1}^{n - 1} \rho^{|k - m| - 1} + 1 \right),
+%$$
+%which concludes the proof. 
 
 %
 %\medskip
@@ -847,8 +903,11 @@ Assume H\ref{assum:strong:mixing}. Then for all $n \in \nset$, $m \in \intvect{0
 $$
 \left|\frac{\lambda \retrokmod_{m, n} \addf[n]{k}}{\lambda \retrokmod_{m, n} \1_{\Xset^n}} - \frac{\lambda' \retrokmod_{m, n} \addf[n]{k}}{\lambda' \retrokmod_{m, n} \1_{\Xset^n}} \right| \leq \| \addf{k} \|_\infty \rho^{|k - m| - 1}. 
 $$
+\end{lemma}
 \begin{proof}
 See \cite{gloaguen2019pseudo}.
+\end{proof}
+
 %First, assume that $m \leq k$; then note that for all $x_m \in \Xset_m$, 
 %\begin{multline} \label{eq:retrokmodnorm:vs:forward:kernel}
 %\frac{\retrokmod_{m, n} \addf[n]{k}(x_m)}{\retrokmod_{m, n} \1_{\Xset^n}(x_m)} - \frac{\retrokmod_{m, n} \addf[n]{k}(x_m)}{\retrokmod_{m, n} \1_{\Xset^n}(x_m)}
@@ -895,28 +954,28 @@ See \cite{gloaguen2019pseudo}.
 %= \left| (\lambda_{m, n} - \lambda_{m, n}') \bkmod{m - 1} \cdots \bkmod{k + 1}(\bkmod{k} \addf{k}) \right| \leq \rho^{m - k - 1} \| \addf{k} \|_\infty. 
 %$$
 %This completes the proof. 
-\end{proof}
-\end{lemma}
+%\end{proof}
+%\end{lemma}
 
-\begin{lemma} \label{lem:diff:bound} 
-Assume H\ref{assum:strong:mixing} and H\
-ref{assum:bias:bound}. Then the following holds. 
-\begin{itemize}
-\item[(i)] For all $n \in \nset$, $m \in \intvect{0}{n}$, $\precpar \in \precparsp$, and $h \in \bmf{\Xfd^n}$,   
-$$
-\left| \noshift_{m, n} h - \shiftbwd_{m, n} h \right| \vee \left| \shiftfwd_{m, n} h - \noshift_{m, n} h \right| \leq 2 c(\theta,\varphi)  \frac{\udup}{\udlow^2} \| h \|_\infty.   
-$$
-\item[(ii)] For all $n \in \nset$, $m \in \intvect{0}{n - 1}$, and $\precpar \in \precparsp$,
-$$
-\left| \frac{\postmod{m + 1} \retrokmod_{m + 1, n} \addf[n]{m}}{\postmod{m + 1} \retrokmod_{m + 1, n} \1_{\Xset^n}} - \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{m}}{\postmod{m} \retrokmod_{m, n} \1_{\Xset^n}} \right| \leq 2 c(\theta,\varphi)  \frac{\udup}{\udlow^2} \| h_m \|_\infty. 
-$$
-\end{itemize}
-In both cases, $c(\theta,\varphi)$ is the constant in H
-\ref{assum:bias:bound}. 
-\end{lemma}
-
-\begin{proof}
-See \cite{gloaguen2019pseudo}.
+%\begin{lemma} \label{lem:diff:bound} 
+%Assume H\ref{assum:strong:mixing} and H\
+%ref{assum:bias:bound}. Then the following holds. 
+%\begin{itemize}
+%\item[(i)] For all $n \in \nset$, $m \in \intvect{0}{n}$, $\precpar \in \precparsp$, and $h \in \bmf{\Xfd^n}$,   
+%$$
+%\left| \noshift_{m, n} h - \shiftbwd_{m, n} h \right| \vee \left| \shiftfwd_{m, n} h - \noshift_{m, n} h \right| \leq 2 c(\theta,\varphi)  \frac{\udup}{\udlow^2} \| h \|_\infty.   
+%$$
+%\item[(ii)] For all $n \in \nset$, $m \in \intvect{0}{n - 1}$, and $\precpar \in \precparsp$,
+%$$
+%\left| \frac{\postmod{m + 1} \retrokmod_{m + 1, n} \addf[n]{m}}{\postmod{m + 1} \retrokmod_{m + 1, n} \1_{\Xset^n}} - \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{m}}{\postmod{m} \retrokmod_{m, n} \1_{\Xset^n}} \right| \leq 2 c(\theta,\varphi)  \frac{\udup}{\udlow^2} \| h_m \|_\infty. 
+%$$
+%\end{itemize}
+%In both cases, $c(\theta,\varphi)$ is the constant in H
+%\ref{assum:bias:bound}. 
+%\end{lemma}
+%
+%\begin{proof}
+%See \cite{gloaguen2019pseudo}.
 %We start with (i). Combining the decomposition 
 %\begin{multline*}
 % \noshift_{m, n} h - \shiftbwd_{m, n} h = \varphi_{m, n}^\precpar h \left( \frac{\postmod{m - 1} \uk{m - 1} \retrokmod_{m, n} \1_{\Xset^n} - \postmod{m - 1} \ukmod{m - 1} \retrokmod_{m, n} \1_{\Xset^n}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{\Xset^n}} \right) \\
@@ -972,7 +1031,7 @@ See \cite{gloaguen2019pseudo}.
 %
 
 
-\end{proof}
+%\end{proof}
 %
 %\clearpage
 %\newpage
