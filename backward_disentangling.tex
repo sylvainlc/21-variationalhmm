@@ -637,13 +637,13 @@ But less useful in practice as we directly parameterize the backward variational
 
 \begin{hypH}
 \label{assum:strong:mixing}
-There exist constants $0 < \udlow < \udup < \infty$ such that for all $k \in \nset$, $\theta\in\Theta$, and $(x_k, x_{k + 1}) \in \Xset_k \times \Xset_{k + 1}$, 
+There exist constants $0 < \udlow < \udup < \infty$ such that for all $k \in \nset$, $\theta\in\Theta$, and $(x_k, x_{k + 1}) \in \mathbb{R}^d \times \mathbb{R}^d$, 
 $$
     \udlow \leq \ud{k,\theta}(x_k, x_{k + 1}) \leq \udup
 $$ 
 and 
 $$
-    \udlow \leq \inf_{\varphi} m_{\varphi,k}(x_k, x_{k + 1}), \quad \sup_{\varphi} m_{\varphi,k}(x_k, x_{k + 1}) \leq \udup. 
+    \udlow \leq \inf_{\varphi} q_{\varphi,k-1}(x_k, x_{k -1}), \quad \sup_{\varphi} q_{\varphi,k-1}(x_k, x_{k -1}) \leq \udup. 
 $$ 
 \end{hypH}
 %Under these assumptions, define the mixing rate 
@@ -654,7 +654,7 @@ $$
 
 \begin{proposition}
 \label{prop:bias}
-Assume that H\ref{assum:bias:bound} and H\ref{assum:strong:mixing} hold. Then, there exists a constant $\upsilon$ such that for all $n \in \nset$, $\parvec$, $\varphi$, and all additive functional $h_{0:n}$,  
+Assume that H\ref{assum:bias:bound} and H\ref{assum:strong:mixing} hold. Then, for all $n \in \nset$, $\parvec$, $\varphi$, and all additive functional $h_{0:n}$,  
 %    \begin{align*}
 %        \big| \postmod{0:n} h_n -  \post{0:n}^{\parvec} h_n \big| 
 %        &\leq 2 c(\parvec,\varphi) \frac{\udup}{\udlow^2} \sum_{k = 0}^{n - 1} \| \addf{k} \|_\infty \left( \sum_{m = 1}^{n - 1} \rho^{|k - m| - 1} + 1 \right) \\
@@ -662,7 +662,7 @@ Assume that H\ref{assum:bias:bound} and H\ref{assum:strong:mixing} hold. Then, t
 %    \end{align*}
 $$
         \big| \postmod{0:n} h_{0:n} -  \post{0:n}^{\parvec} h_{0:n} \big| 
-        \leq 2\frac{\sigma_+}{\sigma_-^2}\sum_{k=0}^{n-1}\left\| \addf[n]{k}\right\|_\infty\left( c_0(\theta,\varphi) + \sum_{m=1}^n \rho^{|k-m|-1}c_m(\theta,\varphi)\right)\eqsp,%\upsilon\sup_{0 \leq k \leq n - 1}\!\!\!\! \| \addf{k} \|_\infty  c(\parvec,\varphi) n\eqsp.
+        \leq 2\frac{\sigma_+}{\sigma_-^2}\sum_{k=0}^{n-1}\left\| \addf{k}\right\|_\infty\left( c_0(\theta,\varphi) + \sum_{m=1}^n \rho^{|k-m|-1}c_m(\theta,\varphi)\right)\eqsp,%\upsilon\sup_{0 \leq k \leq n - 1}\!\!\!\! \| \addf{k} \|_\infty  c(\parvec,\varphi) n\eqsp.
 $$
 where $\rho = 1-\sigma_-/\sigma_+$.
 \end{proposition}
