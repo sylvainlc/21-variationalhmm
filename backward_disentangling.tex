@@ -918,7 +918,7 @@ $$
 $$
 where $f_1\otimes f_2: (x_{m-1},x_m) \mapsto f_1(x_{m-1})f(x_m)$ and for any probability meausre $\eta$, $\eta_{n,m}$ is defined, for all measurable function $f$ by
 $$
-\eta_{n,m}f = \frac{\lambda (h\otimes \uk{m, n-1}^\theta\1_{})}{\lambda (\1\otimes \uk{m, n-1}^\theta\1_{})}\eqsp.
+\eta_{n,m}f = \frac{\eta (h\otimes \uk{m, n-1}^\theta\1_{})}{\eta (\1\otimes \uk{m, n-1}^\theta\1_{})}\eqsp.
 $$
 Therefore,
 $$
@@ -928,8 +928,32 @@ By H\ref{assum:strong:mixing} the variational backward kernel satisfies a Doebli
 $$
 \left|\frac{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}}\right|\leqslant  \left(1-\frac{\sigma_-}{\sigma_+}\right)^{m-k-1}\left\|\addf[n]{k}\right\|_\infty\eqsp.
 $$
-Assume now first that $m\leqslant k$. \textcolor{red}{To be completed}.
-
+Assume now first that $m< k$. Note that 
+$$
+\frac{\lambda\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}}= \frac{\lambda(1\otimes F^\theta_{m|n}\ldots F^\theta_{k|n}\addf[n]{k}\uk{m, n-1}^\theta\1_{})}{\lambda (\1\otimes  \uk{m, n-1}^\theta\1_{})}\eqsp, 
+$$
+where the forward kernel $ F^\theta_{\ell|n}$ is given by
+$$
+ F^\theta_{\ell|n}h(x_\ell) = \frac{\uk{\ell}^\theta(h\uk{\ell+1, n-1}^\theta\1_{})(x_\ell)}{ \uk{\ell, n-1}^\theta\1_{}(x_\ell)}\eqsp.
+$$
+By H\ref{assum:strong:mixing}, 
+$$
+ F^\theta_{\ell|n}h(x_\ell) \geqslant \frac{\sigma_-}{\sigma_+}\mu_{\ell|n}h\eqsp,
+$$
+with $\mu_{\ell|n}h = \mu(h\uk{\ell+1, n-1}^\theta\1_{})(x_\ell) / \mu\uk{\ell+1, n-1}^\theta\1_{}$. Therefore, the kernels $ F^\theta_{\ell|n}$ also satisfy a Doeblin condition. On the other hand,
+$$
+\frac{\lambda\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}} - \frac{\lambda'\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda'\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}} = (\lambda_{m|n} - \lambda'_{m|n})F^\theta_{m|n}\ldots F^\theta_{k|n}\addf[n]{k},
+$$
+where for any probability measure $\eta$,
+$$
+\eta_{m|n}h = \frac{\eta(1\otimes h\uk{m, n-1}^\theta\1_{})}{\eta(1\otimes \uk{m, n-1}^\theta\1_{})}\eqsp.
+$$
+This yields
+$$
+\left|\frac{\lambda\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}} - \frac{\lambda'\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda'\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}}\right|\leqslant  \left(1-\frac{\sigma_-}{\sigma_+}\right)^{k-m}\left\|\addf[n]{k}\right\|_\infty\eqsp,
+$$
+which concludes the proof.
+ 
 \end{proof}
 
 %First, assume that $m \leq k$; then note that for all $x_m \in \Xset_m$, 
