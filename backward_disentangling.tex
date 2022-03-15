@@ -655,8 +655,9 @@ Assume that H\ref{assum:bias:bound} and H\ref{assum:strong:mixing} hold. Then, t
 %    \end{align*}
 $$
         \big| \postmod{0:n} h_{0:n} -  \post{0:n}^{\parvec} h_{0:n} \big| 
-        \leq \upsilon\sup_{0 \leq k \leq n - 1}\!\!\!\! \| \addf{k} \|_\infty  c(\parvec,\varphi) n\eqsp.
+        \leq 2\frac{\sigma_+}{\sigma_-^2}\sum_{k=0}^{n-1}\left\| \addf[n]{k}\right\|_\infty\left( c_0(\theta,\varphi) + \sum_{m=1}^n \rho^{|k-m|-1}c_m(\theta,\varphi)\right)\eqsp,%\upsilon\sup_{0 \leq k \leq n - 1}\!\!\!\! \| \addf{k} \|_\infty  c(\parvec,\varphi) n\eqsp.
 $$
+where $\rho = 1-\sigma_-/\sigma_+$.
 \end{proposition}
 
 \begin{proof}
@@ -755,7 +756,7 @@ $$
 \left|\frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{\Xset^n}} - \frac{\chi \md{0;\parvec}\uk{0, n - 1}^\theta \addf[n]{k}}{\chi\md{0;\parvec}\uk{0, n - 1}^\theta \1_{\Xset^n}}\right|\leqslant 2c_0(\theta,\varphi)\frac{\sigma_+}{\sigma_-}\|\addf[n]{k}\|_\infty\eqsp.
 $$
 
-\paragraph{Error term at time $m\leqslant k$ in \eqref{eq:error:decomp}. } For all bounded measurable function $h$ and $m \in \intvect{1}{k}$, define the kernel  
+\paragraph{Error term at time $m>0$ in \eqref{eq:error:decomp}. } For all bounded measurable function $h$ and $m \in \intvect{1}{k}$, define the kernel  
 \begin{equation} \label{eq:def:retrokmod:joint}
     \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}(x'_{m-1},x_m', \rmd x_{0:n}) \eqdef \delta_{x'_{m-1}}(\rmd x_{m-1})\delta_{x_m'}(\rmd x_m) \, \tstatmod{m-1}(x_{m-1}, \rmd x_{0:m - 2}) \prod_{\ell = m}^{n - 1} \uk{\ell,\theta}(x_\ell, \rmd x_{\ell + 1}), 
 \end{equation}
@@ -800,8 +801,7 @@ Therefore,
 $$
 \left| \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \right|\leqslant 2\frac{\sigma_+}{\sigma_-^2}c_m(\theta,\varphi) \left\|\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\right\|_\infty\eqsp.
 $$
-
-\noindent \textcolor{red}{It remains to prove an equivalent of Lemma~\ref{lem:geo:bound}.}
+The proof is completed using Lemma~\ref{lem:geo:bound}.
 
 
 
@@ -810,8 +810,8 @@ $$
 % \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}  = 
 %$$
 
-\clearpage
-\newpage
+%\clearpage
+%\newpage
 
 %Now, for all $m \in \intvect{1}{n}$, pick an arbitrary element $\xarb_m \in \Xset_m$ and define the kernel 
 %\begin{equation} \label{eq:def:norm:objective:func}
@@ -899,13 +899,30 @@ $$
 %\end{proof}
 
 \begin{lemma} \label{lem:geo:bound}
-Assume H\ref{assum:strong:mixing}. Then for all $n \in \nset$, $m \in \intvect{0}{n}$, $k \in \intvect{0}{n - 1}$, and $(\lambda, \lambda') \in \probmeas{\Xfd_m}^2$, 
+Assume H\ref{assum:strong:mixing}. Then for all $n \in \nset$, $m \in \intvect{0}{n}$, $k \in \intvect{0}{n - 1}$, bounded and measurable function $h$, and all probability measures $(\lambda, \lambda')$ on $(\mathbb{R}^d\times\mathbb{R}^d,\mathcal{B}(\mathbb{R}^d\times \mathbb{R}^d))$, 
 $$
-\left|\frac{\lambda \retrokmod_{m, n} \addf[n]{k}}{\lambda \retrokmod_{m, n} \1_{\Xset^n}} - \frac{\lambda' \retrokmod_{m, n} \addf[n]{k}}{\lambda' \retrokmod_{m, n} \1_{\Xset^n}} \right| \leq \| \addf{k} \|_\infty \rho^{|k - m| - 1}. 
+\left|\frac{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}} - \frac{\lambda' \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda'  \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1} \right| \leq \| \addf{k} \|_\infty \rho^{|k - m| - 1}. 
 $$
 \end{lemma}
 \begin{proof}
-See \cite{gloaguen2019pseudo}.
+The proof is adapted from  \cite[Lemma~D.3]{gloaguen2019pseudo} and given here for completeness. Assume first that $m>k$. Then,
+$$
+\frac{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}} = \frac{\lambda \prod_{\ell = k}^{m-2}\bkw{\ell}^\varphi\addf{k}\uk{m, n-1}^\theta\1_{}}{\lambda(\1\otimes \uk{m, n-1}^\theta\1_{})} = \lambda_{m,n}\bkw{m-2}^\varphi \ldots \bkw{k}^\varphi\addf{k}\eqsp,
+$$
+where $f_1\otimes f_2: (x_{m-1},x_m) \mapsto f_1(x_{m-1})f(x_m)$ and for any probability meausre $\eta$, $\eta_{n,m}$ is defined, for all measurable function $f$ by
+$$
+\eta_{n,m}f = \frac{\lambda (h\otimes \uk{m, n-1}^\theta\1_{})}{\lambda (\1\otimes \uk{m, n-1}^\theta\1_{})}\eqsp.
+$$
+Therefore,
+$$
+\frac{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}} = (\lambda_{m,n}-\lambda'_{m,n})\bkw{m-2}^\varphi \ldots \bkw{k}^\varphi\addf{k}\eqsp.
+$$
+By H\ref{assum:strong:mixing} the variational backward kernel satisfies a Doeblin condition and 
+$$
+\left|\frac{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}}\right|\leqslant  \left(1-\frac{\sigma_-}{\sigma_+}\right)^{m-k-1}\left\|\addf[n]{k}\right\|_\infty\eqsp.
+$$
+Assume now first that $m\leqslant k$. \textcolor{red}{To be completed}.
+
 \end{proof}
 
 %First, assume that $m \leq k$; then note that for all $x_m \in \Xset_m$, 
