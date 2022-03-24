@@ -600,17 +600,17 @@ The variational family parameterizes the backward kernel which naturally appears
 
 \begin{hypH}
 \label{assum:bias:bound}
-There exist functions $c_k$, $0\leqslant k \leqslant n$, such that for all $0\leqslant k \leqslant n$, $\parvec$, $\varphi$, all bounded measurable functions $h_k$, %and $x \in \Xset_k$,   
+There exist functions $c_k$, $0\leqslant k \leqslant n$, such that for all $0\leqslant k \leqslant n$, $\parvec$, $\varphi$, all bounded measurable functions $h$ on $\mathbb{R}^d\times\mathbb{R}^d$, %and $x \in \Xset_k$,   
 %$$
 %\left|\int m_{\varphi,n}(x,x_{k+1}) h (x_{k+1})dx_{k+1}- \int\qg{k,\parvec}(x,x_{k+1}) h (x_{k+1})dx_{k+1}\right| \leqslant c_k(\parvec,\varphi) \| h_k \|_\infty. 
 %$$
 %The previous assumption should be replaced by
 $$
-\left|\post{k}^{\varphi}Q_{\varphi,k-1} h_k - \post{k-1}^{\varphi} \uk{k-1,\theta}h_k\right| \leqslant c_k(\parvec,\varphi) \| h_k \|_\infty. 
+\left|\post{k}^{\varphi}Q_{\varphi,k-1} h - \post{k-1}^{\varphi} \uk{k-1,\theta}h\right| \leqslant c_k(\parvec,\varphi) \| h \|_\infty. 
 $$ 
-and 
+and for all bounded measurable functions $h$ on $\mathbb{R}^d$,
 $$
-\left|\chi_\theta \md{0;\parvec}h_0 - \postmod{0} h_0\right|\leqslant c_0(\theta,\varphi)\|h_0\|_\infty\eqsp.
+\left|\chi_\theta \md{0;\parvec}h - \postmod{0} h\right|\leqslant c_0(\theta,\varphi)\|h\|_\infty\eqsp.
 $$
 \end{hypH}
 %\begin{remark}
