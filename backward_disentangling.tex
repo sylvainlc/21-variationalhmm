@@ -698,23 +698,24 @@ on $(\mathbb{R}^d)^{m+1} \times \mathcal{B}((\mathbb{R}^d)^{n + 1})$, with the c
 \sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1}^\theta \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1}^\theta \1_{}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1}^\theta \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1}^\theta \1_{}} \right) \\ + \frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} - \frac{\chi_\theta \md{0;\parvec}\uk{0, n - 1}^\theta \addf[n]{k}}{\chi_\theta\md{0;\parvec}\uk{0, n - 1}^\theta \1_{}},
 \end{multline*}
 since $\chi_\theta \md{0;\parvec} \uk{0, n - 1}^\theta \addf[n]{k}/\chi_\theta\md{0;\parvec}\uk{0, n - 1}^\theta \1_{} = \post{0:n}^\theta \addf[n]{k}$.
-For each $m \in \nset$, define the  backward Markov kernel 
-\begin{equation} \label{eq:def:backward:kernel}
-    \bkw{m}^\parvec(x_{m + 1}, \rmd x_m) \eqdef \frac{\post{m}^\parvec(\rmd x_m) \, \ud{m,\parvec}(x_m, x_{m + 1})}{\post{m}^\parvec[\ud{m,\parvec}(\cdot, x_{m + 1})]} = \frac{\post{m}^\parvec(\rmd x_m) \, \hd{m+1;\parvec}(x_{m}, x_{m+1})}{\post{m}^\parvec[\hd{m+1;\parvec}(\cdot, x_{m+1})]}
-\end{equation}
-on $\mathbb{R}^d \times \mathcal{B}(\mathbb{R}^d)$. In addition, for each $n>0$, define on $\mathbb{R}^d \times \mathcal{B}((\mathbb{R}^d)^n)$ the following Markov kernel  : 
-\begin{equation} \label{eq:def:tstat}
-\tstat{n}^\parvec(x_n, \rmd x_{0:n - 1}) \eqdef \prod_{m = 0}^{n - 1} \bkw{m}^\parvec(x_{m + 1}, \rmd x_m)
-\end{equation}
-%on $\Xset_n \times \Xfd^{n - 1}$ denote the joint law of the backward Markov chain induced by the kernels \eqref{eq:def:backward:kernel} when initialised at $x_n \in \Xset_n$.   
-%In the following, the notation $\parvec$ may be dropped when there is no confusion. 
-Define similarly, 
+%For each $m \in \nset$, define the  backward Markov kernel 
+%\begin{equation} \label{eq:def:backward:kernel}
+%    \bkw{m}^\parvec(x_{m + 1}, \rmd x_m) \eqdef \frac{\post{m}^\parvec(\rmd x_m) \, \ud{m,\parvec}(x_m, x_{m + 1})}{\post{m}^\parvec[\ud{m,\parvec}(\cdot, x_{m + 1})]} = \frac{\post{m}^\parvec(\rmd x_m) \, \hd{m+1;\parvec}(x_{m}, x_{m+1})}{\post{m}^\parvec[\hd{m+1;\parvec}(\cdot, x_{m+1})]}
+%\end{equation}
+%on $\mathbb{R}^d \times \mathcal{B}(\mathbb{R}^d)$. In addition, for each $n>0$, define on $\mathbb{R}^d \times \mathcal{B}((\mathbb{R}^d)^n)$ the following Markov kernel  : 
+%\begin{equation} \label{eq:def:tstat}
+%\tstat{n}^\parvec(x_n, \rmd x_{0:n - 1}) \eqdef \prod_{m = 0}^{n - 1} \bkw{m}^\parvec(x_{m + 1}, \rmd x_m)
+%\end{equation}
+%%on $\Xset_n \times \Xfd^{n - 1}$ denote the joint law of the backward Markov chain induced by the kernels \eqref{eq:def:backward:kernel} when initialised at $x_n \in \Xset_n$.   
+%%In the following, the notation $\parvec$ may be dropped when there is no confusion. 
+%Define similarly, 
+%$$
+%\bkw{m}^\varphi(x_{m + 1}, \rmd x_m) = q_{\varphi,m}(x_{m+1},x_m)\mu(\rmd x_m)
+%$$
+%on $\mathbb{R}^d \times \mathcal{B}(\mathbb{R}^d)$. 
+In addition, define for each $n \in \nsetpos$, the Markov kernel  
 $$
-\bkw{m}^\varphi(x_{m + 1}, \rmd x_m) = q_{\varphi,m}(x_{m+1},x_m)\mu(\rmd x_m)
-$$
-on $\mathbb{R}^d \times \mathcal{B}(\mathbb{R}^d)$. In addition, define for each $n \in \nsetpos$, the Markov kernel  
-$$
-\tstat{n}^\varphi(x_n, \rmd x_{0:n - 1}) = \prod_{m = 0}^{n - 1} \bkw{m}^\varphi(x_{m + 1}, \rmd x_m)
+\tstat{n}^\varphi(x_n, \rmd x_{0:n - 1}) = \prod_{m = 0}^{n - 1} Q_{\varphi,m}(x_{m + 1}, \rmd x_m)
 $$ 
 on $\mathbb{R}^d \times \mathcal{B}((\mathbb{R}^d)^n)$. % In the following, the notation $\parvec$ may be dropped when there is no confusion. 
 %\begin{itemize} 
@@ -779,7 +780,7 @@ $$
 \end{equation}
 on  $(\mathbb{R}^d)^2 \times \mathcal{B}((\mathbb{R}^d)^{n+1})$.  Then, write
 $$
- \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}  = \frac{\postmod{m} \bkw{m-1}^\parvec \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \uk{m-1,\theta} \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \eqsp.
+ \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}  = \frac{\postmod{m} Q_{\varphi,m-1} \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \uk{m-1,\theta} \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \eqsp.
 $$
 Let $x_{m-1}^*$ and $x_m^*$ be arbitrary elements in $\mathbb{R}^d$ and define the kernel
 $$
@@ -788,18 +789,18 @@ $$
 so that
 \begin{align*}
  \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} &- \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}  \\
-&= \frac{\postmod{m} \bkw{m-1}^\parvec \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \uk{m-1,\theta} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \\ 
-&= \frac{\postmod{m} \bkw{m-1}^\parvec \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\} - \postmod{m - 1} \uk{m-1,\theta} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \\
-&\hspace{2.5cm}+  \frac{\postmod{m} \bkw{m-1}^\parvec \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}}\left(\frac{\postmod{m-1} \retrokmod_{m-1, n} \1_{}-\postmod{m} \retrokmod_{m, n} \1_{}}{\postmod{m-1} \retrokmod_{m-1, n} \1_{}}\right)\eqsp.
+&= \frac{\postmod{m} Q_{\varphi,m-1} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \uk{m-1,\theta} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \\ 
+&= \frac{\postmod{m} Q_{\varphi,m-1} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\} - \postmod{m - 1} \uk{m-1,\theta} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \\
+&\hspace{2.5cm}+  \frac{\postmod{m} Q_{\varphi,m-1}\left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}}\left(\frac{\postmod{m-1} \retrokmod_{m-1, n} \1_{}-\postmod{m} \retrokmod_{m, n} \1_{}}{\postmod{m-1} \retrokmod_{m-1, n} \1_{}}\right)\eqsp.
 \end{align*}
 Then, using that
 $$
-\left|\frac{\postmod{m} \bkw{m-1}^\parvec \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}}\right|\leqslant \left\|\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\right\|_\infty\eqsp,
+\left|\frac{\postmod{m} Q_{\varphi,m-1} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}}\right|\leqslant \left\|\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\right\|_\infty\eqsp,
 $$
 and by H\ref{assum:bias:bound},
 \begin{align*}
 \left|\frac{\postmod{m-1} \retrokmod_{m-1, n} \1_{}-\postmod{m} \retrokmod_{m, n} \1_{}}{\postmod{m-1} \retrokmod_{m-1, n} \1_{}}\right|&\leqslant c_m(\theta,\varphi)\frac{\left\|\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\|_\infty}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}\eqsp,\\
-\left|\frac{\postmod{m} \bkw{m-1}^\parvec \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\} - \postmod{m - 1} \uk{m-1,\theta} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}\right| &\leqslant c_m(\theta,\varphi)\frac{\left\|\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\right\|_\infty\left\|\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\|_\infty}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}\eqsp,
+\left|\frac{\postmod{m} Q_{\varphi,m-1} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\} - \postmod{m - 1} \uk{m-1,\theta} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}\right| &\leqslant c_m(\theta,\varphi)\frac{\left\|\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\right\|_\infty\left\|\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\|_\infty}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}\eqsp,
 \end{align*}
 yields
 $$
@@ -924,7 +925,7 @@ $$
 \begin{proof}
 The proof is adapted from  \cite[Lemma~D.3]{gloaguen2019pseudo} and given here for completeness. Assume first that $m>k$. Then,
 $$
-\frac{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}} = \frac{\lambda \prod_{\ell = k}^{m-2}\bkw{\ell}^\varphi\addf{k}\uk{m, n-1}^\theta\1_{}}{\lambda(\1\otimes \uk{m, n-1}^\theta\1_{})} = \lambda_{m,n}\bkw{m-2}^\varphi \ldots \bkw{k}^\varphi\addf{k}\eqsp,
+\frac{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}} = \frac{\lambda \prod_{\ell = k}^{m-2}Q_{\varphi,\ell}\addf{k}\uk{m, n-1}^\theta\1_{}}{\lambda(\1\otimes \uk{m, n-1}^\theta\1_{})} = \lambda_{m,n}Q_{\varphi,m-2}\ldots Q_{\varphi,k}\addf{k}\eqsp,
 $$
 where $f_1\otimes f_2: (x_{m-1},x_m) \mapsto f_1(x_{m-1})f(x_m)$ and for any probability meausre $\eta$, $\eta_{n,m}$ is defined, for all measurable function $f$ by
 $$
@@ -932,7 +933,7 @@ $$
 $$
 Therefore,
 $$
-\frac{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}} = (\lambda_{m,n}-\lambda'_{m,n})\bkw{m-2}^\varphi \ldots \bkw{k}^\varphi\addf{k}\eqsp.
+\frac{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}} = (\lambda_{m,n}-\lambda'_{m,n})Q_{\varphi,m-2} \ldots Q_{\varphi,k}\addf{k}\eqsp.
 $$
 By H\ref{assum:strong:mixing} the variational backward kernel satisfies a Doeblin condition and 
 $$
