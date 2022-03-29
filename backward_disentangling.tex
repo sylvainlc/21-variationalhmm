@@ -581,7 +581,7 @@ Most works in the literature focus on mean field approximations which means that
 $$
  \post{0:n}^{\varphi}(x_{0:n})=  \post{n}^{\varphi}(x_n)\prod_{k=0}^{n-1}q_{\varphi,k}(x_{k+1},x_k)\eqsp.
 $$
-The variational family parameterizes the backward kernel which naturally appears in the decomposition of the law of $X_{0:n}$ given $Y_{0:n}$. In the following, we write $Q_{\varphi,k}(x_{k+1}, \rmd x_k) = q_{\varphi,k}(x_{k+1},x_k) \mu(\rmd x_k)$. Note that $ \post{n}^{\varphi}$ is the marginal distribution of $ \post{0:n}^{\varphi}$ at time $n$ which therefore targets the filtering distribution at time $n$, i.e. the distribution of $X_n$ given $Y_{0:n}$. On the other hand, for a fixed record of observations $Y_{0:n}$, for all $0 \leq k \leq n-1$,   $ \post{k}^{\varphi}$ is the marginal distribution of $ \post{0:n}^{\varphi}$ at time $k$ which therefore targets the marginal smoothing distribution at time $k$, i.e. the distribution of $X_k$ given $Y_{0:n}$.
+The variational family parameterizes the backward kernel which naturally appears in the decomposition of the law of $X_{0:n}$ given $Y_{0:n}$. In the following, we write $Q_{\varphi,k}(x_{k+1}, \rmd x_k) = q_{\varphi,k}(x_{k+1},x_k) \mu(\rmd x_k)$. Note that $ \post{n}^{\varphi}$ is the marginal distribution of $ \post{0:n}^{\varphi}$ at time $n$ which therefore targets the filtering distribution at time $n$, i.e. the distribution of $X_n$ given $Y_{0:n}$. %On the other hand, for a fixed record of observations $Y_{0:n}$, for all $0 \leq k \leq n-1$,   $ \post{k}^{\varphi}$ is the marginal distribution of $ \post{0:n}^{\varphi}$ at time $k$ which therefore targets the marginal smoothing distribution at time $k$, i.e. the distribution of $X_k$ given $Y_{0:n}$.
 
 \subsection{Control of the variational error}
 %In this section we propose an upper bound for the error $|\mathbb{E}_{q_\varphi}[\af{0:n}(X_{0:n})]-\mathbb{E}_\theta[\af{0:n}(X_{0:n})|Y_{0:n}]|$  when $\af{0:n}$ is an additive functional of the hidden states as in \eqref{eq:additive:functional}. %Following \cite{gloaguen2019pseudo} this control can be obtained in a broader framework than the HMM setting. Let $(\Xset_n, \Xfd_n)_{n \in \nset}$ be a sequence of general state spaces and let, for all $n \in \nset$ and all $\theta$, $\uk{n,\theta}$ defined on  $\Xset_n \times \Xfd_{n + 1}$ be bounded kernels in the sense that $\sup_{x \in \Xset_n} \uk{n,\theta}(x, \Xset_{n + 1}) < \infty$. We will assume a dominated model where each kernel $\uk{n,\theta}$ has a kernel density $\ud{n,\theta}$ with respect to some $\sigma$-finite reference measure $\mu_{n + 1}$ on $\Xfd_{n + 1}$. Finally, let $\chi$ be some bounded measure on $\Xfd_0$. In the following, we denote state-space product sets and $\sigma$-fields by $\Xset^n \eqdef \Xset_0 \times \cdots \times \Xset_n$ and $\Xfd^n \eqdef \Xfd_0 \tensprod \cdots \tensprod \Xfd_n$, respectively, and consider probability measures  
@@ -606,12 +606,13 @@ There exist functions $c_k$, $0\leqslant k \leqslant n$, such that for all $0\le
 %$$
 %The previous assumption should be replaced by
 $$
-\left|\post{k}^{\varphi}Q_{\varphi,k-1} h - \post{k-1}^{\varphi} \uk{k-1,\theta}h\right| \leqslant c_k(\parvec,\varphi) \| h \|_\infty. 
+\left|\post{k}^{\varphi}Q_{\varphi,k-1} h - \frac{\post{k-1}^{\varphi} \uk{k-1,\theta}h}{\post{k-1}^{\varphi} \uk{k-1,\theta}\1}\right| \leqslant c_k(\parvec,\varphi) \| h \|_\infty. 
 $$ 
 and for all bounded measurable functions $h$ on $\mathbb{R}^d$,
 $$
-\left|\chi_\theta \md{0;\parvec}h - \postmod{0} h\right|\leqslant c_0(\theta,\varphi)\|h\|_\infty\eqsp.
+\left|\post{0}^{\theta}h - \postmod{0} h\right|\leqslant c_0(\theta,\varphi)\|h\|_\infty\eqsp,
 $$
+where  $\post{0}^{\theta}$ is the filtering distribution at time $0$, i.e. $\post{0}^{\theta}h = \chi_\theta \md{0;\parvec}h/\chi_\theta \md{0;\parvec}\1$.
 \end{hypH}
 %\begin{remark}
 %In the linear and Gaussian case, $\qg{k,\parvec}(x,x_{k+1}) = \Psi_{Ax+b,\Sigma}(x_{k+1})\Psi_{Cx_{k+1}+d,\Omega}(Y_{k+1})$ where $\Psi_{\mu,\lambda}$ is the Gaussian probability function with mean $\mu$ and variance $\Lambda$. Assume that $q_{\varphi,k}$ is the backward kernel of a linear and Gaussian model with parameters $\tilde A$, $\tilde b$, $\tilde \Sigma$, $\tilde C$ $\tilde d$, $\tilde \Omega$. Therefore,
