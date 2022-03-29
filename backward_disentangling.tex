@@ -754,20 +754,14 @@ Therefore,
 \end{multline}
 
 \paragraph{Error term at time $m=0$ in \eqref{eq:error:decomp}. }Consider the following decomposition of the first term:
-\begin{multline*}
-\frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} - \frac{\chi_\theta \md{0;\parvec}\uk{0, n - 1}^\theta \addf[n]{k}}{\chi_\theta\md{0;\parvec}\uk{0, n - 1}^\theta \1_{}} = \frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}-\chi_\theta \md{0;\parvec}\uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} \\
-+  \frac{\chi_\theta \md{0;\parvec}\uk{0, n - 1}^\theta \addf[n]{k}}{\chi_\theta\md{0;\parvec}\uk{0, n - 1}^\theta \1_{}}\frac{\chi_\theta \md{0;\parvec}\uk{0, n - 1}^\theta \1_{} - \postmod{0} \uk{0, n - 1}^\theta \1_{}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} \eqsp.
-\end{multline*}
-\textcolor{red}{Alternative. Denote by $\phi^\theta_0$ the filtering distribution at time $0$, i.e the law defined as  $\phi^\theta_0h= \chi_\theta \md{0;\parvec}h/\chi_\theta \md{0;\parvec}$. Then,
-\begin{multline*}
-\frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} - \frac{\chi_\theta \md{0;\parvec}\uk{0, n - 1}^\theta \addf[n]{k}}{\chi_\theta\md{0;\parvec}\uk{0, n - 1}^\theta \1_{}} = \frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}-\phi^\theta_0\uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} \\
-+  \frac{\phi^\theta_0\uk{0, n - 1}^\theta \addf[n]{k}}{\phi^\theta_0\uk{0, n - 1}^\theta \1_{}}\frac{\phi^\theta_0\uk{0, n - 1}^\theta \1_{} - \postmod{0} \uk{0, n - 1}^\theta \1_{}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} \eqsp.
-\end{multline*}
-and the asummption is $|\chi_\theta \md{0;\parvec}h/\chi_\theta \md{0;\parvec} - \postmod{0} h|\leq c_0(\theta,\varphi)\|\|_\infty$.
-}
-Then, by H\ref{assum:bias:bound},
+\begin{align*}
+\frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} - \frac{\chi_\theta \md{0;\parvec}\uk{0, n - 1}^\theta \addf[n]{k}}{\chi_\theta\md{0;\parvec}\uk{0, n - 1}^\theta \1_{}} &= \frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} - \frac{\phi^\theta_0\uk{0, n - 1}^\theta \addf[n]{k}}{\phi^\theta_0\uk{0, n - 1}^\theta \1_{}}\eqsp,\\
+& = \frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}-\phi^\theta_0\uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} \\
+&\hspace{2cm}+  \frac{\phi^\theta_0\uk{0, n - 1}^\theta \addf[n]{k}}{\phi^\theta_0\uk{0, n - 1}^\theta \1_{}}\frac{\phi^\theta_0\uk{0, n - 1}^\theta \1_{} - \postmod{0} \uk{0, n - 1}^\theta \1_{}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} \eqsp,
+\end{align*}
+where $\phi^\theta_0$ the filtering distribution at time $0$, i.e the law defined as  $\phi^\theta_0h= \chi_\theta \md{0;\parvec}h/\chi_\theta \md{0;\parvec}$. Then, by H\ref{assum:bias:bound},
 $$
-\left|\frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} - \frac{\chi_\theta \md{0;\parvec}\uk{0, n - 1}^\theta \addf[n]{k}}{\chi_\theta\md{0;\parvec}\uk{0, n - 1}^\theta \1_{}}\right|\leqslant 2c_0(\theta,\varphi)\frac{\| \uk{0, n - 1}^\theta \1_{}\|_\infty\|\addf[n]{k}\|_\infty}{\postmod{0} \uk{0, n - 1}^\theta \1_{}}\eqsp.
+\left|\frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} - \frac{\phi^\theta_0\uk{0, n - 1}^\theta \addf[n]{k}}{\phi^\theta_0\uk{0, n - 1}^\theta \1_{}}\right|\leqslant 2c_0(\theta,\varphi)\frac{\| \uk{0, n - 1}^\theta \1_{}\|_\infty\|\addf[n]{k}\|_\infty}{\postmod{0} \uk{0, n - 1}^\theta \1_{}}\eqsp.
 $$
 By H\ref{assum:strong:mixing}, for all $x_0\in \mathbb{R}^d$,
 $$
@@ -779,7 +773,7 @@ $$
 $$
 which yields
 $$
-\left|\frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} - \frac{\chi \md{0;\parvec}\uk{0, n - 1}^\theta \addf[n]{k}}{\chi\md{0;\parvec}\uk{0, n - 1}^\theta \1_{}}\right|\leqslant 2c_0(\theta,\varphi)\frac{\sigma_+}{\sigma_-}\|\addf[n]{k}\|_\infty\eqsp.
+\left|\frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} - \frac{\phi^\theta_0\uk{0, n - 1}^\theta \addf[n]{k}}{\phi^\theta_0\uk{0, n - 1}^\theta \1_{}}\right|\leqslant 2c_0(\theta,\varphi)\frac{\sigma_+}{\sigma_-}\|\addf[n]{k}\|_\infty\eqsp.
 $$
 
 \paragraph{Error term at time $m>0$ in \eqref{eq:error:decomp}. } For all bounded measurable function $h$ and $m \in \intvect{1}{k}$, define the kernel  
