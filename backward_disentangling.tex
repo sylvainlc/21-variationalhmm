@@ -788,12 +788,13 @@ Let $x_{m-1}^*$ and $x_m^*$ be arbitrary elements in $\mathbb{R}^d$ and define t
 $$
 \mathcal{L}^{*,\varphi,\theta}_{m, n}h(x_{m-1},x_m) = \frac{\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}h(x_{m-1},x_m) }{\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1(x_{m-1},x_m)} - \frac{\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}h(x^*_{m-1},x^*_m) }{\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1(x^*_{m-1},x^*_m)} = \frac{\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}h(x_{m-1},x_m) }{\uk{m, n - 1}^\theta\1(x_m)} - \frac{\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}h(x^*_{m-1},x^*_m) }{\uk{m, n - 1}^\theta\1(x^*_m)}\eqsp,
 $$
-so that
+and define the normalized measure $\tilde\phi^\varphi_mh$ by $\postmod{m - 1} \uk{m-1,\theta}h/\postmod{m - 1} \uk{m-1,\theta}\1$, so that
 \begin{align*}
  \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} &- \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}  \\
 &= \frac{\postmod{m} Q_{\varphi,m-1} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \uk{m-1,\theta} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \\ 
-&= \frac{\postmod{m} Q_{\varphi,m-1} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\} - \postmod{m - 1} \uk{m-1,\theta} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \\
-&\hspace{2.5cm}+  \frac{\postmod{m} Q_{\varphi,m-1}\left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}}\left(\frac{\postmod{m-1} \retrokmod_{m-1, n} \1_{}-\postmod{m} \retrokmod_{m, n} \1_{}}{\postmod{m-1} \retrokmod_{m-1, n} \1_{}}\right)\eqsp.
+&=  \frac{\postmod{m} Q_{\varphi,m-1} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\tilde\phi^\varphi_m\left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1_{}} \\ \\
+&= \frac{\postmod{m} Q_{\varphi,m-1} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\} - \tilde\phi^\varphi_m \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1_{}} \\
+&\hspace{2.5cm}+  \frac{\postmod{m} Q_{\varphi,m-1}\left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}}\left(\frac{\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1-\postmod{m} \retrokmod_{m, n} \1_{}}{\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1_{}}\right)\eqsp.
 \end{align*}
 Then, using that
 $$
@@ -801,16 +802,16 @@ $$
 $$
 and by H\ref{assum:bias:bound},
 \begin{align*}
-\left|\frac{\postmod{m-1} \retrokmod_{m-1, n} \1_{}-\postmod{m} \retrokmod_{m, n} \1_{}}{\postmod{m-1} \retrokmod_{m-1, n} \1_{}}\right|&\leqslant c_m(\theta,\varphi)\frac{\left\|\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\|_\infty}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}\eqsp,\\
-\left|\frac{\postmod{m} Q_{\varphi,m-1} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\} - \postmod{m - 1} \uk{m-1,\theta} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}\right| &\leqslant c_m(\theta,\varphi)\frac{\left\|\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\right\|_\infty\left\|\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\|_\infty}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}\eqsp,
+\left|\frac{\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}-\postmod{m} \retrokmod_{m, n} \1_{}}{\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}}\right|&\leqslant c_m(\theta,\varphi)\frac{\left\|\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\|_\infty}{\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1_{}}\eqsp,\\
+\left|\frac{\postmod{m} Q_{\varphi,m-1} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\} - \tilde\phi^\varphi_m\left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}}\right| &\leqslant c_m(\theta,\varphi)\frac{\left\|\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\right\|_\infty\left\|\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\|_\infty}{\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1_{}}\eqsp,
 \end{align*}
 yields
 $$
-\left| \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \right|\leqslant 2c_m(\theta,\varphi)\frac{\left\|\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\right\|_\infty\left\|\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\|_\infty}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}\eqsp.
+\left| \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \right|\leqslant 2c_m(\theta,\varphi)\frac{\left\|\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\right\|_\infty\left\|\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\|_\infty}{\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1_{}}\eqsp.
 $$
 Note also that by H\ref{assum:strong:mixing},
 $$
-\postmod{m - 1} \retrokmod_{m - 1, n} \1_{} \geqslant \sigma_-^2 \mu  \uk{m+1, n-1}^\theta\1\eqsp,
+\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1_{} \geqslant \sigma_-^2 \mu  \uk{m+1, n-1}^\theta\1\eqsp,
 $$ 
 and for all $x,x'\in\mathbb{R}^d$,
 $$
