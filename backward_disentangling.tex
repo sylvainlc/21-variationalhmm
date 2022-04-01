@@ -625,19 +625,19 @@ where  $\post{0}^{\theta}$ is the filtering distribution at time $0$, i.e. $\pos
 %\left|\int \left(m_{\varphi,n}(x,x_{n+1})-\qg{n,\parvec}(x,x_{n+1})\right) h (x_{n+1})dx_{n+1}\right| 
 %$$
 %\end{remark}
-\textcolor{red}{
-\begin{itemize}
-\item In the case of HMM/ICA models, etc. the kernels depend on the observations. Then, the upper bound $c(\parvec,\varphi)$ is random and depend on the observations. This should be detailed in the specific case of HMM.
-\item The joint probability distribution $\post{0:n}^{\varphi}$ can also be written:
-$$
- \post{0:n}^{\varphi}(x_{0:n})=  \post{0}^{\varphi}(x_0)\prod_{k=0}^{n-1}m_{\varphi,k}(x_{k},x_{k+1})\eqsp,
-$$
-where $m_{\varphi,k}(x_{k},x_{k+1}) =   \post{k+1}^{\varphi}(x_{k+1})q_{\varphi,k}(x_{k+1},x_k)/ \post{k}^{\varphi}(x_k)$. We could discuss other assumptions such as 
-$$
-\left|\int m_{\varphi,n}(x,x_{k+1}) h (x_{k+1})dx_{k+1}- \int\qg{k,\parvec}(x,x_{k+1}) h (x_{k+1})dx_{k+1}\right| \leqslant c_k(\parvec,\varphi) \| h_k \|_\infty. 
-$$
-But less useful in practice as we directly parameterize the backward variational kernel and not $ m_{\varphi,n}(x,x_{k+1}) $.
-\end{itemize}}
+%\textcolor{red}{
+%\begin{itemize}
+%\item In the case of HMM/ICA models, etc. the kernels depend on the observations. Then, the upper bound $c(\parvec,\varphi)$ is random and depend on the observations. This should be detailed in the specific case of HMM.
+%\item The joint probability distribution $\post{0:n}^{\varphi}$ can also be written:
+%$$
+% \post{0:n}^{\varphi}(x_{0:n})=  \post{0}^{\varphi}(x_0)\prod_{k=0}^{n-1}m_{\varphi,k}(x_{k},x_{k+1})\eqsp,
+%$$
+%where $m_{\varphi,k}(x_{k},x_{k+1}) =   \post{k+1}^{\varphi}(x_{k+1})q_{\varphi,k}(x_{k+1},x_k)/ \post{k}^{\varphi}(x_k)$. We could discuss other assumptions such as 
+%$$
+%\left|\int m_{\varphi,n}(x,x_{k+1}) h (x_{k+1})dx_{k+1}- \int\qg{k,\parvec}(x,x_{k+1}) h (x_{k+1})dx_{k+1}\right| \leqslant c_k(\parvec,\varphi) \| h_k \|_\infty. 
+%$$
+%But less useful in practice as we directly parameterize the backward variational kernel and not $ m_{\varphi,n}(x,x_{k+1}) $.
+%\end{itemize}}
 
 \begin{hypH}
 \label{assum:strong:mixing}
@@ -677,7 +677,17 @@ The proof is postponed to Section~\ref{sec:assumptions}.
 
 \subsection{Commments on assumption H\ref{assum:bias:bound} and H~\ref{assum:strong:mixing}}
 \label{sec:assumptions}
-\textcolor{red}{Add here explicit computations of $c(\theta,\varphi)$ in the ICA case.}
+%\textcolor{red}{Add here explicit computations of $c(\theta,\varphi)$ in the ICA case.}
+\begin{itemize}
+\item
+Consider first the linear and Gaussian case, i.e. we assume that for all $x_k$, $\hd{k+1;\parvec}(x_{k}, \cdot)$ is the Gaussian pdf with mean $A_k^\theta x_k$ and variance $R_k^\theta$  and that $\md{k;\parvec}(x_{k},\cdot)$ is the Gaussian pdf with mean $B_k^\theta x_k$ and variance $S_k^\theta$. In this setting, assume that $\phi_k^\varphi$ is the Gaussian pdf with mean $\mu_k^\varphi$ and variance $\Sigma_k^\varphi$ and that for all $x_k$, $q_{\varphi,k-1}(x_{k}, \cdot)$ is the Gaussian pdf with mean $A_k^\varphi x_k$ and variance $R_k^\varphi$. In this case, for all bounded and measurable function $h$,
+$$
+\left|\post{k}^{\varphi}Q_{\varphi,k-1} h - \frac{\post{k-1}^{\varphi} \uk{k-1,\theta}h}{\post{k-1}^{\varphi} \uk{k-1,\theta}\1}\right| \leqslant 2 \left\|\mu_{k-1:k}^\varphi - \mu_{k-1:k}^{\varphi,\theta}\right\|_{\mathrm{tv}} \| h \|_\infty,
+$$ 
+where $\|\cdot\|_{\mathrm{tv}}$ is the total variation distance and $\mu_{k-1:k}^\varphi$  (resp. $\mu_{k-1:k}^{\varphi,\theta}$) is a short-hand notation for the joint distribution $\post{k}^{\varphi}Q_{\varphi,k-1} $ (resp. $\post{k-1}^{\varphi} \uk{k-1,\theta}h/\post{k-1}^{\varphi} \uk{k-1,\theta}\1$). Therefore, we can choose $c_k(\theta,\varphi) = 2 \left\|\mu_{k-1:k}^\varphi - \mu_{k-1:k}^{\varphi,\theta}\right\|_{\mathrm{tv}}$. It remains to use the fact that $\mu_{k-1:k}^\varphi$  and $\mu_{k-1:k}^{\varphi,\theta}$ are Gaussian pdf and that $ \left\|\mu_{k-1:k}^\varphi - \mu_{k-1:k}^{\varphi,\theta}\right\|_{\mathrm{tv}} \leqslant (\mathrm{KL}(\mu_{k-1:k}^\varphi \| \mu_{k-1:k}^{\varphi,\theta})/2)^{1/2}$ and that we have an explicit expression of the $\mathrm{KL}$ divergence between Gaussian  distributions.
+\item Nonlinear ICA ?
+\end{itemize}
+
 
 \subsection{Proof of Proposition~\ref{prop:bias}}
 \label{sec:proof}
