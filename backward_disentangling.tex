@@ -734,7 +734,7 @@ on $(\mathbb{R}^d)^{m+1} \times \mathcal{B}((\mathbb{R}^d)^{n + 1})$, with the c
 \postmod{0:n} \addf[n]{k} - \post{0:n}^\theta \addf[n]{k} = 
 \sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1}^\theta \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1}^\theta \1_{}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1}^\theta \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1}^\theta \1_{}} \right) \\ + \frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} - \frac{\chi_\theta \md{0;\parvec}\uk{0, n - 1}^\theta \addf[n]{k}}{\chi_\theta\md{0;\parvec}\uk{0, n - 1}^\theta \1_{}},
 \end{multline*}
-since $\chi_\theta \md{0;\parvec} \uk{0, n - 1}^\theta \addf[n]{k}/\chi_\theta\md{0;\parvec}\uk{0, n - 1}^\theta \1_{} = \post{0:n}^\theta \addf[n]{k}$.
+where $\postmod{0} = \postmod{0:0}$, and since $\chi_\theta \md{0;\parvec} \uk{0, n - 1}^\theta \addf[n]{k}/\chi_\theta\md{0;\parvec}\uk{0, n - 1}^\theta \1_{} = \post{0:n}^\theta \addf[n]{k}$.
 %For each $m \in \nset$, define the  backward Markov kernel 
 %\begin{equation} \label{eq:def:backward:kernel}
 %    \bkw{m}^\parvec(x_{m + 1}, \rmd x_m) \eqdef \frac{\post{m}^\parvec(\rmd x_m) \, \ud{m,\parvec}(x_m, x_{m + 1})}{\post{m}^\parvec[\ud{m,\parvec}(\cdot, x_{m + 1})]} = \frac{\post{m}^\parvec(\rmd x_m) \, \hd{m+1;\parvec}(x_{m}, x_{m+1})}{\post{m}^\parvec[\hd{m+1;\parvec}(\cdot, x_{m+1})]}
@@ -768,7 +768,7 @@ on $\mathbb{R}^d \times \mathcal{B}((\mathbb{R}^d)^n)$. % In the following, the 
 %$
 %\end{itemize}
 %\begin{proof}
-    For each $n \in \nset$ and $m \in \intvect{0}{n}$, define the kernel  
+    For each $n \in \nset$, define  $\retrokmod_{0, n}(x_0', \rmd x_{0:n}) \eqdef \delta_{x_0'}(\rmd x_0) \,  \prod_{\ell = 0}^{n - 1} \uk{\ell,\theta}(x_\ell, \rmd x_{\ell + 1})$ and for $m \in \intvect{1}{n}$, 
 \begin{equation} \label{eq:def:retrokmod}
     \retrokmod_{m, n}(x_m', \rmd x_{0:n}) \eqdef \delta_{x_m'}(\rmd x_m) \, \tstatmod{m}(x_m, \rmd x_{0:m - 1}) \prod_{\ell = m}^{n - 1} \uk{\ell,\theta}(x_\ell, \rmd x_{\ell + 1}), 
 \end{equation}
