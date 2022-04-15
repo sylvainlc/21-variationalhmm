@@ -483,12 +483,24 @@ where $ \mathrm{Tr}$ is the Trace operator and $\propto$ means up to a multiplic
 \section{Numerical experiments}
 \subsection{Linear and Gausian state space model}
 \textcolor{red}{Comparaisons \`a Kalman/mean field.}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=10cm]{additive_smoothing_errors.png}
+    \caption{Computation of $\big| \postmod{0:n} h_{0:n} -  \post{0:n}^{\parvec} h_{0:n} \big|$ for growing values of $n$}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=10cm]{marginal_smoothing_errors.png}
+    \caption{Computation of $\big| \postmod{0:n} \tilde{h}_{k} -  \post{0:n}^{\parvec} \tilde{h}_{k} \big|$ for different $k$}
+\end{figure}
+
 \subsection{Noisy linear ICA}
 \textcolor{red}{Comparaisons \`a Kalman/mean field.} 
 \subsection{Noisy nonlinear ICA}
 \textcolor{red}{Comparaisons \`a l'algo de Hermanni.}
 
-\clearpage
 \newpage
 
 %We now want to frame the multi-object tracking challenge as the downstream task of the more general problem of "disentenglement". In general terms and departing from the specific field of computer vision, we view our observations as random variables that arise from a generating process involving hidden/latent random variables. In disentenglement research, these latent variables are assumed to decompose into independent components (which, in the deep learning community, would be refered to as disentangled "representations"). For multi-object tracking, our goal is to infer latent variables whose independent components are "object-centric" representations, ie. each of them separetely describes an individual object. Many works exist that constrain VAEs to provide disentengled latent variables (e.g. via a special form of regularization, see \cite{betavae}) but \cite{unidentifiability} showed that most of them are actually trying to solve an ill-posed problem which is essentially unidentifiable. On the contrary, the Independant Component Analysis (ICA) litterature provides many identifiability results. In brief, in the nonlinear case, identifiability is only guaranteed if signals exhibit some structure (e.g. temporal dependencies), or if the inference is conditioned on an additionally observed process, which was shown in \cite{iVAE} for the specific case of VAEs. More recently, \cite{hermanni2021} proved identifiability when hidden states follow linear but flexible dynamics via regime switching: this is currently the most general setup that is still backed by identifiability proofs. However, in practice, inference is made with strong assumptions on the variational family. For sequential data, this is in contrast to the most recent works on VAEs, like \cite{campbell2021online}, which introduce flexible variational families that factorize according to the original model. We therefore attempt to merge ideas from these works.
