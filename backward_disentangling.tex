@@ -478,20 +478,20 @@ where, for each $k \in \intvect{0}{n - 1}$,
 \end{equation}
 denote the extension of $\addf{k}$ to $(\mathbb{R}^d)^{n+1}$. Define, for each $n \in \nset$ and $m \in \intvect{0}{n}$, the kernel 
 \begin{equation} \label{eq:def:uk:products}
-    \uk{m, n}{\parvec}(x_{0:m}', \rmd x_{0:n + 1}) \eqdef \delta_{x_{0:m}'}(\rmd x_{0:m}) \prod_{\ell = m}^n \uk{\ell}{\parvec}(x_\ell, \rmd x_{\ell + 1}) 
+    \uk{m, n}{\parvec}(x_{0:m}', \rmd x_{0:n}) \eqdef \delta_{x_{0:m}'}(\rmd x_{0:m}) \prod_{\ell = m}^{n - 1} \uk{\ell}{\parvec}(x_\ell, \rmd x_{\ell + 1}) 
 \end{equation}
-on $(\mathbb{R}^d)^{m+1} \times \mathcal{B}((\mathbb{R}^d)^{n + 1})$, with the convention $\uk{n, n - 1}{\parvec} = \operatorname{id}$.  This yields the following decomposition:
+on $(\mathbb{R}^d)^{n + 1} \times \mathcal{B}((\mathbb{R}^d)^{n + 1})$, with the convention $\prod_{\ell = n}^{n - 1} f(l) = 1$ .  This yields the following decomposition:
 \begin{multline*}
 \postmod{0:n} \addf[n]{k} - \post{0:n}^\parvec \addf[n]{k} = 
 \sum_{m = 1}^n 
 \left( 
-\frac{\postmod{0:m} \uk{m, n - 1}{\parvec} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1}{\parvec} \1_{}}
-- \frac{\postmod{0:m - 1} \uk{m - 1, n - 1}{\parvec} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1}{\parvec} \1_{}} 
+\frac{\postmod{0:m} \uk{m, n}{\parvec} \addf[n]{k}}{\postmod{0:m} \uk{m, n}{\parvec} \1_{}}
+- \frac{\postmod{0:m - 1} \uk{m - 1, n}{\parvec} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n}{\parvec} \1_{}} 
 \right) \\ 
-+ \frac{\postmod{0} \uk{0, n - 1}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n - 1}{\parvec} \1_{}}
-- \frac{\chi^\parvec \md{0}{\parvec}\uk{0, n - 1}{\parvec} \addf[n]{k}}{\chi^\parvec\md{0}{\parvec}\uk{0, n - 1}{\parvec} \1_{}},
++ \frac{\postmod{0} \uk{0, n}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n}{\parvec} \1_{}}
+- \frac{\chi^\parvec \md{0}{\parvec}\uk{0, n}{\parvec} \addf[n]{k}}{\chi^\parvec\md{0}{\parvec}\uk{0, n}{\parvec} \1_{}},
 \end{multline*}
-where $\postmod{0} = \postmod{0:0}$, and since $\chi^\parvec \md{0}{\parvec} \uk{0, n - 1}{\parvec} \addf[n]{k}/\chi^\parvec\md{0}{\parvec}\uk{0, n - 1}{\parvec} \1_{} = \post{0:n}^\parvec \addf[n]{k}$.
+where $\postmod{0} = \postmod{0:0}$, and since $\chi^\parvec \md{0}{\parvec} \uk{0, n}{\parvec} \addf[n]{k}/\chi^\parvec\md{0}{\parvec}\uk{0, n}{\parvec} \1_{} = \post{0:n}^\parvec \addf[n]{k}$.
 %For each $m \in \nset$, define the  backward Markov kernel 
 %\begin{equation} \label{eq:def:backward:kernel}
 %    \bkw{m}^\parvec(x_{m + 1}, \rmd x_m) \eqdef \frac{\post{m}^\parvec(\rmd x_m) \, \ud{m,\parvec}(x_m, x_{m + 1})}{\post{m}^\parvec[\ud{m,\parvec}(\cdot, x_{m + 1})]} = \frac{\post{m}^\parvec(\rmd x_m) \, \hd{m+1;\parvec}(x_{m}, x_{m+1})}{\post{m}^\parvec[\hd{m+1;\parvec}(\cdot, x_{m+1})]}
@@ -525,48 +525,48 @@ on $\mathbb{R}^d \times \mathcal{B}((\mathbb{R}^d)^n)$. % In the following, the 
 %$
 %\end{itemize}
 %\begin{proof}
-    For each $n \in \nset$, define  $\retrokmod_{0, n}(x_0', \rmd x_{0:n}) \eqdef \delta_{x_0'}(\rmd x_0) \,  \prod_{\ell = 0}^{n - 1} \uk{\ell,\parvec}(x_\ell, \rmd x_{\ell + 1})$ and for $m \in \intvect{1}{n}$, 
+    For each $n \in \nset$, define  $\retrokmod_{0, n}(x_0', \rmd x_{0:n}) \eqdef \delta_{x_0'}(\rmd x_0) \,  \prod_{\ell = 0}^{n - 1} \uk{\ell}{\parvec}(x_\ell, \rmd x_{\ell + 1})$ and for $m \in \intvect{1}{n}$, 
 \begin{equation} \label{eq:def:retrokmod}
-    \retrokmod_{m, n}(x_m', \rmd x_{0:n}) \eqdef \delta_{x_m'}(\rmd x_m) \, \tstatmod{m}(x_m, \rmd x_{0:m - 1}) \prod_{\ell = m}^{n - 1} \uk{\ell,\parvec}(x_\ell, \rmd x_{\ell + 1}), 
+    \retrokmod_{m, n}(x_m', \rmd x_{0:n}) \eqdef \delta_{x_m'}(\rmd x_m) \, \tstatmod{m}(x_m, \rmd x_{0:m - 1}) \prod_{\ell = m}^{n - 1} \uk{\ell}{\parvec}(x_\ell, \rmd x_{\ell + 1}), 
 \end{equation}
 on  $\mathbb{R}^d \times \mathcal{B}((\mathbb{R}^d)^{n+1})$. 
-As for all $m \in \intvect{0}{n}$ and measurable function $h$, 
+As for all $m \in \intvect{1}{n}$ and measurable function $h$, 
 %\begin{equation} \label{eq:retro:prospective:id}
- $\postmod{0:m} \uk{m, n - 1}{\parvec} h = \postmod{m} \retrokmod_{m, n} h$,
+ $\postmod{0:m} \uk{m, n}{\parvec} h = \postmod{m} \retrokmod_{m, n} h$,
 %\end{equation}
 %In order to bound each term of this decomposition, write, using Lemma~\ref{lem:retro:prospective:id},  
 $$
-\frac{\postmod{0:m} \uk{m, n - 1}{\parvec} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1}{\parvec} \1_{}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1}{\parvec} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1}{\parvec} \1_{}} 
+\frac{\postmod{0:m} \uk{m, n}{\parvec} \addf[n]{k}}{\postmod{0:m} \uk{m, n}{\parvec} \1_{}} - \frac{\postmod{0:m - 1} \uk{m - 1, n}{\parvec} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n}{\parvec} \1_{}} 
 = \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}. 
 $$
 Therefore,
 \begin{multline}
 \label{eq:error:decomp}
 \postmod{0:n} \addf[n]{k} - \post{0:n}^\parvec \addf[n]{k} = 
-\sum_{m = 1}^n \left( \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \right) \\ + \frac{\postmod{0} \uk{0, n - 1}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n - 1}{\parvec} \1_{}} - \frac{\chi^\parvec \md{0}{\parvec}\uk{0, n - 1}{\parvec} \addf[n]{k}}{\chi^\parvec\md{0}{\parvec}\uk{0, n - 1}{\parvec} \1_{}}.
+\sum_{m = 1}^n \left( \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \right) \\ + \frac{\postmod{0} \uk{0, n}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n}{\parvec} \1_{}} - \frac{\chi^\parvec \md{0}{\parvec}\uk{0, n}{\parvec} \addf[n]{k}}{\chi^\parvec\md{0}{\parvec}\uk{0, n}{\parvec} \1_{}}.
 \end{multline}
 
 \paragraph{Error term at time $m=0$ in \eqref{eq:error:decomp}. }Consider the following decomposition of the first term:
 \begin{align*}
-\frac{\postmod{0} \uk{0, n - 1}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n - 1}{\parvec} \1_{}} - \frac{\chi^\parvec \md{0}{\parvec}\uk{0, n - 1}{\parvec} \addf[n]{k}}{\chi^\parvec\md{0}{\parvec}\uk{0, n - 1}{\parvec} \1_{}} &= \frac{\postmod{0} \uk{0, n - 1}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n - 1}{\parvec} \1_{}} - \frac{\phi^\parvec_0\uk{0, n - 1}{\parvec} \addf[n]{k}}{\phi^\parvec_0\uk{0, n - 1}{\parvec} \1_{}}\eqsp,\\
-& = \frac{\postmod{0} \uk{0, n - 1}{\parvec} \addf[n]{k}-\phi^\parvec_0\uk{0, n - 1}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n - 1}{\parvec} \1_{}} \\
-&\hspace{2cm}+  \frac{\phi^\parvec_0\uk{0, n - 1}{\parvec} \addf[n]{k}}{\phi^\parvec_0\uk{0, n - 1}{\parvec} \1_{}}\frac{\phi^\parvec_0\uk{0, n - 1}{\parvec} \1_{} - \postmod{0} \uk{0, n - 1}{\parvec} \1_{}}{\postmod{0} \uk{0, n - 1}{\parvec} \1_{}} \eqsp,
+\frac{\postmod{0} \uk{0, n}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n}{\parvec} \1_{}} - \frac{\chi^\parvec \md{0}{\parvec}\uk{0, n}{\parvec} \addf[n]{k}}{\chi^\parvec\md{0}{\parvec}\uk{0, n}{\parvec} \1_{}} &= \frac{\postmod{0} \uk{0, n}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n}{\parvec} \1_{}} - \frac{\phi^\parvec_0\uk{0, n}{\parvec} \addf[n]{k}}{\phi^\parvec_0\uk{0, n}{\parvec} \1_{}}\eqsp,\\
+& = \frac{\postmod{0} \uk{0, n}{\parvec} \addf[n]{k}-\phi^\parvec_0\uk{0, n}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n}{\parvec} \1_{}} \\
+&\hspace{2cm}+  \frac{\phi^\parvec_0\uk{0, n}{\parvec} \addf[n]{k}}{\phi^\parvec_0\uk{0, n}{\parvec} \1_{}}\frac{\phi^\parvec_0\uk{0, n}{\parvec} \1_{} - \postmod{0} \uk{0, n}{\parvec} \1_{}}{\postmod{0} \uk{0, n}{\parvec} \1_{}} \eqsp,
 \end{align*}
 where $\phi^\parvec_0$ the filtering distribution at time $0$, i.e the law defined as  $\phi^\parvec_0h= \chi^\parvec \md{0}{\parvec}h/\chi^\parvec \md{0}{\parvec}$. Then, by H\ref{assum:bias:bound},
 $$
-\left|\frac{\postmod{0} \uk{0, n - 1}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n - 1}{\parvec} \1_{}} - \frac{\phi^\parvec_0\uk{0, n - 1}{\parvec} \addf[n]{k}}{\phi^\parvec_0\uk{0, n - 1}{\parvec} \1_{}}\right|\leqslant 2c_0(\parvec,\parvar)\frac{\| \uk{0, n - 1}{\parvec} \1_{}\|_\infty\|\addf[n]{k}\|_\infty}{\postmod{0} \uk{0, n - 1}{\parvec} \1_{}}\eqsp.
+\left|\frac{\postmod{0} \uk{0, n}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n}{\parvec} \1_{}} - \frac{\phi^\parvec_0\uk{0, n}{\parvec} \addf[n]{k}}{\phi^\parvec_0\uk{0, n}{\parvec} \1_{}}\right|\leqslant 2c_0(\parvec,\parvar)\frac{\| \uk{0, n}{\parvec} \1_{}\|_\infty\|\addf[n]{k}\|_\infty}{\postmod{0} \uk{0, n}{\parvec} \1_{}}\eqsp.
 $$
 By H\ref{assum:strong:mixing}, for all $x_0\in \mathbb{R}^d$,
 $$
-\uk{0, n - 1}{\parvec} \1_{}(x_0) = \int  \ud{0,\parvec}(x_0, x_{1})\mu(\rmd x_1)\uk{1, n - 1}{\parvec} \1_{}(x_1)\leqslant \sigma_+  \int \mu(\rmd x_1)\uk{1, n - 1}{\parvec} \1_{}(x_1)
+\uk{0, n}{\parvec} \1_{}(x_0) = \int  \ud{0,\parvec}(x_0, x_{1})\mu(\rmd x_1)\uk{1, n}{\parvec} \1_{}(x_1)\leqslant \sigma_+  \int \mu(\rmd x_1)\uk{1, n}{\parvec} \1_{}(x_1)
 $$
 and 
 $$
-\postmod{0} \uk{0, n - 1}{\parvec} \1 = \int \postmod{0} (\rmd x_0)\ud{0,\parvec}(x_0, x_{1})\mu(\rmd x_1)\uk{1, n - 1}{\parvec} \1_{}(x_1)\geqslant \sigma_-  \int \mu(\rmd x_1)\uk{1, n - 1}{\parvec} \1_{}(x_1)\eqsp,
+\postmod{0} \uk{0, n}{\parvec} \1 = \int \postmod{0} (\rmd x_0)\ud{0,\parvec}(x_0, x_{1})\mu(\rmd x_1)\uk{1, n}{\parvec} \1_{}(x_1)\geqslant \sigma_-  \int \mu(\rmd x_1)\uk{1, n}{\parvec} \1_{}(x_1)\eqsp,
 $$
 which yields
 $$
-\left|\frac{\postmod{0} \uk{0, n - 1}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n - 1}{\parvec} \1_{}} - \frac{\phi^\parvec_0\uk{0, n - 1}{\parvec} \addf[n]{k}}{\phi^\parvec_0\uk{0, n - 1}{\parvec} \1_{}}\right|\leqslant 2c_0(\parvec,\parvar)\frac{\sigma_+}{\sigma_-}\|\addf[n]{k}\|_\infty\eqsp.
+\left|\frac{\postmod{0} \uk{0, n}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n}{\parvec} \1_{}} - \frac{\phi^\parvec_0\uk{0, n}{\parvec} \addf[n]{k}}{\phi^\parvec_0\uk{0, n}{\parvec} \1_{}}\right|\leqslant 2c_0(\parvec,\parvar)\frac{\sigma_+}{\sigma_-}\|\addf[n]{k}\|_\infty\eqsp.
 $$
 
 \paragraph{Error term at time $m>0$ in \eqref{eq:error:decomp}. } Define the kernel  
@@ -582,9 +582,9 @@ $$
 $$
 Let $x_{m-1}^*$ and $x_m^*$ be arbitrary elements in $\mathbb{R}^d$ and define the kernel
 $$
-\mathcal{L}^{*,\parvar,\parvec}_{m, n}h(x_{m-1},x_m) = \frac{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}h(x_{m-1},x_m) }{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1(x_{m-1},x_m)} - \frac{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}h(x^*_{m-1},x^*_m) }{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1(x^*_{m-1},x^*_m)} = \frac{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}h(x_{m-1},x_m) }{\uk{m, n - 1}{\parvec}\1(x_m)} - \frac{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}h(x^*_{m-1},x^*_m) }{\uk{m, n - 1}{\parvec}\1(x^*_m)}\eqsp,
+\mathcal{L}^{*,\parvar,\parvec}_{m, n}h(x_{m-1},x_m) = \frac{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}h(x_{m-1},x_m) }{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1(x_{m-1},x_m)} - \frac{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}h(x^*_{m-1},x^*_m) }{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1(x^*_{m-1},x^*_m)} = \frac{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}h(x_{m-1},x_m) }{\uk{m, n}{\parvec}\1(x_m)} - \frac{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}h(x^*_{m-1},x^*_m) }{\uk{m, n}{\parvec}\1(x^*_m)}\eqsp,
 $$
-and define the normalized measure $\tilde\phi^\parvar_mh$ by $\postmod{m - 1} \uk{m-1,\parvec}h/\postmod{m - 1} \uk{m-1,\parvec}\1$, so that
+and define the normalized measure $\tilde\phi^\parvar_mh$ by $\postmod{m - 1} \uk{m-1, n}{\parvec}h/\postmod{m - 1} \uk{m-1,n}{\parvec}\1$, so that
 \begin{align*}
  \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} &- \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}  \\
 &= \frac{\postmod{m} Q_{\parvar,m-1} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \uk{m-1}{\parvec} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \\ 
@@ -607,7 +607,7 @@ $$
 $$
 Note also that by H\ref{assum:strong:mixing},
 $$
-\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1_{} \geqslant \sigma_-^2 \mu  \uk{m+1, n-1}{\parvec}\1\eqsp,
+\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1_{} \geqslant \sigma_- \mu  \uk{m+1, n-1}{\parvec}\1\eqsp,
 $$ 
 and for all $x,x'\in\mathbb{R}^d$,
 $$
@@ -636,7 +636,7 @@ The proof is completed using Lemma~\ref{lem:geo:bound}.
 %\end{equation}
 %We may express the quantity of interest as 
 %\begin{multline*}
-%\postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} = \frac{\postmod{0} \uk{0, n - 1}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n - 1}{\parvec} \1_{\Xset^n}} - \frac{\chi \uk{0, n - 1}{\parvec} \addf[n]{k}}{\chi\uk{0, n - 1}{\parvec} \1_{\Xset^n}} + \sum_{m = 1}^k \left( \noshift_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} - \shiftbwd_{m, n}  \retrokmodnorm_{m, n} \addf[n]{k} \right) \\ 
+%\postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} = \frac{\postmod{0} \uk{0, n}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n}{\parvec} \1_{\Xset^n}} - \frac{\chi \uk{0, n}{\parvec} \addf[n]{k}}{\chi\uk{0, n}{\parvec} \1_{\Xset^n}} + \sum_{m = 1}^k \left( \noshift_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} - \shiftbwd_{m, n}  \retrokmodnorm_{m, n} \addf[n]{k} \right) \\ 
 %+ \frac{\postmod{k + 1} \retrokmod_{k + 1, n} \addf[n]{k}}{\postmod{k + 1} \retrokmod_{k + 1, n} \1_{\Xset^n}} - \frac{\postmod{k} \retrokmod_{k, n} \addf[n]{k}}{\postmod{k} \retrokmod_{k, n} \1_{\Xset^n}} + \sum_{m = k + 1}^{n - 1} \left( \shiftfwd_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} - \noshift_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} \right),
 %\end{multline*}
 %where, for $h \in \bmf{\Xfd_m}$, 
@@ -660,7 +660,7 @@ The proof is completed using Lemma~\ref{lem:geo:bound}.
 %\begin{lemma} \label{lem:retro:prospective:id}
 %For all $m \in \intvect{0}{n}$ and $h \in \bmf{\Xfd^n}$, 
 %\begin{equation} \label{eq:retro:prospective:id}
-%\postmod{0:m} \uk{m, n - 1} h = \postmod{m} \retrokmod_{m, n} h.  
+%\postmod{0:m} \uk{m, n} h = \postmod{m} \retrokmod_{m, n} h.  
 %\end{equation}
 %\end{lemma}
 
@@ -724,11 +724,11 @@ $$
 \begin{proof}
 The proof is adapted from  \cite[Lemma~D.3]{gloaguen2019pseudo} and given here for completeness. Assume first that $m>k$. Then,
 $$
-\frac{\lambda \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \addf[n]{k}}{\lambda \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1_{}} = \frac{\lambda \prod_{\ell = k}^{m-2}Q_{\parvar,\ell}\addf{k}\uk{m, n-1}{\parvec}\1_{}}{\lambda(\1\otimes \uk{m, n-1}{\parvec}\1_{})} = \lambda_{m,n}Q_{\parvar,m-2}\ldots Q_{\parvar,k}\addf{k}\eqsp,
+\frac{\lambda \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \addf[n]{k}}{\lambda \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1_{}} = \frac{\lambda \prod_{\ell = k}^{m-2}Q_{\parvar,\ell}\addf{k}\uk{m, n}{\parvec}\1_{}}{\lambda(\1\otimes \uk{m, n}{\parvec}\1_{})} = \lambda_{m,n}Q_{\parvar,m-2}\ldots Q_{\parvar,k}\addf{k}\eqsp,
 $$
 where $f_1\otimes f_2: (x_{m-1},x_m) \mapsto f_1(x_{m-1})f(x_m)$ and for any probability meausre $\eta$, $\eta_{n,m}$ is defined, for all measurable function $f$ by
 $$
-\eta_{n,m}f = \frac{\eta (f\otimes \uk{m, n-1}{\parvec}\1_{})}{\eta (\1\otimes \uk{m, n-1}{\parvec}\1_{})}\eqsp.
+\eta_{n,m}f = \frac{\eta (f\otimes \uk{m, n}{\parvec}\1_{})}{\eta (\1\otimes \uk{m, n}{\parvec}\1_{})}\eqsp.
 $$
 Therefore,
 $$
@@ -740,7 +740,7 @@ $$
 $$
 Assume now first that $m< k$. Note that 
 $$
-\frac{\lambda\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \addf[n]{k}}{\lambda\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1_{}}= \frac{\lambda(1\otimes F^\parvec_{m|n}\ldots F^\parvec_{k|n}\addf[n]{k}\cdot\uk{m, n-1}{\parvec}\1_{})}{\lambda (\1\otimes  \uk{m, n-1}{\parvec}\1_{})}\eqsp, 
+\frac{\lambda\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \addf[n]{k}}{\lambda\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1_{}}= \frac{\lambda(1\otimes F^\parvec_{m|n}\ldots F^\parvec_{k|n}\addf[n]{k}\cdot\uk{m, n}{\parvec}\1_{})}{\lambda (\1\otimes  \uk{m, n}{\parvec}\1_{})}\eqsp, 
 $$
 where the forward kernel $ \mathsf{F}^\parvec_{\ell|n}$ is given by
 $$
@@ -756,7 +756,7 @@ $$
 $$
 where for any probability measure $\eta$,
 $$
-\eta_{m|n}h = \frac{\eta(1\otimes h\uk{m, n-1}{\parvec}\1_{})}{\eta(1\otimes \uk{m, n-1}{\parvec}\1_{})}\eqsp.
+\eta_{m|n}h = \frac{\eta(1\otimes h\uk{m, n}{\parvec}\1_{})}{\eta(1\otimes \uk{m, n}{\parvec}\1_{})}\eqsp.
 $$
 This yields
 $$
@@ -933,7 +933,7 @@ which concludes the proof.
 %where each term can be decomposed according to   
 %\begin{equation*}
 %\postmod{0:n} \addf[n]{k} - \post{0:n}^\parvar \addf[n]{k} = 
-%\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} \right)  
+%\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n} \addf[n]{k}}{\postmod{0:m} \uk{m, n} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n} \1_{\Xset^n}} \right)  
 %\end{equation*}
 %
 %
@@ -965,7 +965,7 @@ which concludes the proof.
 %$$
 %on the same space.  For all $0\leq m \leq n$ and $h \in \bmf{\Xfd^n}$, 
 %\begin{equation} \label{eq:retro:prospective:id}
-%\postmod{0:m} \uk{m, n - 1}^\parvec h = \postmod{m} \retrokmod_{m, n} h.  
+%\postmod{0:m} \uk{m, n}^\parvec h = \postmod{m} \retrokmod_{m, n} h.  
 %\end{equation}
 %In addition, for each $0\leq k \leq n - 1$, let 
 %\begin{equation} \label{eq:def:addf}
@@ -982,7 +982,7 @@ which concludes the proof.
 %where each term can be decomposed according to   
 %\begin{equation*}
 %\postmod{0:n} \addf[n]{k} - \post{0:n}^\parvar \addf[n]{k} = 
-%\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} \right)  
+%\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n} \addf[n]{k}}{\postmod{0:m} \uk{m, n} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n} \1_{\Xset^n}} \right)  
 %\end{equation*}
 
 \bibliographystyle{apalike}
