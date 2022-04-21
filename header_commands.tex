@@ -16,6 +16,7 @@
 \newcommand{\shiftbwd}{\cev{\shiftsymbol}^{\precpar}}
 \newcommand{\shiftfwd}{\vec{\shiftsymbol}^{\, \precpar}}
 \newcommand{\shiftsymbol}{\Phi}
+\newcommand{\parvar}{\lambda}
 \newcommand{\precpar}{\varphi}
 \newcommand{\intvect}[2]{\{ #1, #2 \}}
 \newcommandx\tstatmod[2][1=]{
@@ -40,11 +41,11 @@
 \newcommand{\1}{\mathbbm{1}} 
 \newcommandx{\postmod}[2][1=]{
 \ifthenelse{\equal{#1}{}}
-	{\phi_{#2}^\varphi}
+	{\phi_{#2}^\parvar}
 	{\phi_{#2}^\N}
 }
 \newcommand{\retrokmod}{\boldsymbol{\mathcal{L}}^{\precpar,\theta}}
-\newcommand{\uk}[1]{\mathbf{L}_{#1}}
+\newcommand{\uk}[2]{\mathbf{L}_{#1}^{#2}}
 \newcommand{\tensprod}{\otimes}
 \def\dimX{d}
 \def\dimY{m}
@@ -53,11 +54,11 @@
 \def\Yset{\mathsf{Y}}
 \newcommand{\mk}{\kernel{G}}
 \newcommand{\hk}{\kernel{Q}}
-\newcommand{\md}[1]{g_{#1}}
+\newcommand{\md}[2]{g_{#1}^{#2}}
 \newcommand{\SmoothFigSize}{0.27}
 
 \newcommand{\logllh}[1]{\ell_{#1}}
-\newcommand{\llh}[1]{\mathsf{L}_{#1}}
+\newcommand{\llh}[2]{\mathsf{L}_{#1}^{#2}}
 \newcommand{\testf}{\mathsf{h}}
 
 \newcommandx\filtderiv[2][1=]{
@@ -101,8 +102,8 @@
 
 \newcommand{\lk}{\kernel{L}}
 \newcommand{\idop}{\operatorname{id}}
-\newcommand{\hd}[1]{q_{#1}}
-\newcommand{\hdhat}[1]{\widehat{q}_{#1}}
+\newcommand{\hd}[2]{q_{#1}^{#2}}
+%\newcommand{\hdhat}[1]{\widehat{q}_{#1}}
 
 
 \newcommandx{\addf}[2][1=]{
@@ -197,14 +198,14 @@
 \ifthenelse{\equal{#1}{}}{\ensuremath{\phi_{#2}}}{\ensuremath{\phi_{#1,#2}}}%
 }
 \newcommand{\Xinit}{\ensuremath{\chi}}
+
 \newcommand{\sumwght}[2][]{%
 \ifthenelse{\equal{#1}{}}{\ensuremath{\Omega_{#2}}}{\ensuremath{\Omega_{#2}^{(#1)}}}}
+
 \newcommand{\sumwghthat}[2][]{%
 \ifthenelse{\equal{#1}{}}{\ensuremath{\widehat{\Omega}_{#2}}}{\ensuremath{\widehat{\Omega}_{#2}^{(#1)}}}}
 
-\newcounter{hypH}
-\newenvironment{hypH}{\refstepcounter{hypH}\begin{itemize}
-\item[{\bf H\arabic{hypH}}]}{\end{itemize}}
+
 
 \newcommand{\marginalset}{\mathsf{U}}
 
@@ -220,7 +221,8 @@
 \newcommand{\ddlim}{\overset{\mathcal{D}}{ \underset{\N \to \infty}{\longrightarrow}}}
 \newcommand{\aslim}{\overset{\pP\mathrm{-a.s.}}{ \underset{\N \to \infty}{\longrightarrow}}}
 
-\newcommand{\qg}[1]{\ell_{#1}}
+%\newcommand{\qg}[1]{\ell_{#1}}
+\newcommand{\qg}[2]{\ell_{#1}^{#2}}
 \newcommand{\hatqg}[1]{\mathsf{\ell}_{#1}}
 
 \newcommand{\sfd}{\mathsf{d}}
@@ -237,26 +239,37 @@
 
 
 
-
-\newcounter{example}[section]
-\newenvironment{example}[1][]{\refstepcounter{example}\par\medskip
-   \noindent \textbf{Example~\theexample:} \textit{#1} \text \rmfamily}{\medskip}
-
 \newcommand{\expect}[2]{\mathbb{E}_{#1}\left[#2\right]}
 \newcommand{\gaussian}[2]{\mathcal{N}\left( #1, #2 \right)}
 \newcommand{\backward}[1]{\overleftarrow{#1}}
 \newcommand{\vbackward}[1]{q_{1:#1}(z_{#1}|z_{#1 + 1})}
 \newcommand{\vfilt}[1]{q_{1:#1}(z_{#1})}
-\newcommand{\vbackwardparam}[2]{\backward{#1}_{1:#2}^\phi}
+\newcommand{\vbackwardparam}[2]{\backward{#1}_{1:#2}^\parvar}
 \newcommand{\vbackwardmean}[1]{\vbackwardparam{\mu}{#1}}
 \newcommand{\vbackwardcov}[1]{\vbackwardparam{\Sigma}{#1}}
-\newcommand{\vfiltparam}[2]{#1_{1:#2}^\phi}
+\newcommand{\vfiltparam}[2]{#1_{1:#2}^\parvar}
 \newcommand{\vfiltmean}[1]{\vfiltparam{\mu}{#1}}
 \newcommand{\vfiltcov}[1]{\vfiltparam{\Sigma}{#1}}
 \newcommand{\inv}[1]{{#1}^{-1}}
 \newcommand{\stateprec}{\inv{Q^\theta}}
-\newcommand{\vstateprec}{\inv{Q^\phi}}
+\newcommand{\vstateprec}{\inv{Q^\parvar}}
 \newcommand{\quadform}[2]{#1^T #2 #1}
 
 
 \DeclareMathOperator*{\argmax}{arg\,max} 
+
+
+%%%%%%
+%% Counters
+
+% For examples
+
+\newcounter{example}[section]
+\newenvironment{example}[1][]{\refstepcounter{example}\par\medskip
+   \noindent \textbf{Example~\theexample:} \textit{#1} \text \rmfamily}{\medskip}
+   
+% For hypothesis
+
+\newcounter{hypH}
+\newenvironment{hypH}{\refstepcounter{hypH}\begin{itemize}
+\item[{\bf H\arabic{hypH}}]}{\end{itemize}}

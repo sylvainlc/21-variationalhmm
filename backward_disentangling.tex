@@ -47,22 +47,22 @@
 \section{Introduction}
 
 \section{Latent data models and backward variational inference}
-Let $\parvec$ be a parameter lying in a $\Theta\subset \rset^q$ and consider a  \textit{state space model} where the hidden Markov chain  in $\rset^d$ is denoted by $(X_k)_{k\geqslant 0}$. The distribution of $X_0$ has density $\chi_\theta$ with respect to the Lebesgue measure $\mu$ and for all $0\leqslant k \leqslant n-1$, the conditional distribution of $X_{k+1} $ given $X_{0:k}$ has density $\hd{k+1;\parvec}(X_{k},\cdot)$, where $a_{u:v}$ is a short-hand notation for $(a_u,\ldots,a_v)$. 
+Let $\parvec$ be a parameter lying in a $\Theta\subset \rset^q$ and consider a  \textit{state space model} where the hidden Markov chain  in $\rset^d$ is denoted by $(X_k)_{k\geqslant 0}$. The distribution of $X_0$ has density $\chi^\parvec$ with respect to the Lebesgue measure $\mu$ and for all $0\leqslant k \leqslant n-1$, the conditional distribution of $X_{k+1} $ given $X_{0:k}$ has density $\hd{k+1}{\parvec}(X_{k},\cdot)$, where $a_{u:v}$ is a short-hand notation for $(a_u,\ldots,a_v)$. 
 It is assumed that this state  is partially observed  through an observation process $(Y_k)_{0\leqslant k \leqslant n}$ taking values in $\rset^m$. 
-For all $0\leqslant k \leqslant n$, the distribution of $Y_k$ given $X_{0:n}$ depends on $X_k$ only and has density $\md{k;\parvec}(X_k,\cdot)$ with respect to the Lebesgue measure. 
+For all $0\leqslant k \leqslant n$, the distribution of $Y_k$ given $X_{0:n}$ depends on $X_k$ only and has density $\md{k}{\parvec}(X_k,\cdot)$ with respect to the Lebesgue measure. 
 In this context, for any pair of indices $0\leqslant k_1 \leqslant k_2 \leqslant n$, we define the \textit{joint smoothing distribution} as the conditional law of $X_{k_1:k_2}$ given $Y_{0:n}$. 
-In this framework, the likelihood of the observations $\llh{n,\parvec}(Y_{0:n})$, which is  in general intractable, is
+In this framework, the likelihood of the observations $\llh{n}{\parvec}(Y_{0:n})$, which is  in general intractable, is
 $$
-\llh{n,\parvec}(Y_{0:n})  = \int \chi_\theta(x_0)\md{0;\parvec}(x_{0},Y_{0})\prod_{k=0}^{n-1}\qg{k;\parvec}(x_{k},x_{k+1})\mu(\rmd x_{0:n})\eqsp,
+\llh{n}{\parvec}(Y_{0:n})  = \int \chi^\parvec(x_0)\md{0}{\parvec}(x_{0},Y_{0})\prod_{k=0}^{n-1} \qg{k}{\parvec}(x_{k},x_{k+1})\mu(\rmd x_{0:n})\eqsp,
 $$
  where, for all $0\leqslant k \leqslant n$ and all $\parvec\in\parspace$,
 \begin{equation}
 \label{eq:def:elln}
-\qg{k;\parvec}(x_{k},x_{k+1}) = \hd{k+1;\parvec}(x_{k}, x_{k+1})\md{k+1;\parvec}(x_{k+1},Y_{k+1})\eqsp.
+\qg{k}{\parvec}(x_{k},x_{k+1}) = \hd{k+1}{\parvec}(x_{k}, x_{k+1})\md{k+1}{\parvec}(x_{k+1},Y_{k+1})\eqsp.
 \end{equation}
-For all $x_k\in\mathbb{R}^d$, we also write $\uk{k,\theta}(x_k, \cdot)$ the kernel with density $\qg{k;\parvec}(x_{k},\cdot) $ with respect to the Lebesgue measure:
+For all $x_k\in\mathbb{R}^d$, we also write $\uk{k,\parvec}(x_k, \cdot)$ the kernel with density $\qg{k}{\parvec}(x_{k},\cdot) $ with respect to the Lebesgue measure:
 $$
-\uk{k,\theta}(x_k, \rmd x_{k+ 1})  = \hd{k+1;\parvec}(x_{k}, x_{k+1})\md{k+1;\parvec}(x_{k+1},Y_{k+1})\mu(dx_{k+1})\eqsp.
+\uk{k,\parvec}(x_k, \rmd x_{k+ 1})  = \hd{k+1}{\parvec}(x_{k}, x_{k+1})\md{k+1}{\parvec}(x_{k+1},Y_{k+1})\mu(dx_{k+1})\eqsp.
 $$
 In a large variety of situations, the loglikelihood of the observations is not available explicitly and obtaining approximate maximum likelihood estimators is computationally intensive, in particular in high dimensional settings. Standard approaches  aim at computing \textit{smoothing expectations of additive functionals},  where $\af{0:n}$ is an \textit{additive functional}, \textit{i.e.} a function from $\rset^{d \times (n + 1)}$ to $\rset^{d'}$ satisfying:
 \begin{equation}
@@ -72,100 +72,100 @@ In a large variety of situations, the loglikelihood of the observations is not a
 where $\addf{k}:\rset^{d} \times \rset^{d}\to\rset^{d'}$.
 Such expectations are the keystones of many common inference problems in state space models. The joint smoothing distribution is defined as
 $$
-\post{0:n}^{\parvec} h = \llh{n,\parvec}(Y_{0:n})^{-1} \int \chi_\theta(x_0)\md{0;\parvec}(x_{0},Y_{0})\prod_{k=0}^{n-1}\qg{k;\parvec}(x_{k},x_{k+1})h(x_{0:n})\mu(\rmd x_{0:n})\eqsp.
+\post{0:n}^{\parvec} h = \llh{n}{\parvec}(Y_{0:n})^{-1} \int \chi^\parvec(x_0)\md{0}{\parvec}(x_{0},Y_{0})\prod_{k=0}^{n-1}\qg{k}{\parvec}(x_{k},x_{k+1})h(x_{0:n})\mu(\rmd x_{0:n})\eqsp.
 $$
 
 \begin{example}[EM algorithm.]
 \label{ex:em:algorithm}
-In the usual case when $\theta$ is unknown, the maximum likelihood estimator is $\widehat \parvec = \mathrm{argmax}_{\parvec\in\parspace}\eqsp\llh{n,\parvec}(Y_{0:n})$. Expectation Maximization based algorithms are appealing solutions to obtain an estimator of $\hat \parvec$.
+In the usual case when $\parvec$ is unknown, the maximum likelihood estimator is $\widehat \parvec = \mathrm{argmax}_{\parvec\in\parspace}\eqsp\llh{n}{\parvec}(Y_{0:n})$. Expectation Maximization based algorithms are appealing solutions to obtain an estimator of $\hat \parvec$.
 The pivotal concept of the EM algorithm is that the intermediate quantity defined by
 \begin{equation*}
-\parvec\mapsto Q(\parvec,\parvec') = \pE_{\parvec'}\left[\sum_{k=0}^{n-1} \log \qg{k;\parvec}(X_{k}, X_{k+1})\middle | Y_{0:n}\right] 
+\parvec\mapsto Q(\parvec,\parvec') = \pE^{\parvec'}\left[\sum_{k=0}^{n-1} \log \qg{k}{\parvec}(X_{k}, X_{k+1})\middle | Y_{0:n}\right] 
 \end{equation*}
-may be used as a surrogate for $\llh{n}(\parvec)$ in the maximization procedure,  where $\pE_{\parvec'}$ is the expectation under the joint distribution of the latent states and the observations when the model is parameterized by $\parvec'$. 
+may be used as a surrogate for $\llh{n}(\parvec)$ in the maximization procedure,  where $\pE^{\parvec'}$ is the expectation under the joint distribution of the latent states and the observations when the model is parameterized by $\parvec'$. 
 \end{example}
 
 \textcolor{red}{Discuter ici les difficult\'es Monte Carlo en grande dimension en particulier num\'eriques : SMC/MCMC, Monte Carlo VAE...}
-In variational approaches, instead of trying to design Monte Carlo estimators of $\post{0:n}^{\parvec} h$ (or equivalently of the conditional distribution of the states given the observations), the conditional law of $X_{0:n}$ given $Y_{0:n}$ is approximated by choosing a candidate in a parametric family $\{ \post{0:n}^{\varphi}\}_{\varphi \in \Phi}$, where $\Phi$ is a parameter set. Parameters are then estimated by maximizing the ELBO defined as:
+In variational approaches, instead of trying to design Monte Carlo estimators of $\post{0:n}^{\parvec} h$ (or equivalently of the conditional distribution of the states given the observations), the conditional law of $X_{0:n}$ given $Y_{0:n}$ is approximated by choosing a candidate in a parametric family $\{ \post{0:n}^{\parvar}\}_{\parvar \in \Phi}$, where $\Phi$ is a parameter set. Parameters are then estimated by maximizing the ELBO defined as:
 $$
-\mathcal{L}(\parvec,\varphi) = \pE_{ \post{0:n}^{\varphi}}\left[\log \frac{p_\parvec(X_{0:n},Y_{0:n})}{ \post{0:n}^{\varphi}(X_{0:n})}\right] = \int \log \frac{p_\parvec(x_{0:n},Y_{0:n})}{ \post{0:n}^{\varphi}(x_{0:n})} \post{0:n}^{\varphi}(x_{0:n})\mu(\rmd x_{0:n})\eqsp.
+\mathcal{L}(\parvec,\parvar) = \pE_{ \post{0:n}^{\parvar}}\left[\log \frac{p_\parvec(X_{0:n},Y_{0:n})}{ \post{0:n}^{\parvar}(X_{0:n})}\right] = \int \log \frac{p_\parvec(x_{0:n},Y_{0:n})}{ \post{0:n}^{\parvar}(x_{0:n})} \post{0:n}^{\parvar}(x_{0:n})\mu(\rmd x_{0:n})\eqsp.
 $$
-Most works in the literature focus on mean field approximations which means that the family $\{ \post{0:n}^{\varphi}\}_{\varphi \in \Phi}$ can be written as a product of independent distributions \textcolor{red}{Discuter ce point : alternatives propos\'ees en pratique et r\'esultats obtenus en particulier pour les s\'eries temporelles/les mod\`eles \`a donn\'ees latentes}. However, such an assumption fails to hold in standard hidden Markov models which may lead to poor result in the approximation of the posterior distribution of some states given the observations. In this paper, we propose another solution to provide a decomposition of   $ \post{0:n}^{\varphi}$ which accounts for the hidden Markov structure of $p_\parvec$. Under the assumptions of this paper, conditionally on $\{Y_{0:n}\}$, the backward chain $(X_n,\ldots,X_0)$ is a Markov chain with inhomogeneous Markov transition kernels. This leads us to introduce a variational family where each $\post{0:n}^{\varphi}$ is of the form:
+Most works in the literature focus on mean field approximations which means that the family $\{ \post{0:n}^{\parvar}\}_{\parvar \in \Phi}$ can be written as a product of independent distributions \textcolor{red}{Discuter ce point : alternatives propos\'ees en pratique et r\'esultats obtenus en particulier pour les s\'eries temporelles/les mod\`eles \`a donn\'ees latentes}. However, such an assumption fails to hold in standard hidden Markov models which may lead to poor result in the approximation of the posterior distribution of some states given the observations. In this paper, we propose another solution to provide a decomposition of   $ \post{0:n}^{\parvar}$ which accounts for the hidden Markov structure of $p_\parvec$. Under the assumptions of this paper, conditionally on $\{Y_{0:n}\}$, the backward chain $(X_n,\ldots,X_0)$ is a Markov chain with inhomogeneous Markov transition kernels. This leads us to introduce a variational family where each $\post{0:n}^{\parvar}$ is of the form:
 $$
- \post{0:n}^{\varphi}(x_{0:n})=  \post{n}^{\varphi}(x_n)\prod_{k=0}^{n-1}q_{\varphi,k}(x_{k+1},x_k)\eqsp.
+ \post{0:n}^{\parvar}(x_{0:n})=  \post{n}^{\parvar}(x_n)\prod_{k=0}^{n-1}q_{\parvar,k}(x_{k+1},x_k)\eqsp.
 $$
-The variational family parameterizes the backward kernel which naturally appears in the decomposition of the law of $X_{0:n}$ given $Y_{0:n}$. In the following, we write $Q_{\varphi,k}(x_{k+1}, \rmd x_k) = q_{\varphi,k}(x_{k+1},x_k) \mu(\rmd x_k)$. Note that $ \post{n}^{\varphi}$ is the marginal distribution of $ \post{0:n}^{\varphi}$ at time $n$ which therefore targets the filtering distribution at time $n$, i.e. the distribution of $X_n$ given $Y_{0:n}$.
+The variational family parameterizes the backward kernel which naturally appears in the decomposition of the law of $X_{0:n}$ given $Y_{0:n}$. In the following, we write $Q_{\parvar,k}(x_{k+1}, \rmd x_k) = q_{\parvar,k}(x_{k+1},x_k) \mu(\rmd x_k)$. Note that $ \post{n}^{\parvar}$ is the marginal distribution of $ \post{0:n}^{\parvar}$ at time $n$ which therefore targets the filtering distribution at time $n$, i.e. the distribution of $X_n$ given $Y_{0:n}$.
 \textcolor{red}{Discuter le papier de Doucet, le fait que c'est naturel pour les HMM et que \c ca permet l'estimation en ligne : mais que ce n'est pas gratuit. Et ajouter qu'aucun r\'esultat sur la qualit\'e de l'approximation dans l'espace latent n'a \'et\'e obtenu \`a ce jour.}
 
- %On the other hand, for a fixed record of observations $Y_{0:n}$, for all $0 \leq k \leq n-1$,   $ \post{k}^{\varphi}$ is the marginal distribution of $ \post{0:n}^{\varphi}$ at time $k$ which therefore targets the marginal smoothing distribution at time $k$, i.e. the distribution of $X_k$ given $Y_{0:n}$.
+ %On the other hand, for a fixed record of observations $Y_{0:n}$, for all $0 \leq k \leq n-1$,   $ \post{k}^{\parvar}$ is the marginal distribution of $ \post{0:n}^{\parvar}$ at time $k$ which therefore targets the marginal smoothing distribution at time $k$, i.e. the distribution of $X_k$ given $Y_{0:n}$.
 
 \section{Control of the variational error for additive functionals}
 \textcolor{red}{Motiver les fonctionnelles additives et mentionner les r\'esultats connus en HMM.}
 \subsection{Control of the variational error}
-%In this section we propose an upper bound for the error $|\mathbb{E}_{q_\varphi}[\af{0:n}(X_{0:n})]-\mathbb{E}_\theta[\af{0:n}(X_{0:n})|Y_{0:n}]|$  when $\af{0:n}$ is an additive functional of the hidden states as in \eqref{eq:additive:functional}. %Following \cite{gloaguen2019pseudo} this control can be obtained in a broader framework than the HMM setting. Let $(\Xset_n, \Xfd_n)_{n \in \nset}$ be a sequence of general state spaces and let, for all $n \in \nset$ and all $\theta$, $\uk{n,\theta}$ defined on  $\Xset_n \times \Xfd_{n + 1}$ be bounded kernels in the sense that $\sup_{x \in \Xset_n} \uk{n,\theta}(x, \Xset_{n + 1}) < \infty$. We will assume a dominated model where each kernel $\uk{n,\theta}$ has a kernel density $\ud{n,\theta}$ with respect to some $\sigma$-finite reference measure $\mu_{n + 1}$ on $\Xfd_{n + 1}$. Finally, let $\chi$ be some bounded measure on $\Xfd_0$. In the following, we denote state-space product sets and $\sigma$-fields by $\Xset^n \eqdef \Xset_0 \times \cdots \times \Xset_n$ and $\Xfd^n \eqdef \Xfd_0 \tensprod \cdots \tensprod \Xfd_n$, respectively, and consider probability measures  
+%In this section we propose an upper bound for the error $|\mathbb{E}_{q_\parvar}[\af{0:n}(X_{0:n})]-\mathbb{E}^\parvec[\af{0:n}(X_{0:n})|Y_{0:n}]|$  when $\af{0:n}$ is an additive functional of the hidden states as in \eqref{eq:additive:functional}. %Following \cite{gloaguen2019pseudo} this control can be obtained in a broader framework than the HMM setting. Let $(\Xset_n, \Xfd_n)_{n \in \nset}$ be a sequence of general state spaces and let, for all $n \in \nset$ and all $\parvec$, $\uk{n,\parvec}$ defined on  $\Xset_n \times \Xfd_{n + 1}$ be bounded kernels in the sense that $\sup_{x \in \Xset_n} \uk{n,\parvec}(x, \Xset_{n + 1}) < \infty$. We will assume a dominated model where each kernel $\uk{n,\parvec}$ has a kernel density $\ud{n,\parvec}$ with respect to some $\sigma$-finite reference measure $\mu_{n + 1}$ on $\Xfd_{n + 1}$. Finally, let $\chi$ be some bounded measure on $\Xfd_0$. In the following, we denote state-space product sets and $\sigma$-fields by $\Xset^n \eqdef \Xset_0 \times \cdots \times \Xset_n$ and $\Xfd^n \eqdef \Xfd_0 \tensprod \cdots \tensprod \Xfd_n$, respectively, and consider probability measures  
 %\begin{equation} \label{eq:def:post}
-%\post{0:n}^\theta(\rmd x_{0:n}) \propto \chi(\rmd x_0) \prod_{m = 0}^{n - 1} \uk{m,\theta}(x_m, \rmd x_{m + 1}), \quad n \in \nset, 
+%\post{0:n}^\parvec(\rmd x_{0:n}) \propto \chi(\rmd x_0) \prod_{m = 0}^{n - 1} \uk{m,\parvec}(x_m, \rmd x_{m + 1}), \quad n \in \nset, 
 %\end{equation}
-%on these product spaces.\footnote{We will always use the standard convention $\prod_{\varnothing} = 1$, implying that $\post{0} \propto \chi$.}   the HMM setting discussed in this sectionIn the special case where each $\uk{n,\theta}$ can be decomposed as $\uk{n,\theta}(x_n, \rmd x_{n + 1}) = \md{n,\theta}(x_n) \, \hk_{n,\theta}(x_n, \rmd x_{n + 1})$ for some Markov kernel $\hk_{n,\theta}$ and some nonnegative potential function $\md{n,\theta}$, \eqref{eq:def:post} yields. 
+%on these product spaces.\footnote{We will always use the standard convention $\prod_{\varnothing} = 1$, implying that $\post{0} \propto \chi$.}   the HMM setting discussed in this sectionIn the special case where each $\uk{n,\parvec}$ can be decomposed as $\uk{n,\parvec}(x_n, \rmd x_{n + 1}) = \md{n,\parvec}(x_n) \, \hk_{n,\parvec}(x_n, \rmd x_{n + 1})$ for some Markov kernel $\hk_{n,\parvec}$ and some nonnegative potential function $\md{n,\parvec}$, \eqref{eq:def:post} yields. 
 
 %\paragraph{Variational family. }
-%For all $n\in\nset$, without loss of generality, write $\post{0:n}^{\varphi}$ the joint smoothing distribution provided by the variational family. Then,
+%For all $n\in\nset$, without loss of generality, write $\post{0:n}^{\parvar}$ the joint smoothing distribution provided by the variational family. Then,
 %$$
- %\post{0:n}^{\varphi}(x_{0:n})=  \post{n}^{\varphi}(x_n)\prod_{k=0}^{n-1}q_{\varphi,k}(x_{k+1},x_k)\eqsp.
+ %\post{0:n}^{\parvar}(x_{0:n})=  \post{n}^{\parvar}(x_n)\prod_{k=0}^{n-1}q_{\parvar,k}(x_{k+1},x_k)\eqsp.
 %$$
-%with the convention $\post{0:n}^{\varphi}(x_{n}) = \post{n}^{\varphi}(x_{n})$. 
- %\textcolor{red}{Here $q_{\varphi,k+1}(dx_{k+1})$, $q_{\varphi,k}(dx_{k})$ and $q_{\varphi,n}(dx_0)$ are not really $ q_{\varphi,\ell}$ but the marginals  of $ \post{0:n}^{\varphi}$ ?}
+%with the convention $\post{0:n}^{\parvar}(x_{n}) = \post{n}^{\parvar}(x_{n})$. 
+ %\textcolor{red}{Here $q_{\parvar,k+1}(dx_{k+1})$, $q_{\parvar,k}(dx_{k})$ and $q_{\parvar,n}(dx_0)$ are not really $ q_{\parvar,\ell}$ but the marginals  of $ \post{0:n}^{\parvar}$ ?}
 
 \begin{hypH}
 \label{assum:bias:bound}
-There exist functions $c_k$, $0\leqslant k \leqslant n$, such that for all $0\leqslant k \leqslant n$, $\parvec$, $\varphi$, all bounded measurable functions $h$ on $\mathbb{R}^d\times\mathbb{R}^d$, %and $x \in \Xset_k$,   
+There exist functions $c_k$, $0\leqslant k \leqslant n$, such that for all $0\leqslant k \leqslant n$, $\parvec$, $\parvar$, all bounded measurable functions $h$ on $\mathbb{R}^d\times\mathbb{R}^d$, %and $x \in \Xset_k$,   
 %$$
-%\left|\int m_{\varphi,n}(x,x_{k+1}) h (x_{k+1})dx_{k+1}- \int\qg{k,\parvec}(x,x_{k+1}) h (x_{k+1})dx_{k+1}\right| \leqslant c_k(\parvec,\varphi) \| h_k \|_\infty. 
+%\left|\int m_{\parvar,n}(x,x_{k+1}) h (x_{k+1})dx_{k+1}- \int\qg{k,\parvec}(x,x_{k+1}) h (x_{k+1})dx_{k+1}\right| \leqslant c_k(\parvec,\parvar) \| h_k \|_\infty. 
 %$$
 %The previous assumption should be replaced by
 $$
-\left|\post{k}^{\varphi}Q_{\varphi,k-1} h - \frac{\post{k-1}^{\varphi} \uk{k-1,\theta}h}{\post{k-1}^{\varphi} \uk{k-1,\theta}\1}\right| \leqslant c_k(\parvec,\varphi) \| h \|_\infty. 
+\left|\post{k}^{\parvar}Q_{\parvar,k-1} h - \frac{\post{k-1}^{\parvar} \uk{k-1,\parvec}h}{\post{k-1}^{\parvar} \uk{k-1,\parvec}\1}\right| \leqslant c_k(\parvec,\parvar) \| h \|_\infty. 
 $$ 
 and for all bounded measurable functions $h$ on $\mathbb{R}^d$,
 $$
-\left|\post{0}^{\theta}h - \postmod{0} h\right|\leqslant c_0(\theta,\varphi)\|h\|_\infty\eqsp,
+\left|\post{0}^{\parvec}h - \postmod{0} h\right|\leqslant c_0(\parvec,\parvar)\|h\|_\infty\eqsp,
 $$
-where  $\post{0}^{\theta}$ is the filtering distribution at time $0$, i.e. $\post{0}^{\theta}h = \chi_\theta \md{0;\parvec}h/\chi_\theta \md{0;\parvec}\1$.
+where  $\post{0}^{\parvec}$ is the filtering distribution at time $0$, i.e. $\post{0}^{\parvec}h = \chi^\parvec \md{0}{\parvec}h/\chi^\parvec \md{0}{\parvec}\1$.
 \end{hypH}
 %\begin{remark}
-%In the linear and Gaussian case, $\qg{k,\parvec}(x,x_{k+1}) = \Psi_{Ax+b,\Sigma}(x_{k+1})\Psi_{Cx_{k+1}+d,\Omega}(Y_{k+1})$ where $\Psi_{\mu,\lambda}$ is the Gaussian probability function with mean $\mu$ and variance $\Lambda$. Assume that $q_{\varphi,k}$ is the backward kernel of a linear and Gaussian model with parameters $\tilde A$, $\tilde b$, $\tilde \Sigma$, $\tilde C$ $\tilde d$, $\tilde \Omega$. Therefore,
+%In the linear and Gaussian case, $\qg{k,\parvec}(x,x_{k+1}) = \Psi_{Ax+b,\Sigma}(x_{k+1})\Psi_{Cx_{k+1}+d,\Omega}(Y_{k+1})$ where $\Psi_{\mu,\lambda}$ is the Gaussian probability function with mean $\mu$ and variance $\Lambda$. Assume that $q_{\parvar,k}$ is the backward kernel of a linear and Gaussian model with parameters $\tilde A$, $\tilde b$, $\tilde \Sigma$, $\tilde C$ $\tilde d$, $\tilde \Omega$. Therefore,
 %\begin{multline*}
-%m_{\varphi,k}(x_{k},x_{k+1}) =   \frac{\post{k+1}^{\varphi}(x_{k+1})q_{\varphi,k}(x_{k+1},x_k)}{\post{k}^{\varphi}(x_k)} =   \frac{\post{k+1}^{\varphi}(x_{k+1})\post{k}^{\varphi}(x_k)\Psi_{\tilde Ax_k+\tilde b,\Sigma}(x_{k+1})}{\post{k}^{\varphi}(x_k)\int \post{k}^{\varphi}(x)\Psi_{Ax+b,\Sigma}(x_{k+1})d x}\\
-%= \frac{\post{k+1}^{\varphi}(x_{k+1})\Psi_{\tilde Ax_k+\tilde b,\Sigma}(x_{k+1})}{\int \post{k}^{\varphi}(x)\Psi_{\tilde Ax+\tilde b,\tilde \Sigma}(x_{k+1})d x} = \frac{\Psi_{\mu_{k+1},\Sigma_{k+1}}(x_{k+1})\Psi_{\tilde Ax_k+\tilde b,\tilde \Sigma}(x_{k+1})}{\Psi_{\tilde A \mu_k+ \tilde b,\tilde\Sigma}(x_{k+1})}, 
+%m_{\parvar,k}(x_{k},x_{k+1}) =   \frac{\post{k+1}^{\parvar}(x_{k+1})q_{\parvar,k}(x_{k+1},x_k)}{\post{k}^{\parvar}(x_k)} =   \frac{\post{k+1}^{\parvar}(x_{k+1})\post{k}^{\parvar}(x_k)\Psi_{\tilde Ax_k+\tilde b,\Sigma}(x_{k+1})}{\post{k}^{\parvar}(x_k)\int \post{k}^{\parvar}(x)\Psi_{Ax+b,\Sigma}(x_{k+1})d x}\\
+%= \frac{\post{k+1}^{\parvar}(x_{k+1})\Psi_{\tilde Ax_k+\tilde b,\Sigma}(x_{k+1})}{\int \post{k}^{\parvar}(x)\Psi_{\tilde Ax+\tilde b,\tilde \Sigma}(x_{k+1})d x} = \frac{\Psi_{\mu_{k+1},\Sigma_{k+1}}(x_{k+1})\Psi_{\tilde Ax_k+\tilde b,\tilde \Sigma}(x_{k+1})}{\Psi_{\tilde A \mu_k+ \tilde b,\tilde\Sigma}(x_{k+1})}, 
 %\end{multline*}
 %where $\mu_k$ and $\Sigma_k$ are the mean and variances of the filtering distribution at time $k$ under the variational distribution. Therefore,
 %$$
-%\left|\int \left(m_{\varphi,n}(x,x_{n+1})-\qg{n,\parvec}(x,x_{n+1})\right) h (x_{n+1})dx_{n+1}\right| 
+%\left|\int \left(m_{\parvar,n}(x,x_{n+1})-\qg{n,\parvec}(x,x_{n+1})\right) h (x_{n+1})dx_{n+1}\right| 
 %$$
 %\end{remark}
 %\textcolor{red}{
 %\begin{itemize}
-%\item In the case of HMM/ICA models, etc. the kernels depend on the observations. Then, the upper bound $c(\parvec,\varphi)$ is random and depend on the observations. This should be detailed in the specific case of HMM.
-%\item The joint probability distribution $\post{0:n}^{\varphi}$ can also be written:
+%\item In the case of HMM/ICA models, etc. the kernels depend on the observations. Then, the upper bound $c(\parvec,\parvar)$ is random and depend on the observations. This should be detailed in the specific case of HMM.
+%\item The joint probability distribution $\post{0:n}^{\parvar}$ can also be written:
 %$$
-% \post{0:n}^{\varphi}(x_{0:n})=  \post{0}^{\varphi}(x_0)\prod_{k=0}^{n-1}m_{\varphi,k}(x_{k},x_{k+1})\eqsp,
+% \post{0:n}^{\parvar}(x_{0:n})=  \post{0}^{\parvar}(x_0)\prod_{k=0}^{n-1}m_{\parvar,k}(x_{k},x_{k+1})\eqsp,
 %$$
-%where $m_{\varphi,k}(x_{k},x_{k+1}) =   \post{k+1}^{\varphi}(x_{k+1})q_{\varphi,k}(x_{k+1},x_k)/ \post{k}^{\varphi}(x_k)$. We could discuss other assumptions such as 
+%where $m_{\parvar,k}(x_{k},x_{k+1}) =   \post{k+1}^{\parvar}(x_{k+1})q_{\parvar,k}(x_{k+1},x_k)/ \post{k}^{\parvar}(x_k)$. We could discuss other assumptions such as 
 %$$
-%\left|\int m_{\varphi,n}(x,x_{k+1}) h (x_{k+1})dx_{k+1}- \int\qg{k,\parvec}(x,x_{k+1}) h (x_{k+1})dx_{k+1}\right| \leqslant c_k(\parvec,\varphi) \| h_k \|_\infty. 
+%\left|\int m_{\parvar,n}(x,x_{k+1}) h (x_{k+1})dx_{k+1}- \int\qg{k,\parvec}(x,x_{k+1}) h (x_{k+1})dx_{k+1}\right| \leqslant c_k(\parvec,\parvar) \| h_k \|_\infty. 
 %$$
-%But less useful in practice as we directly parameterize the backward variational kernel and not $ m_{\varphi,n}(x,x_{k+1}) $.
+%But less useful in practice as we directly parameterize the backward variational kernel and not $ m_{\parvar,n}(x,x_{k+1}) $.
 %\end{itemize}}
 
 \begin{hypH}
 \label{assum:strong:mixing}
-There exist constants $0 < \udlow < \udup < \infty$ such that for all $k \in \nset$, $\theta\in\Theta$, $\varphi\in\Phi$ and $(x_k, x_{k + 1}) \in \mathbb{R}^d \times \mathbb{R}^d$, 
+There exist constants $0 < \udlow < \udup < \infty$ such that for all $k \in \nset$, $\parvec\in\Theta$, $\parvar\in\Phi$ and $(x_k, x_{k + 1}) \in \mathbb{R}^d \times \mathbb{R}^d$, 
 $$
-    \udlow \leq \ud{k,\theta}(x_k, x_{k + 1}) \leq \udup
+    \udlow \leq \ud{k,\parvec}(x_k, x_{k + 1}) \leq \udup
 $$ 
 and 
 $$
-    \udlow \leq  q_{\varphi,k}(x_{k+1}, x_{k}) \leq \udup. 
+    \udlow \leq  q_{\parvar,k}(x_{k+1}, x_{k}) \leq \udup. 
 $$ 
 \end{hypH}
 %Under these assumptions, define the mixing rate 
@@ -176,15 +176,15 @@ $$
 
 \begin{proposition}
 \label{prop:bias}
-Assume that H\ref{assum:bias:bound} and H\ref{assum:strong:mixing} hold. Then, for all $n \in \nset$, $\parvec\in\Theta$, $\varphi\in\Phi$, and all additive functional $h_{0:n}$,  
+Assume that H\ref{assum:bias:bound} and H\ref{assum:strong:mixing} hold. Then, for all $n \in \nset$, $\parvec\in\Theta$, $\parvar\in\Phi$, and all additive functional $h_{0:n}$,  
 %    \begin{align*}
 %        \big| \postmod{0:n} h_n -  \post{0:n}^{\parvec} h_n \big| 
-%        &\leq 2 c(\parvec,\varphi) \frac{\udup}{\udlow^2} \sum_{k = 0}^{n - 1} \| \addf{k} \|_\infty \left( \sum_{m = 1}^{n - 1} \rho^{|k - m| - 1} + 1 \right) \\
-%        &\leq 2 c(\parvec,\varphi) n \frac{\udup}{\udlow^2} \left( 1 + \frac{1}{\rho} + \frac{2}{1 - \rho} \right) \sup_{0 \leq k \leq n - 1} \| \addf{k} \|_\infty\eqsp,
+%        &\leq 2 c(\parvec,\parvar) \frac{\udup}{\udlow^2} \sum_{k = 0}^{n - 1} \| \addf{k} \|_\infty \left( \sum_{m = 1}^{n - 1} \rho^{|k - m| - 1} + 1 \right) \\
+%        &\leq 2 c(\parvec,\parvar) n \frac{\udup}{\udlow^2} \left( 1 + \frac{1}{\rho} + \frac{2}{1 - \rho} \right) \sup_{0 \leq k \leq n - 1} \| \addf{k} \|_\infty\eqsp,
 %    \end{align*}
 $$
         \big| \postmod{0:n} h_{0:n} -  \post{0:n}^{\parvec} h_{0:n} \big| 
-        \leq 2\frac{\sigma_+}{\sigma_-^2}\sum_{k=0}^{n-1}\left\| \addf{k}\right\|_\infty\left( c_0(\theta,\varphi) + \sum_{m=1}^n \rho^{|k-m|-1}c_m(\theta,\varphi)\right)\eqsp,%\upsilon\sup_{0 \leq k \leq n - 1}\!\!\!\! \| \addf{k} \|_\infty  c(\parvec,\varphi) n\eqsp.
+        \leq 2\frac{\sigma_+}{\sigma_-^2}\sum_{k=0}^{n-1}\left\| \addf{k}\right\|_\infty\left( c_0(\parvec,\parvar) + \sum_{m=1}^n \rho^{|k-m|-1}c_m(\parvec,\parvar)\right)\eqsp,%\upsilon\sup_{0 \leq k \leq n - 1}\!\!\!\! \| \addf{k} \|_\infty  c(\parvec,\parvar) n\eqsp.
 $$
 where $\rho = 1-\sigma_-/\sigma_+$.
 \end{proposition}
@@ -195,25 +195,25 @@ The proof is postponed to Appendix~\ref{sec:proof}.
 
 \subsection{Commments on assumption H\ref{assum:bias:bound} and H~\ref{assum:strong:mixing}}
 \label{sec:assumptions}
-%\textcolor{red}{Add here explicit computations of $c(\theta,\varphi)$ in the ICA case.}
+%\textcolor{red}{Add here explicit computations of $c(\parvec,\parvar)$ in the ICA case.}
 \begin{itemize}
 \item
-Consider first the linear and Gaussian case, i.e. we assume that for all $x_{k-1}$, $\hd{k;\parvec}(x_{k-1}, \cdot)$ is the Gaussian pdf with mean $A_{k,\theta} x_{k-1}$ and variance $R_{k,\theta}$  and that $\md{k;\parvec}(x_{k},\cdot)$ is the Gaussian pdf with mean $B_{k,\theta} x_k$ and variance $S_{k,\theta}$. In this setting, assume that $\phi_k^\varphi$ is the Gaussian pdf with mean $\mu_{k,\varphi}$ and variance $\Sigma_{k,\varphi}$ and that for all $x_k$, $q_{\varphi,k-1}(x_{k}, \cdot)$ is the Gaussian pdf with mean $A_{k,\varphi} x_k$ and variance $R_{k,\varphi}$. Define also $\mu_{k-1:k}^\varphi$  (resp. $\mu_{k-1:k}^{\varphi,\theta}$) the short-hand notation for the joint distribution $\post{k}^{\varphi}Q_{\varphi,k-1} $ (resp. $\post{k-1}^{\varphi} \uk{k-1,\theta}h/\post{k-1}^{\varphi} \uk{k-1,\theta}\1$).
+Consider first the linear and Gaussian case, i.e. we assume that for all $x_{k-1}$, $\hd{k}{\parvec}(x_{k-1}, \cdot)$ is the Gaussian pdf with mean $A_{k,\parvec} x_{k-1}$ and variance $R_{k,\parvec}$  and that $\md{k}{\parvec}(x_{k},\cdot)$ is the Gaussian pdf with mean $B_{k,\parvec} x_k$ and variance $S_{k,\parvec}$. In this setting, assume that $\phi_k^\parvar$ is the Gaussian pdf with mean $\mu_{k,\parvar}$ and variance $\Sigma_{k,\parvar}$ and that for all $x_k$, $q_{\parvar,k-1}(x_{k}, \cdot)$ is the Gaussian pdf with mean $A_{k,\parvar} x_k$ and variance $R_{k,\parvar}$. Define also $\mu_{k-1:k}^\parvar$  (resp. $\mu_{k-1:k}^{\parvar,\parvec}$) the short-hand notation for the joint distribution $\post{k}^{\parvar}Q_{\parvar,k-1} $ (resp. $\post{k-1}^{\parvar} \uk{k-1,\parvec}h/\post{k-1}^{\parvar} \uk{k-1,\parvec}\1$).
 
-It is straightforward to obtain that $\mu_{k-1:k}^\varphi$ is a multivariate Gaussian distribution with mean and variance:
+It is straightforward to obtain that $\mu_{k-1:k}^\parvar$ is a multivariate Gaussian distribution with mean and variance:
 $$
-\mathsf{M}_{k,\varphi} = \begin{pmatrix}A_{k,\varphi} \mu_{k,\varphi} \\ \mu_{k,\varphi}\end{pmatrix}\quad\mathrm{and}\quad \mathsf{V}_{k,\varphi} =\begin{pmatrix} A_{k,\varphi} \Sigma_{k,\varphi}A_{k,\varphi}^\top + R_{k,\theta}&  A_{k,\varphi} \Sigma_{k,\varphi}\\  \Sigma_{k,\varphi}A_{k,\varphi}^\top& \Sigma_{k,\varphi} \end{pmatrix}\,.
+\mathsf{M}_{k,\parvar} = \begin{pmatrix}A_{k,\parvar} \mu_{k,\parvar} \\ \mu_{k,\parvar}\end{pmatrix}\quad\mathrm{and}\quad \mathsf{V}_{k,\parvar} =\begin{pmatrix} A_{k,\parvar} \Sigma_{k,\parvar}A_{k,\parvar}^\top + R_{k,\parvec}&  A_{k,\parvar} \Sigma_{k,\parvar}\\  \Sigma_{k,\parvar}A_{k,\parvar}^\top& \Sigma_{k,\parvar} \end{pmatrix}\,.
 $$
-On the other hand, $\mu_{k-1:k}^{\varphi,\theta}$ is also a multivariate Gaussian with mean $\mathsf{M}_{k,\varphi,\theta}$ and variance $ \mathsf{V}_{k,\varphi,\theta}$ which can be computed explicitly. In this case, for all bounded and measurable function $h$,
+On the other hand, $\mu_{k-1:k}^{\parvar,\parvec}$ is also a multivariate Gaussian with mean $\mathsf{M}_{k,\parvar,\parvec}$ and variance $ \mathsf{V}_{k,\parvar,\parvec}$ which can be computed explicitly. In this case, for all bounded and measurable function $h$,
 $$
-\left|\post{k}^{\varphi}Q_{\varphi,k-1} h - \frac{\post{k-1}^{\varphi} \uk{k-1,\theta}h}{\post{k-1}^{\varphi} \uk{k-1,\theta}\1}\right| \leqslant 2 \left\|\mu_{k-1:k}^\varphi - \mu_{k-1:k}^{\varphi,\theta}\right\|_{\mathrm{tv}} \| h \|_\infty,
+\left|\post{k}^{\parvar}Q_{\parvar,k-1} h - \frac{\post{k-1}^{\parvar} \uk{k-1,\parvec}h}{\post{k-1}^{\parvar} \uk{k-1,\parvec}\1}\right| \leqslant 2 \left\|\mu_{k-1:k}^\parvar - \mu_{k-1:k}^{\parvar,\parvec}\right\|_{\mathrm{tv}} \| h \|_\infty,
 $$ 
-where $\|\cdot\|_{\mathrm{tv}}$ is the total variation distance and . Therefore, we can choose $c_k(\theta,\varphi) = 2 \|\mu_{k-1:k}^\varphi - \mu_{k-1:k}^{\varphi,\theta}\|_{\mathrm{tv}}$. It remains to use the fact that $\mu_{k-1:k}^\varphi$  and $\mu_{k-1:k}^{\varphi,\theta}$ are Gaussian distributions and that $\|\mu_{k-1:k}^\varphi - \mu_{k-1:k}^{\varphi,\theta}\|_{\mathrm{tv}} \leqslant (\mathrm{KL}(\mu_{k-1:k}^\varphi \| \mu_{k-1:k}^{\varphi,\theta})/2)^{1/2}$ and that we have an explicit expression of the $\mathrm{KL}$ divergence between Gaussian  distributions which yields
+where $\|\cdot\|_{\mathrm{tv}}$ is the total variation distance and . Therefore, we can choose $c_k(\parvec,\parvar) = 2 \|\mu_{k-1:k}^\parvar - \mu_{k-1:k}^{\parvar,\parvec}\|_{\mathrm{tv}}$. It remains to use the fact that $\mu_{k-1:k}^\parvar$  and $\mu_{k-1:k}^{\parvar,\parvec}$ are Gaussian distributions and that $\|\mu_{k-1:k}^\parvar - \mu_{k-1:k}^{\parvar,\parvec}\|_{\mathrm{tv}} \leqslant (\mathrm{KL}(\mu_{k-1:k}^\parvar \| \mu_{k-1:k}^{\parvar,\parvec})/2)^{1/2}$ and that we have an explicit expression of the $\mathrm{KL}$ divergence between Gaussian  distributions which yields
 $$
-c_k(\theta,\varphi) \propto \left(\log \frac{\left| \mathsf{V}_{k,\varphi,\theta}\right|}{\left| \mathsf{V}_{k,\varphi}\right|} - d + \left(\mathsf{M}_{k,\varphi} - \mathsf{M}_{k,\varphi,\theta}\right)^\top\mathsf{V}_{k,\varphi,\theta}^{-1}\left(\mathsf{M}_{k,\varphi} - \mathsf{M}_{k,\varphi,\theta}\right) + \mathrm{Tr}\left( \mathsf{V}_{k,\varphi,\theta}^{-1}\mathsf{V}_{k,\varphi}\right)\right)^{-1/2}\eqsp,
+c_k(\parvec,\parvar) \propto \left(\log \frac{\left| \mathsf{V}_{k,\parvar,\parvec}\right|}{\left| \mathsf{V}_{k,\parvar}\right|} - d + \left(\mathsf{M}_{k,\parvar} - \mathsf{M}_{k,\parvar,\parvec}\right)^\top\mathsf{V}_{k,\parvar,\parvec}^{-1}\left(\mathsf{M}_{k,\parvar} - \mathsf{M}_{k,\parvar,\parvec}\right) + \mathrm{Tr}\left( \mathsf{V}_{k,\parvar,\parvec}^{-1}\mathsf{V}_{k,\parvar}\right)\right)^{-1/2}\eqsp,
 $$
-where $ \mathrm{Tr}$ is the Trace operator and $\propto$ means up to a multiplicative constant independent of $\theta$ and $\varphi$.
-\item Consider now that the variational model is sill linear and Gaussian while the true model involves nonlinearity. We assume that for all $x_{k-1}$, $\hd{k;\parvec}(x_{k-1}, \cdot)$ is the Gaussian pdf with mean $A_{k,\theta} x_{k-1}$ and variance $R_{k,\theta}$  and that $\md{k;\parvec}(x_{k},\cdot)$ is the Gaussian pdf with mean $f_\theta(x_k)$ and variance $S_{k,\theta}$, where $f_\theta$ is nonlinear. In this setting, assume that $\phi_k^\varphi$ is the Gaussian pdf with mean $\mu_{k,\varphi}$ and variance $\Sigma_{k,\varphi}$ and that for all $x_k$, $q_{\varphi,k-1}(x_{k}, \cdot)$ is the Gaussian pdf with mean $A_{k,\varphi} x_k$ and variance $R_{k,\varphi}$. \textcolor{red}{Ongoing} 
+where $ \mathrm{Tr}$ is the Trace operator and $\propto$ means up to a multiplicative constant independent of $\parvec$ and $\parvar$.
+\item Consider now that the variational model is sill linear and Gaussian while the true model involves nonlinearity. We assume that for all $x_{k-1}$, $\hd{k}{\parvec}(x_{k-1}, \cdot)$ is the Gaussian pdf with mean $A_{k,\parvec} x_{k-1}$ and variance $R_{k,\parvec}$  and that $\md{k}{\parvec}(x_{k},\cdot)$ is the Gaussian pdf with mean $f^\parvec(x_k)$ and variance $S_{k,\parvec}$, where $f^\parvec$ is nonlinear. In this setting, assume that $\phi_k^\parvar$ is the Gaussian pdf with mean $\mu_{k,\parvar}$ and variance $\Sigma_{k,\parvar}$ and that for all $x_k$, $q_{\parvar,k-1}(x_{k}, \cdot)$ is the Gaussian pdf with mean $A_{k,\parvar} x_k$ and variance $R_{k,\parvar}$. \textcolor{red}{Ongoing} 
 \end{itemize}
 
 \section{Exact and approximate backward decomposition for ICA}
@@ -226,13 +226,13 @@ where $ \mathrm{Tr}$ is the Trace operator and $\propto$ means up to a multiplic
 \begin{figure}[h]
     \centering
     \includegraphics[width=10cm]{additive_smoothing_errors.png}
-    \caption{Computation of $\big| \postmod{0:n} h_{0:n} -  \post{0:n}^{\parvec} h_{0:n} \big|$ for growing values of $n$ when both $p_\theta$ and $q_\varphi$ are linear gaussian HMMs}
+    \caption{Computation of $\big| \postmod{0:n} h_{0:n} -  \post{0:n}^{\parvec} h_{0:n} \big|$ for growing values of $n$ when both $p^\parvec$ and $q_\parvar$ are linear gaussian HMMs}
 \end{figure}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=10cm]{marginal_smoothing_errors.png}
-    \caption{Computation of $\big| \postmod{0:n} \tilde{h}_{k} -  \post{0:n}^{\parvec} \tilde{h}_{k} \big|$ for different $k$ when both $p_\theta$ and $q_\varphi$ are linear gaussian HMMs}
+    \caption{Computation of $\big| \postmod{0:n} \tilde{h}_{k} -  \post{0:n}^{\parvec} \tilde{h}_{k} \big|$ for different $k$ when both $p^\parvec$ and $q_\parvar$ are linear gaussian HMMs}
 \end{figure}
 
 \subsection{Noisy linear ICA}
@@ -350,43 +350,43 @@ In the specific case of our more restricted (linear Gaussian) model, we further 
 
 With similar reasonings, $\log p_{(t+1)}(z_{t+1}|z_t)$ and $\log \tilde{p}_{1:t+1}(z_{t+1}|z_t)$ are both quadratic forms in $z_t$. This means that if we choose a variational family where this is also true for $\tilde{q}_{1:t+1}(z_{t+1}|z_t)$, then the expectation in the recursion \ref{v_t_recursion} will admit a closed form which is a quadratic form in $z_{t+1}$.
                                                     
-One obvious way to choose a variational family that verifies the previous constraints is to define a variational model which mirrors exactly the true model but with different parameters. We start with this option and define the following distributions. We define $\Phi = \{B^\phi, b^\phi, R^\phi, (A^{\phi,i}, a_1^{\phi,i}, a^{\phi,i}, Q_1^{\phi,i}, Q^{\phi,i})_{i \leq I}\}$ the set of all variational parameters, and the following distributions:
+One obvious way to choose a variational family that verifies the previous constraints is to define a variational model which mirrors exactly the true model but with different parameters. We start with this option and define the following distributions. We define $\Phi = \{B^\parvar, b^\parvar, R^\parvar, (A^{\phi,i}, a_1^{\phi,i}, a^{\phi,i}, Q_1^{\phi,i}, Q^{\phi,i})_{i \leq I}\}$ the set of all variational parameters, and the following distributions:
 
 $$q(z_1^i) \sim \gaussian{a_1^{\phi,i}}{Q_1^{\phi,i}}, \eqsp q(z_1) = \prod_{i=1}^I q(z_1^i)$$
 $$q(z_t^i|z_{t-1}^i) \sim \gaussian{A^{\phi,i} z_{t-1}^i + a^{\phi,i}}{Q^{\phi,i}}, \eqsp q(z_t|z_{t-1}) = \prod_{i=1}^I q(z_t^i|z_{t-1}^i)$$
-$$q(x_t|z_t) \sim \gaussian{B^\phi s_t + b^\phi}{R}$$
+$$q(x_t|z_t) \sim \gaussian{B^\parvar s_t + b^\parvar}{R}$$
 
-To facilitate computations, we define the block objects $M = diag(M^1, \ldots, M^I)$ for all relevant parameters. We denote $M^\theta$ the parameters of the true model. We now explicitely derive the closed forms for the expectation of all terms in $\ref{v_t_recursion}$ w.r.t parameters in $\Theta$ and $\Phi$. 
+To facilitate computations, we define the block objects $M = diag(M^1, \ldots, M^I)$ for all relevant parameters. We denote $M^\parvec$ the parameters of the true model. We now explicitely derive the closed forms for the expectation of all terms in $\ref{v_t_recursion}$ w.r.t parameters in $\Theta$ and $\Phi$. 
 
 Since the model of our variational approximation is also a linear Gaussian HMM, we can define: 
 
 \begin{itemize}
-    \item The variational filtering distribution as a Gaussian $\vfilt{t} \sim \gaussian{\mu_{1:t}^\phi}{\Sigma_{1:t}^\phi}$
-    \item The backward variational distribution as a Gaussian $\vbackward{t} \sim \gaussian{\vbackwardmean{t}(z_{t+1})}{\vbackwardcov{t}}$ where $\vbackwardmean{t}$ is linear in $z_{t+1}$ with $\vbackwardmean{t}(z_{t+1}) = \backward{A}_{1:t}^\phi z_{t+1} + \backward{a}_{1:t}^\phi$, where $\backward{A}_{1:t}^\phi$ and $\backward{a}_{1:t}^\phi$ can be entirely expressed in terms of $\mu_{1:t}^\phi, \Sigma_{1:t}^\phi$ and parameters in $\Phi$ (which is detailed below).
+    \item The variational filtering distribution as a Gaussian $\vfilt{t} \sim \gaussian{\mu_{1:t}^\parvar}{\Sigma_{1:t}^\parvar}$
+    \item The backward variational distribution as a Gaussian $\vbackward{t} \sim \gaussian{\vbackwardmean{t}(z_{t+1})}{\vbackwardcov{t}}$ where $\vbackwardmean{t}$ is linear in $z_{t+1}$ with $\vbackwardmean{t}(z_{t+1}) = \backward{A}_{1:t}^\parvar z_{t+1} + \backward{a}_{1:t}^\parvar$, where $\backward{A}_{1:t}^\parvar$ and $\backward{a}_{1:t}^\parvar$ can be entirely expressed in terms of $\mu_{1:t}^\parvar, \Sigma_{1:t}^\parvar$ and parameters in $\Phi$ (which is detailed below).
 \end{itemize} 
 
 We start with the terms from the true model $\log p_{(t+1)}(z_{t+1}|z_t) = \log p(x_{t+1}|z_{t+1}) + \log p(z_{t+1}|z_t)$. The first term on the right hand side is completely measured in $\ref{v_t_recursion}$ at $t+1$ and is therefore integrated later against the backward kernel at $t+2$. We first deal with the second term:
 
 \begin{align}
-    \log p(z_{t+1}|z_t) &= -\frac{1}{2}\left(d_\mathsf{Z} \log(2\pi) + \log |Q^\theta|\right) - \frac{1}{2}\left[\quadform{(z_{t+1} - A^\theta z_t - a^\theta)}{\stateprec}\right]
+    \log p(z_{t+1}|z_t) &= -\frac{1}{2}\left(d_\mathsf{Z} \log(2\pi) + \log |Q^\parvec|\right) - \frac{1}{2}\left[\quadform{(z_{t+1} - A^\parvec z_t - a^\parvec)}{\stateprec}\right]
 \end{align}
 
 For a random variable $u \sim p(u)$ with $\expect{p(u)}{u} = \mu$ and $\mathbb{V}_{p(u)}[u] = \Sigma$, the following holds for any $\Lambda$:
-$$\expect{p(u)}{u^T \Lambda u} = tr(\Lambda \Sigma) + \mu^T \Sigma \mu$$
+$$\expect{p(u)}{u^T \Lambda u} = \text{tr}(\Lambda \Sigma) + \mu^T \Sigma \mu$$
 
-We denote $u = u(z_t) = A^\theta z_t + a^\theta - z_{t+1}$ and $\Lambda = \stateprec$, and we have
+We denote $u = u(z_t) = A^\parvec z_t + a^\parvec - z_{t+1}$ and $\Lambda = \stateprec$, and we have
 
 \begin{align*}
     \expect{\vbackward{t}}{u^T \Lambda u} &= \expect{z_t \sim \gaussian{\vbackwardmean{t}}{\vbackwardcov{t}}}{u(z_t)^T \Lambda u(z_t)} \\
-    &=  \expect{u \sim \gaussian{A^\theta \vbackwardmean{t} + a^\theta - z_{t+1}}{A^\theta \vbackwardcov{t} {A^\theta}^T}}{u^T \Lambda u}
+    &=  \expect{u \sim \gaussian{A^\parvec \vbackwardmean{t} + a^\parvec - z_{t+1}}{A^\parvec \vbackwardcov{t} {A^\parvec}^T}}{u^T \Lambda u}
 \end{align*}
 
 
 which allows the computation of the whole term $\log p(z_{t+1}|z_t)$ against the backward kernel and leads to
 
 \begin{multline*}
-    \expect{\vbackward{t}}{\log p(z_{t+1}|z_t)} = -\frac{1}{2}\{d_\mathsf{Z} \log(2\pi) + \log |Q^\theta| + tr(\stateprec A^\theta \vbackwardcov{t} {A^\theta}^T) \\
-     + \quadform{(A^\theta \vbackwardmean{t}(z_{t+1}) + a^\theta - z_{t+1})}{\stateprec}\} 
+    \expect{\vbackward{t}}{\log p(z_{t+1}|z_t)} = -\frac{1}{2}\{d_\mathsf{Z} \log(2\pi) + \log |Q^\parvec| + tr(\stateprec A^\parvec \vbackwardcov{t} {A^\parvec}^T) \\
+     + \quadform{(A^\parvec \vbackwardmean{t}(z_{t+1}) + a^\parvec - z_{t+1})}{\stateprec}\} 
 \end{multline*}
 
 Where we can see clearly that it is still a quadratic form in $z_{t+1}$ if $\vbackwardmean{t}(z_{t+1})$ is linear in $z_{t+1}$
@@ -394,7 +394,7 @@ Where we can see clearly that it is still a quadratic form in $z_{t+1}$ if $\vba
 To express the parameters $\vbackwardmean{t}$ and $\vbackwardcov{t}$ of the variational backward in terms of parameters in $\Phi$ and $\vfiltmean{t},\vfiltcov{t}$, we just recall that: 
 
 \begin{equation*}
-    \vbackward{t} \propto q(z_{t+1}|z_t) \vfilt{t} \propto e^{-\frac{1}{2}\left[\quadform{\left(z_{t+1} - (A^\phi z_t + a^\phi)\right)}{\vstateprec} + \quadform{(z_t - \vfiltmean{t})}{\inv{\vfiltcov{t}}} \right]}
+    \vbackward{t} \propto q(z_{t+1}|z_t) \vfilt{t} \propto e^{-\frac{1}{2}\left[\quadform{\left(z_{t+1} - (A^\parvar z_t + a^\parvar)\right)}{\vstateprec} + \quadform{(z_t - \vfiltmean{t})}{\inv{\vfiltcov{t}}} \right]}
 \end{equation*}
 
 Quadratic forms develop into $\quadform{(u-b)}{\Omega} = \quadform{u}{\Omega} - 2b^T \Omega u +b^T \Omega b$ (for $\Omega$ symmetric), so for any $A,b_1,b_2,\Omega_1, \Omega_2$:
@@ -406,13 +406,13 @@ Quadratic forms develop into $\quadform{(u-b)}{\Omega} = \quadform{u}{\Omega} - 
 
 With $\Omega = (\quadform{A}{\Omega_1}+ \Omega_2)$ and $b = \inv{\Omega}\left(\Omega_2 b_2 + A^T \Omega_1 b_1 \right)$.
 
-This operation is precisely what appears in the argument of the exponential in the previous equation with $A = A^\phi$, $b_1 = z_{t+1} - a^\phi$, $\Omega_1 = \vstateprec$, $b_2 = \vfiltmean{t}$, $\Omega_2 = \inv{\vfiltcov{t}}$, so we can identify the parameters of $\vbackward{t}$ as 
+This operation is precisely what appears in the argument of the exponential in the previous equation with $A = A^\parvar$, $b_1 = z_{t+1} - a^\parvar$, $\Omega_1 = \vstateprec$, $b_2 = \vfiltmean{t}$, $\Omega_2 = \inv{\vfiltcov{t}}$, so we can identify the parameters of $\vbackward{t}$ as 
 
-$$\vbackwardcov{t} = \inv{\left(\quadform{{A^\phi}}{\vstateprec} + \inv{\vfiltcov{t}}\right)}$$
+$$\vbackwardcov{t} = \inv{\left(\quadform{{A^\parvar}}{\vstateprec} + \inv{\vfiltcov{t}}\right)}$$
 
-$$\vbackwardmean{t} = \left(\quadform{{A^\phi}}{\vstateprec} + \inv{\vfiltcov{t}}\right)\left(\inv{\vfiltcov{t}}\vfiltmean{t} + {A^\phi}^T \vstateprec (z_{t+1} - a^\phi)\right)$$
+$$\vbackwardmean{t} = \left(\quadform{{A^\parvar}}{\vstateprec} + \inv{\vfiltcov{t}}\right)\left(\inv{\vfiltcov{t}}\vfiltmean{t} + {A^\parvar}^T \vstateprec (z_{t+1} - a^\parvar)\right)$$
 
-Therefore we do have the linearity in $z_{t+1}$ with $$\backward{A}_{1:t}^\phi = \left(\quadform{{A^\phi}}{\vstateprec} + \inv{\vfiltcov{t}}\right) {A^\phi}^T \vstateprec$$ and $$\backward{a}_{1:t}^\phi = \left(\quadform{{A^\phi}}{\vstateprec} + \inv{\vfiltcov{t}}\right)\left(\inv{\vfiltcov{t}}\vfiltmean{t} - {A^\phi}^T \vstateprec a^\phi \right)$$
+Therefore we do have the linearity in $z_{t+1}$ with $$\backward{A}_{1:t}^\parvar = \left(\quadform{{A^\parvar}}{\vstateprec} + \inv{\vfiltcov{t}}\right) {A^\parvar}^T \vstateprec$$ and $$\backward{a}_{1:t}^\parvar = \left(\quadform{{A^\parvar}}{\vstateprec} + \inv{\vfiltcov{t}}\right)\left(\inv{\vfiltcov{t}}\vfiltmean{t} - {A^\parvar}^T \vstateprec a^\parvar \right)$$
 
 
 It remains to compute $\expect{\vbackward{t}}{\log \tilde{q}_{1:t+1}(z_{t+1}|z_t)}$ which develops into
@@ -426,7 +426,7 @@ The second term is only integrated at $t+2$ but cancels out with the third term 
 For the observation model at $t+2$ we have
 
 \begin{multline*}
-\expect{q_{1:t+1}(z_{t+1}|z_{t+2})}{\log p(x_{t+1}|z_{t+1})} = -\frac{1}{2}\{d_{\mathsf{X}}\log 2\pi + \log |R^\theta| + tr\left(\inv{R^\theta} B^\theta\vbackwardcov{t+1}{B^\theta}^T\right) \\ + \quadform{(B^\theta\vbackwardmean{t+1} + b^\theta - x_{t+1})}{\inv{R^\theta}}\}
+\expect{q_{1:t+1}(z_{t+1}|z_{t+2})}{\log p(x_{t+1}|z_{t+1})} = -\frac{1}{2}\{d_{\mathsf{X}}\log 2\pi + \log |R^\parvec| + tr\left(\inv{R^\parvec} B^\parvec\vbackwardcov{t+1}{B^\parvec}^T\right) \\ + \quadform{(B^\parvec\vbackwardmean{t+1} + b^\parvec - x_{t+1})}{\inv{R^\parvec}}\}
 \end{multline*} 
 
 
@@ -447,13 +447,13 @@ In the VAE litterature, powerful variational families (e.g. normalizing flows) a
 
 \subsubsection*{Nonlinear observation model}
 
-We assume a similar transition model $p(z_t|z_{t-1})$ for the hidden states, but observations are nonlinear transformations of the components under Gaussian noise, ie. $$p(x_t|z_t) = p(x_t|s_t) \sim \gaussian{f_\theta(s_t)}{R^\theta}$$. 
+We assume a similar transition model $p(z_t|z_{t-1})$ for the hidden states, but observations are nonlinear transformations of the components under Gaussian noise, ie. $$p(x_t|z_t) = p(x_t|s_t) \sim \gaussian{f^\parvec(s_t)}{R^\parvec}$$. 
 
 As stated above, in this case, $p_{1:t}(z_t|z_{t+1})$ is not Gaussian anymore, however we approximate it with a Gaussian variational backward $\vbackward{t} \sim \gaussian{\vbackwardmean{t}(z_{t+1})}{\vbackwardcov{t}}$ and define the variational joint smoothing distribution via the backward factorization given by equation \ref{backward_fact}. If we specify that $\vbackwardmean{t}(z_{t+1})$ is linear in $z_{t+1}$, then all quantities in the previous section except from the expectation of the observation model are tractable as before. For this latter term, at $t+2$, 
 
 \begin{multline*}
-\expect{q_{1:t+1}(z_{t+1}|z_{t+2})}{\log p(x_{t+1}|z_{t+1})} = -\frac{1}{2}\{d_{\mathsf{X}}\log 2\pi + \log |R^\theta| \\
-    + \expect{z_{t+1} \sim \gaussian{\vbackwardmean{t+1}}{\vbackwardcov{t+1}}}{\quadform{(f_\theta(z_{t+1}) - x_{t+1})}{\inv{R^\theta}}}\} \\
+\expect{q_{1:t+1}(z_{t+1}|z_{t+2})}{\log p(x_{t+1}|z_{t+1})} = -\frac{1}{2}\{d_{\mathsf{X}}\log 2\pi + \log |R^\parvec| \\
+    + \expect{z_{t+1} \sim \gaussian{\vbackwardmean{t+1}}{\vbackwardcov{t+1}}}{\quadform{(f^\parvec(z_{t+1}) - x_{t+1})}{\inv{R^\parvec}}}\} \\
 \end{multline*}
 
 and the expectation that remains admits no closed-form. From \cite{johnson}, the following approximation may be a suitable alternative (where we write the equation at $t$ for readability)
@@ -470,7 +470,7 @@ where
 \label{sec:proof}
 Following \cite{gloaguen2019pseudo}, write 
 $$
-\postmod{0:n} h_n - \post{0:n}^\theta h_n = \sum_{k = 0}^{n - 1} \left( \postmod{0:n} \addf[n]{k} - \post{0:n}^\theta \addf[n]{k} \right), 
+\postmod{0:n} h_n - \post{0:n}^\parvec h_n = \sum_{k = 0}^{n - 1} \left( \postmod{0:n} \addf[n]{k} - \post{0:n}^\parvec \addf[n]{k} \right), 
 $$
 where, for each $k \in \intvect{0}{n - 1}$, 
 \begin{equation} \label{eq:def:addf}
@@ -478,14 +478,20 @@ where, for each $k \in \intvect{0}{n - 1}$,
 \end{equation}
 denote the extension of $\addf{k}$ to $(\mathbb{R}^d)^{n+1}$. Define, for each $n \in \nset$ and $m \in \intvect{0}{n}$, the kernel 
 \begin{equation} \label{eq:def:uk:products}
-    \uk{m, n}^\theta(x_{0:m}', \rmd x_{0:n + 1}) \eqdef \delta_{x_{0:m}'}(\rmd x_{0:m}) \prod_{\ell = m}^n \uk{\ell,\theta}(x_\ell, \rmd x_{\ell + 1}) 
+    \uk{m, n}{\parvec}(x_{0:m}', \rmd x_{0:n + 1}) \eqdef \delta_{x_{0:m}'}(\rmd x_{0:m}) \prod_{\ell = m}^n \uk{\ell}{\parvec}(x_\ell, \rmd x_{\ell + 1}) 
 \end{equation}
-on $(\mathbb{R}^d)^{m+1} \times \mathcal{B}((\mathbb{R}^d)^{n + 1})$, with the convention $\uk{n, n - 1}^\theta = \operatorname{id}$.  This yields the following decomposition:
+on $(\mathbb{R}^d)^{m+1} \times \mathcal{B}((\mathbb{R}^d)^{n + 1})$, with the convention $\uk{n, n - 1}{\parvec} = \operatorname{id}$.  This yields the following decomposition:
 \begin{multline*}
-\postmod{0:n} \addf[n]{k} - \post{0:n}^\theta \addf[n]{k} = 
-\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1}^\theta \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1}^\theta \1_{}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1}^\theta \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1}^\theta \1_{}} \right) \\ + \frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} - \frac{\chi_\theta \md{0;\parvec}\uk{0, n - 1}^\theta \addf[n]{k}}{\chi_\theta\md{0;\parvec}\uk{0, n - 1}^\theta \1_{}},
+\postmod{0:n} \addf[n]{k} - \post{0:n}^\parvec \addf[n]{k} = 
+\sum_{m = 1}^n 
+\left( 
+\frac{\postmod{0:m} \uk{m, n - 1}{\parvec} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1}{\parvec} \1_{}}
+- \frac{\postmod{0:m - 1} \uk{m - 1, n - 1}{\parvec} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1}{\parvec} \1_{}} 
+\right) \\ 
++ \frac{\postmod{0} \uk{0, n - 1}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n - 1}{\parvec} \1_{}}
+- \frac{\chi^\parvec \md{0}{\parvec}\uk{0, n - 1}{\parvec} \addf[n]{k}}{\chi^\parvec\md{0}{\parvec}\uk{0, n - 1}{\parvec} \1_{}},
 \end{multline*}
-where $\postmod{0} = \postmod{0:0}$, and since $\chi_\theta \md{0;\parvec} \uk{0, n - 1}^\theta \addf[n]{k}/\chi_\theta\md{0;\parvec}\uk{0, n - 1}^\theta \1_{} = \post{0:n}^\theta \addf[n]{k}$.
+where $\postmod{0} = \postmod{0:0}$, and since $\chi^\parvec \md{0}{\parvec} \uk{0, n - 1}{\parvec} \addf[n]{k}/\chi^\parvec\md{0}{\parvec}\uk{0, n - 1}{\parvec} \1_{} = \post{0:n}^\parvec \addf[n]{k}$.
 %For each $m \in \nset$, define the  backward Markov kernel 
 %\begin{equation} \label{eq:def:backward:kernel}
 %    \bkw{m}^\parvec(x_{m + 1}, \rmd x_m) \eqdef \frac{\post{m}^\parvec(\rmd x_m) \, \ud{m,\parvec}(x_m, x_{m + 1})}{\post{m}^\parvec[\ud{m,\parvec}(\cdot, x_{m + 1})]} = \frac{\post{m}^\parvec(\rmd x_m) \, \hd{m+1;\parvec}(x_{m}, x_{m+1})}{\post{m}^\parvec[\hd{m+1;\parvec}(\cdot, x_{m+1})]}
@@ -498,12 +504,12 @@ where $\postmod{0} = \postmod{0:0}$, and since $\chi_\theta \md{0;\parvec} \uk{0
 %%In the following, the notation $\parvec$ may be dropped when there is no confusion. 
 %Define similarly, 
 %$$
-%\bkw{m}^\varphi(x_{m + 1}, \rmd x_m) = q_{\varphi,m}(x_{m+1},x_m)\mu(\rmd x_m)
+%\bkw{m}^\parvar(x_{m + 1}, \rmd x_m) = q_{\parvar,m}(x_{m+1},x_m)\mu(\rmd x_m)
 %$$
 %on $\mathbb{R}^d \times \mathcal{B}(\mathbb{R}^d)$. 
 In addition, define for each $n \in \nsetpos$, the Markov kernel  
 $$
-\tstat{n}^\varphi(x_n, \rmd x_{0:n - 1}) = \prod_{m = 0}^{n - 1} Q_{\varphi,m}(x_{m + 1}, \rmd x_m)
+\tstat{n}^\parvar(x_n, \rmd x_{0:n - 1}) = \prod_{m = 0}^{n - 1} Q_{\parvar,m}(x_{m + 1}, \rmd x_m)
 $$ 
 on $\mathbb{R}^d \times \mathcal{B}((\mathbb{R}^d)^n)$. % In the following, the notation $\parvec$ may be dropped when there is no confusion. 
 %\begin{itemize} 
@@ -519,95 +525,98 @@ on $\mathbb{R}^d \times \mathcal{B}((\mathbb{R}^d)^n)$. % In the following, the 
 %$
 %\end{itemize}
 %\begin{proof}
-    For each $n \in \nset$, define  $\retrokmod_{0, n}(x_0', \rmd x_{0:n}) \eqdef \delta_{x_0'}(\rmd x_0) \,  \prod_{\ell = 0}^{n - 1} \uk{\ell,\theta}(x_\ell, \rmd x_{\ell + 1})$ and for $m \in \intvect{1}{n}$, 
+    For each $n \in \nset$, define  $\retrokmod_{0, n}(x_0', \rmd x_{0:n}) \eqdef \delta_{x_0'}(\rmd x_0) \,  \prod_{\ell = 0}^{n - 1} \uk{\ell,\parvec}(x_\ell, \rmd x_{\ell + 1})$ and for $m \in \intvect{1}{n}$, 
 \begin{equation} \label{eq:def:retrokmod}
-    \retrokmod_{m, n}(x_m', \rmd x_{0:n}) \eqdef \delta_{x_m'}(\rmd x_m) \, \tstatmod{m}(x_m, \rmd x_{0:m - 1}) \prod_{\ell = m}^{n - 1} \uk{\ell,\theta}(x_\ell, \rmd x_{\ell + 1}), 
+    \retrokmod_{m, n}(x_m', \rmd x_{0:n}) \eqdef \delta_{x_m'}(\rmd x_m) \, \tstatmod{m}(x_m, \rmd x_{0:m - 1}) \prod_{\ell = m}^{n - 1} \uk{\ell,\parvec}(x_\ell, \rmd x_{\ell + 1}), 
 \end{equation}
 on  $\mathbb{R}^d \times \mathcal{B}((\mathbb{R}^d)^{n+1})$. 
 As for all $m \in \intvect{0}{n}$ and measurable function $h$, 
 %\begin{equation} \label{eq:retro:prospective:id}
- $\postmod{0:m} \uk{m, n - 1}^\theta h = \postmod{m} \retrokmod_{m, n} h$,
+ $\postmod{0:m} \uk{m, n - 1}{\parvec} h = \postmod{m} \retrokmod_{m, n} h$,
 %\end{equation}
 %In order to bound each term of this decomposition, write, using Lemma~\ref{lem:retro:prospective:id},  
 $$
-\frac{\postmod{0:m} \uk{m, n - 1}^\theta \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1}^\theta \1_{}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1}^\theta \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1}^\theta \1_{}} 
+\frac{\postmod{0:m} \uk{m, n - 1}{\parvec} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1}{\parvec} \1_{}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1}{\parvec} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1}{\parvec} \1_{}} 
 = \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}. 
 $$
 Therefore,
 \begin{multline}
 \label{eq:error:decomp}
-\postmod{0:n} \addf[n]{k} - \post{0:n}^\theta \addf[n]{k} = 
-\sum_{m = 1}^n \left( \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \right) \\ + \frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} - \frac{\chi_\theta \md{0;\parvec}\uk{0, n - 1}^\theta \addf[n]{k}}{\chi_\theta\md{0;\parvec}\uk{0, n - 1}^\theta \1_{}}.
+\postmod{0:n} \addf[n]{k} - \post{0:n}^\parvec \addf[n]{k} = 
+\sum_{m = 1}^n \left( \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \right) \\ + \frac{\postmod{0} \uk{0, n - 1}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n - 1}{\parvec} \1_{}} - \frac{\chi^\parvec \md{0}{\parvec}\uk{0, n - 1}{\parvec} \addf[n]{k}}{\chi^\parvec\md{0}{\parvec}\uk{0, n - 1}{\parvec} \1_{}}.
 \end{multline}
 
 \paragraph{Error term at time $m=0$ in \eqref{eq:error:decomp}. }Consider the following decomposition of the first term:
 \begin{align*}
-\frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} - \frac{\chi_\theta \md{0;\parvec}\uk{0, n - 1}^\theta \addf[n]{k}}{\chi_\theta\md{0;\parvec}\uk{0, n - 1}^\theta \1_{}} &= \frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} - \frac{\phi^\theta_0\uk{0, n - 1}^\theta \addf[n]{k}}{\phi^\theta_0\uk{0, n - 1}^\theta \1_{}}\eqsp,\\
-& = \frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}-\phi^\theta_0\uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} \\
-&\hspace{2cm}+  \frac{\phi^\theta_0\uk{0, n - 1}^\theta \addf[n]{k}}{\phi^\theta_0\uk{0, n - 1}^\theta \1_{}}\frac{\phi^\theta_0\uk{0, n - 1}^\theta \1_{} - \postmod{0} \uk{0, n - 1}^\theta \1_{}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} \eqsp,
+\frac{\postmod{0} \uk{0, n - 1}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n - 1}{\parvec} \1_{}} - \frac{\chi^\parvec \md{0}{\parvec}\uk{0, n - 1}{\parvec} \addf[n]{k}}{\chi^\parvec\md{0}{\parvec}\uk{0, n - 1}{\parvec} \1_{}} &= \frac{\postmod{0} \uk{0, n - 1}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n - 1}{\parvec} \1_{}} - \frac{\phi^\parvec_0\uk{0, n - 1}{\parvec} \addf[n]{k}}{\phi^\parvec_0\uk{0, n - 1}{\parvec} \1_{}}\eqsp,\\
+& = \frac{\postmod{0} \uk{0, n - 1}{\parvec} \addf[n]{k}-\phi^\parvec_0\uk{0, n - 1}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n - 1}{\parvec} \1_{}} \\
+&\hspace{2cm}+  \frac{\phi^\parvec_0\uk{0, n - 1}{\parvec} \addf[n]{k}}{\phi^\parvec_0\uk{0, n - 1}{\parvec} \1_{}}\frac{\phi^\parvec_0\uk{0, n - 1}{\parvec} \1_{} - \postmod{0} \uk{0, n - 1}{\parvec} \1_{}}{\postmod{0} \uk{0, n - 1}{\parvec} \1_{}} \eqsp,
 \end{align*}
-where $\phi^\theta_0$ the filtering distribution at time $0$, i.e the law defined as  $\phi^\theta_0h= \chi_\theta \md{0;\parvec}h/\chi_\theta \md{0;\parvec}$. Then, by H\ref{assum:bias:bound},
+where $\phi^\parvec_0$ the filtering distribution at time $0$, i.e the law defined as  $\phi^\parvec_0h= \chi^\parvec \md{0}{\parvec}h/\chi^\parvec \md{0}{\parvec}$. Then, by H\ref{assum:bias:bound},
 $$
-\left|\frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} - \frac{\phi^\theta_0\uk{0, n - 1}^\theta \addf[n]{k}}{\phi^\theta_0\uk{0, n - 1}^\theta \1_{}}\right|\leqslant 2c_0(\theta,\varphi)\frac{\| \uk{0, n - 1}^\theta \1_{}\|_\infty\|\addf[n]{k}\|_\infty}{\postmod{0} \uk{0, n - 1}^\theta \1_{}}\eqsp.
+\left|\frac{\postmod{0} \uk{0, n - 1}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n - 1}{\parvec} \1_{}} - \frac{\phi^\parvec_0\uk{0, n - 1}{\parvec} \addf[n]{k}}{\phi^\parvec_0\uk{0, n - 1}{\parvec} \1_{}}\right|\leqslant 2c_0(\parvec,\parvar)\frac{\| \uk{0, n - 1}{\parvec} \1_{}\|_\infty\|\addf[n]{k}\|_\infty}{\postmod{0} \uk{0, n - 1}{\parvec} \1_{}}\eqsp.
 $$
 By H\ref{assum:strong:mixing}, for all $x_0\in \mathbb{R}^d$,
 $$
-\uk{0, n - 1}^\theta \1_{}(x_0) = \int  \ud{0,\parvec}(x_0, x_{1})\mu(\rmd x_1)\uk{1, n - 1}^\theta \1_{}(x_1)\leqslant \sigma_+  \int \mu(\rmd x_1)\uk{1, n - 1}^\theta \1_{}(x_1)
+\uk{0, n - 1}{\parvec} \1_{}(x_0) = \int  \ud{0,\parvec}(x_0, x_{1})\mu(\rmd x_1)\uk{1, n - 1}{\parvec} \1_{}(x_1)\leqslant \sigma_+  \int \mu(\rmd x_1)\uk{1, n - 1}{\parvec} \1_{}(x_1)
 $$
 and 
 $$
-\postmod{0} \uk{0, n - 1}^\theta \1 = \int \postmod{0} (\rmd x_0)\ud{0,\parvec}(x_0, x_{1})\mu(\rmd x_1)\uk{1, n - 1}^\theta \1_{}(x_1)\geqslant \sigma_-  \int \mu(\rmd x_1)\uk{1, n - 1}^\theta \1_{}(x_1)\eqsp,
+\postmod{0} \uk{0, n - 1}{\parvec} \1 = \int \postmod{0} (\rmd x_0)\ud{0,\parvec}(x_0, x_{1})\mu(\rmd x_1)\uk{1, n - 1}{\parvec} \1_{}(x_1)\geqslant \sigma_-  \int \mu(\rmd x_1)\uk{1, n - 1}{\parvec} \1_{}(x_1)\eqsp,
 $$
 which yields
 $$
-\left|\frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{}} - \frac{\phi^\theta_0\uk{0, n - 1}^\theta \addf[n]{k}}{\phi^\theta_0\uk{0, n - 1}^\theta \1_{}}\right|\leqslant 2c_0(\theta,\varphi)\frac{\sigma_+}{\sigma_-}\|\addf[n]{k}\|_\infty\eqsp.
+\left|\frac{\postmod{0} \uk{0, n - 1}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n - 1}{\parvec} \1_{}} - \frac{\phi^\parvec_0\uk{0, n - 1}{\parvec} \addf[n]{k}}{\phi^\parvec_0\uk{0, n - 1}{\parvec} \1_{}}\right|\leqslant 2c_0(\parvec,\parvar)\frac{\sigma_+}{\sigma_-}\|\addf[n]{k}\|_\infty\eqsp.
 $$
 
 \paragraph{Error term at time $m>0$ in \eqref{eq:error:decomp}. } Define the kernel  
 \begin{equation} \label{eq:def:retrokmod:joint}
-    \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}(x'_{m-1},x_m', \rmd x_{0:n}) \eqdef \delta_{x'_{m-1}}(\rmd x_{m-1})\delta_{x_m'}(\rmd x_m) \, \tstatmod{m-1}(x_{m-1}, \rmd x_{0:m - 2}) \prod_{\ell = m}^{n - 1} \uk{\ell,\theta}(x_\ell, \rmd x_{\ell + 1}), 
+    \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}(x'_{m-1},x_m', \rmd x_{0:n}) \eqdef \delta_{x'_{m-1}}(\rmd x_{m-1})\delta_{x_m'}(\rmd x_m) \, \tstatmod{m-1}(x_{m-1}, \rmd x_{0:m - 2}) \prod_{\ell = m}^{n - 1} \uk{\ell}{\parvec}(x_\ell, \rmd x_{\ell + 1}), 
 \end{equation}
-on  $(\mathbb{R}^d)^2 \times \mathcal{B}((\mathbb{R}^d)^{n+1})$.  Then, write
+on  $(\mathbb{R}^d)^2 \times \mathcal{B}((\mathbb{R}^d)^{n+1})$.  
+Then, write
 $$
- \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}  = \frac{\postmod{m} Q_{\varphi,m-1} \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \uk{m-1,\theta} \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \eqsp.
+\frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}}
+- \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}  = \frac{\postmod{m} Q_{\parvar,m-1} \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}}
+- \frac{\postmod{m - 1} \uk{m-1}{\parvec} \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \eqsp.
 $$
 Let $x_{m-1}^*$ and $x_m^*$ be arbitrary elements in $\mathbb{R}^d$ and define the kernel
 $$
-\mathcal{L}^{*,\varphi,\theta}_{m, n}h(x_{m-1},x_m) = \frac{\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}h(x_{m-1},x_m) }{\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1(x_{m-1},x_m)} - \frac{\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}h(x^*_{m-1},x^*_m) }{\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1(x^*_{m-1},x^*_m)} = \frac{\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}h(x_{m-1},x_m) }{\uk{m, n - 1}^\theta\1(x_m)} - \frac{\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}h(x^*_{m-1},x^*_m) }{\uk{m, n - 1}^\theta\1(x^*_m)}\eqsp,
+\mathcal{L}^{*,\parvar,\parvec}_{m, n}h(x_{m-1},x_m) = \frac{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}h(x_{m-1},x_m) }{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1(x_{m-1},x_m)} - \frac{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}h(x^*_{m-1},x^*_m) }{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1(x^*_{m-1},x^*_m)} = \frac{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}h(x_{m-1},x_m) }{\uk{m, n - 1}{\parvec}\1(x_m)} - \frac{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}h(x^*_{m-1},x^*_m) }{\uk{m, n - 1}{\parvec}\1(x^*_m)}\eqsp,
 $$
-and define the normalized measure $\tilde\phi^\varphi_mh$ by $\postmod{m - 1} \uk{m-1,\theta}h/\postmod{m - 1} \uk{m-1,\theta}\1$, so that
+and define the normalized measure $\tilde\phi^\parvar_mh$ by $\postmod{m - 1} \uk{m-1,\parvec}h/\postmod{m - 1} \uk{m-1,\parvec}\1$, so that
 \begin{align*}
  \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} &- \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}  \\
-&= \frac{\postmod{m} Q_{\varphi,m-1} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \uk{m-1,\theta} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \\ 
-&=  \frac{\postmod{m} Q_{\varphi,m-1} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\tilde\phi^\varphi_m\left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1_{}} \\ \\
-&= \frac{\postmod{m} Q_{\varphi,m-1} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\} - \tilde\phi^\varphi_m \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1_{}} \\
-&\hspace{2.5cm}+  \frac{\postmod{m} Q_{\varphi,m-1}\left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}}\left(\frac{\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1-\postmod{m} \retrokmod_{m, n} \1_{}}{\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1_{}}\right)\eqsp.
+&= \frac{\postmod{m} Q_{\parvar,m-1} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \uk{m-1}{\parvec} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \\ 
+&=  \frac{\postmod{m} Q_{\parvar,m-1} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\tilde\phi^\parvar_m\left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1_{}} \\ \\
+&= \frac{\postmod{m} Q_{\parvar,m-1} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\} - \tilde\phi^\parvar_m \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1_{}} \\
+&\hspace{2.5cm}+  \frac{\postmod{m} Q_{\parvar,m-1}\left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}}\left(\frac{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1-\postmod{m} \retrokmod_{m, n} \1_{}}{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1_{}}\right)\eqsp.
 \end{align*}
 Then, using that
 $$
-\left|\frac{\postmod{m} Q_{\varphi,m-1} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}}\right|\leqslant \left\|\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\right\|_\infty\eqsp,
+\left|\frac{\postmod{m} Q_{\parvar,m-1} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}}\right|\leqslant \left\|\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\right\|_\infty\eqsp,
 $$
 and by H\ref{assum:bias:bound},
 \begin{align*}
-\left|\frac{\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}-\postmod{m} \retrokmod_{m, n} \1_{}}{\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}}\right|&\leqslant c_m(\theta,\varphi)\frac{\left\|\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\|_\infty}{\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1_{}}\eqsp,\\
-\left|\frac{\postmod{m} Q_{\varphi,m-1} \left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\} - \tilde\phi^\varphi_m\left\{\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\}}{\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}}\right| &\leqslant c_m(\theta,\varphi)\frac{\left\|\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\right\|_\infty\left\|\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\|_\infty}{\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1_{}}\eqsp,
+\left|\frac{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1_{}-\postmod{m} \retrokmod_{m, n} \1_{}}{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1_{}}\right|&\leqslant c_m(\parvec,\parvar)\frac{\left\|\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\|_\infty}{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1_{}}\eqsp,\\
+\left|\frac{\postmod{m} Q_{\parvar,m-1} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\} - \tilde\phi^\parvar_m\left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1_{}}\right| &\leqslant c_m(\parvec,\parvar)\frac{\left\|\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\right\|_\infty\left\|\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\|_\infty}{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1_{}}\eqsp,
 \end{align*}
 yields
 $$
-\left| \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \right|\leqslant 2c_m(\theta,\varphi)\frac{\left\|\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\right\|_\infty\left\|\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1\right\|_\infty}{\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1_{}}\eqsp.
+\left| \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \right|\leqslant 2c_m(\parvec,\parvar)\frac{\left\|\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\right\|_\infty\left\|\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\|_\infty}{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1_{}}\eqsp.
 $$
 Note also that by H\ref{assum:strong:mixing},
 $$
-\tilde\phi^\varphi_m\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n}\1_{} \geqslant \sigma_-^2 \mu  \uk{m+1, n-1}^\theta\1\eqsp,
+\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1_{} \geqslant \sigma_-^2 \mu  \uk{m+1, n-1}{\parvec}\1\eqsp,
 $$ 
 and for all $x,x'\in\mathbb{R}^d$,
 $$
-\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1(x,x')\leqslant  \sigma_+\mu  \uk{m+1, n-1}^\theta\1\eqsp.
+\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1(x,x')\leqslant  \sigma_+\mu  \uk{m+1, n-1}{\parvec}\1\eqsp.
 $$
 Therefore,
 
 $$
-\left| \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \right|\leqslant 2\frac{\sigma_+}{\sigma_-^2}c_m(\theta,\varphi) \left\|\mathcal{L}^{*,\varphi,\theta}_{m, n} \addf[n]{k}\right\|_\infty\eqsp.
+\left| \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \right|\leqslant 2\frac{\sigma_+}{\sigma_-^2}c_m(\parvec,\parvar) \left\|\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\right\|_\infty\eqsp.
 $$
 The proof is completed using Lemma~\ref{lem:geo:bound}.
 
@@ -627,7 +636,7 @@ The proof is completed using Lemma~\ref{lem:geo:bound}.
 %\end{equation}
 %We may express the quantity of interest as 
 %\begin{multline*}
-%\postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} = \frac{\postmod{0} \uk{0, n - 1}^\theta \addf[n]{k}}{\postmod{0} \uk{0, n - 1}^\theta \1_{\Xset^n}} - \frac{\chi \uk{0, n - 1}^\theta \addf[n]{k}}{\chi\uk{0, n - 1}^\theta \1_{\Xset^n}} + \sum_{m = 1}^k \left( \noshift_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} - \shiftbwd_{m, n}  \retrokmodnorm_{m, n} \addf[n]{k} \right) \\ 
+%\postmod{0:n} \addf[n]{k} - \post{0:n} \addf[n]{k} = \frac{\postmod{0} \uk{0, n - 1}{\parvec} \addf[n]{k}}{\postmod{0} \uk{0, n - 1}{\parvec} \1_{\Xset^n}} - \frac{\chi \uk{0, n - 1}{\parvec} \addf[n]{k}}{\chi\uk{0, n - 1}{\parvec} \1_{\Xset^n}} + \sum_{m = 1}^k \left( \noshift_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} - \shiftbwd_{m, n}  \retrokmodnorm_{m, n} \addf[n]{k} \right) \\ 
 %+ \frac{\postmod{k + 1} \retrokmod_{k + 1, n} \addf[n]{k}}{\postmod{k + 1} \retrokmod_{k + 1, n} \1_{\Xset^n}} - \frac{\postmod{k} \retrokmod_{k, n} \addf[n]{k}}{\postmod{k} \retrokmod_{k, n} \1_{\Xset^n}} + \sum_{m = k + 1}^{n - 1} \left( \shiftfwd_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} - \noshift_{m, n} \retrokmodnorm_{m, n} \addf[n]{k} \right),
 %\end{multline*}
 %where, for $h \in \bmf{\Xfd_m}$, 
@@ -638,7 +647,7 @@ The proof is completed using Lemma~\ref{lem:geo:bound}.
 %\end{align}
 %Now, applying Lemmas~\ref{lem:geo:bound} and \ref{lem:diff:bound} to the previous decomposition yields
 %$$
-%\left| \postmod{0:n} \addf[n]{k} - \post{0:n}^\theta \addf[n]{k} \right| \leq 2 c(\theta,\varphi) \frac{\udup }{\udlow^2} \sum_{k = 0}^{n - 1} \| \addf{k} \|_\infty \left( \sum_{m = 1}^{n - 1} \rho^{|k - m| - 1} + 1 \right),
+%\left| \postmod{0:n} \addf[n]{k} - \post{0:n}^\parvec \addf[n]{k} \right| \leq 2 c(\parvec,\parvar) \frac{\udup }{\udlow^2} \sum_{k = 0}^{n - 1} \| \addf{k} \|_\infty \left( \sum_{m = 1}^{n - 1} \rho^{|k - m| - 1} + 1 \right),
 %$$
 %which concludes the proof. 
 
@@ -709,49 +718,49 @@ The proof is completed using Lemma~\ref{lem:geo:bound}.
 \begin{lemma} \label{lem:geo:bound}
 Assume H\ref{assum:strong:mixing}. Then for all $n \in \nset$, $m \in \intvect{1}{n}$, $k \in \intvect{0}{n - 1}$, bounded and measurable function $\addf{k}$, and all probability measures $(\lambda, \lambda')$ on $(\mathbb{R}^d\times\mathbb{R}^d,\mathcal{B}(\mathbb{R}^d\times \mathbb{R}^d))$, 
 $$
-\left|\frac{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}} - \frac{\lambda' \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda'  \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1} \right| \leq \| \addf{k} \|_\infty \rho^{|k - m| - 1}. 
+\left|\frac{\lambda \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \addf[n]{k}}{\lambda \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1_{}} - \frac{\lambda' \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \addf[n]{k}}{\lambda'  \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1} \right| \leq \| \addf{k} \|_\infty \rho^{|k - m| - 1}. 
 $$
 \end{lemma}
 \begin{proof}
 The proof is adapted from  \cite[Lemma~D.3]{gloaguen2019pseudo} and given here for completeness. Assume first that $m>k$. Then,
 $$
-\frac{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}} = \frac{\lambda \prod_{\ell = k}^{m-2}Q_{\varphi,\ell}\addf{k}\uk{m, n-1}^\theta\1_{}}{\lambda(\1\otimes \uk{m, n-1}^\theta\1_{})} = \lambda_{m,n}Q_{\varphi,m-2}\ldots Q_{\varphi,k}\addf{k}\eqsp,
+\frac{\lambda \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \addf[n]{k}}{\lambda \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1_{}} = \frac{\lambda \prod_{\ell = k}^{m-2}Q_{\parvar,\ell}\addf{k}\uk{m, n-1}{\parvec}\1_{}}{\lambda(\1\otimes \uk{m, n-1}{\parvec}\1_{})} = \lambda_{m,n}Q_{\parvar,m-2}\ldots Q_{\parvar,k}\addf{k}\eqsp,
 $$
 where $f_1\otimes f_2: (x_{m-1},x_m) \mapsto f_1(x_{m-1})f(x_m)$ and for any probability meausre $\eta$, $\eta_{n,m}$ is defined, for all measurable function $f$ by
 $$
-\eta_{n,m}f = \frac{\eta (f\otimes \uk{m, n-1}^\theta\1_{})}{\eta (\1\otimes \uk{m, n-1}^\theta\1_{})}\eqsp.
+\eta_{n,m}f = \frac{\eta (f\otimes \uk{m, n-1}{\parvec}\1_{})}{\eta (\1\otimes \uk{m, n-1}{\parvec}\1_{})}\eqsp.
 $$
 Therefore,
 $$
-\frac{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}} - \frac{\lambda' \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda'  \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1}  = (\lambda_{m,n}-\lambda'_{m,n})Q_{\varphi,m-2} \ldots Q_{\varphi,k}\addf{k}\eqsp.
+\frac{\lambda \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \addf[n]{k}}{\lambda \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1_{}} - \frac{\lambda' \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \addf[n]{k}}{\lambda'  \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1}  = (\lambda_{m,n}-\lambda'_{m,n})Q_{\parvar,m-2} \ldots Q_{\parvar,k}\addf{k}\eqsp.
 $$
 By H\ref{assum:strong:mixing}, the variational backward kernel satisfies a Doeblin condition and 
 $$
-\left|\frac{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}} - \frac{\lambda' \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda'  \tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1} \right|\leqslant  \left(1-\frac{\sigma_-}{\sigma_+}\right)^{m-k-1}\left\|\addf{k}\right\|_\infty\eqsp.
+\left|\frac{\lambda \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \addf[n]{k}}{\lambda \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1_{}} - \frac{\lambda' \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \addf[n]{k}}{\lambda'  \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1} \right|\leqslant  \left(1-\frac{\sigma_-}{\sigma_+}\right)^{m-k-1}\left\|\addf{k}\right\|_\infty\eqsp.
 $$
 Assume now first that $m< k$. Note that 
 $$
-\frac{\lambda\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}}= \frac{\lambda(1\otimes F^\theta_{m|n}\ldots F^\theta_{k|n}\addf[n]{k}\cdot\uk{m, n-1}^\theta\1_{})}{\lambda (\1\otimes  \uk{m, n-1}^\theta\1_{})}\eqsp, 
+\frac{\lambda\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \addf[n]{k}}{\lambda\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1_{}}= \frac{\lambda(1\otimes F^\parvec_{m|n}\ldots F^\parvec_{k|n}\addf[n]{k}\cdot\uk{m, n-1}{\parvec}\1_{})}{\lambda (\1\otimes  \uk{m, n-1}{\parvec}\1_{})}\eqsp, 
 $$
-where the forward kernel $ \mathsf{F}^\theta_{\ell|n}$ is given by
+where the forward kernel $ \mathsf{F}^\parvec_{\ell|n}$ is given by
 $$
- \mathsf{F}^\theta_{\ell|n}h(x_\ell) = \frac{\uk{\ell}^\theta(h\uk{\ell+1, n-1}^\theta\1_{})(x_\ell)}{ \uk{\ell, n-1}^\theta\1_{}(x_\ell)}\eqsp.
+ \mathsf{F}^\parvec_{\ell|n}h(x_\ell) = \frac{\uk{\ell}{\parvec}(h\uk{\ell+1, n-1}{\parvec}\1_{})(x_\ell)}{ \uk{\ell, n-1}{\parvec}\1_{}(x_\ell)}\eqsp.
 $$
 By H\ref{assum:strong:mixing}, 
 $$
- \mathsf{F}^\theta_{\ell|n}h(x_\ell) \geqslant \frac{\sigma_-}{\sigma_+}\mu_{\ell|n}h\eqsp,
+ \mathsf{F}^\parvec_{\ell|n}h(x_\ell) \geqslant \frac{\sigma_-}{\sigma_+}\mu_{\ell|n}h\eqsp,
 $$
-with $\mu_{\ell|n}h = \mu(h\uk{\ell+1, n-1}^\theta\1_{})(x_\ell) / \mu\uk{\ell+1, n-1}^\theta\1_{}$. Therefore, the kernels $ F^\theta_{\ell|n}$ also satisfy a Doeblin condition. On the other hand,
+with $\mu_{\ell|n}h = \mu(h\uk{\ell+1, n-1}{\parvec}\1_{})(x_\ell) / \mu\uk{\ell+1, n-1}{\parvec}\1_{}$. Therefore, the kernels $ F^\parvec_{\ell|n}$ also satisfy a Doeblin condition. On the other hand,
 $$
-\frac{\lambda\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}} - \frac{\lambda'\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda'\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}} = (\lambda_{m|n} - \lambda'_{m|n})\mathsf{F}^\theta_{m|n}\ldots \mathsf{F}^\theta_{k|n}\addf[n]{k},
+\frac{\lambda\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \addf[n]{k}}{\lambda\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1_{}} - \frac{\lambda'\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \addf[n]{k}}{\lambda'\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1_{}} = (\lambda_{m|n} - \lambda'_{m|n})\mathsf{F}^\parvec_{m|n}\ldots \mathsf{F}^\parvec_{k|n}\addf[n]{k},
 $$
 where for any probability measure $\eta$,
 $$
-\eta_{m|n}h = \frac{\eta(1\otimes h\uk{m, n-1}^\theta\1_{})}{\eta(1\otimes \uk{m, n-1}^\theta\1_{})}\eqsp.
+\eta_{m|n}h = \frac{\eta(1\otimes h\uk{m, n-1}{\parvec}\1_{})}{\eta(1\otimes \uk{m, n-1}{\parvec}\1_{})}\eqsp.
 $$
 This yields
 $$
-\left|\frac{\lambda\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}} - \frac{\lambda'\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \addf[n]{k}}{\lambda'\tilde{\mathcal{L}}^{\varphi,\theta}_{m, n} \1_{}}\right|\leqslant  \left(1-\frac{\sigma_-}{\sigma_+}\right)^{k-m}\left\|\addf{k}\right\|_\infty\eqsp,
+\left|\frac{\lambda\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \addf[n]{k}}{\lambda\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1_{}} - \frac{\lambda'\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \addf[n]{k}}{\lambda'\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1_{}}\right|\leqslant  \left(1-\frac{\sigma_-}{\sigma_+}\right)^{k-m}\left\|\addf{k}\right\|_\infty\eqsp,
 $$
 which concludes the proof.
  
@@ -812,14 +821,14 @@ which concludes the proof.
 %\begin{itemize}
 %\item[(i)] For all $n \in \nset$, $m \in \intvect{0}{n}$, $\precpar \in \precparsp$, and $h \in \bmf{\Xfd^n}$,   
 %$$
-%\left| \noshift_{m, n} h - \shiftbwd_{m, n} h \right| \vee \left| \shiftfwd_{m, n} h - \noshift_{m, n} h \right| \leq 2 c(\theta,\varphi)  \frac{\udup}{\udlow^2} \| h \|_\infty.   
+%\left| \noshift_{m, n} h - \shiftbwd_{m, n} h \right| \vee \left| \shiftfwd_{m, n} h - \noshift_{m, n} h \right| \leq 2 c(\parvec,\parvar)  \frac{\udup}{\udlow^2} \| h \|_\infty.   
 %$$
 %\item[(ii)] For all $n \in \nset$, $m \in \intvect{0}{n - 1}$, and $\precpar \in \precparsp$,
 %$$
-%\left| \frac{\postmod{m + 1} \retrokmod_{m + 1, n} \addf[n]{m}}{\postmod{m + 1} \retrokmod_{m + 1, n} \1_{\Xset^n}} - \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{m}}{\postmod{m} \retrokmod_{m, n} \1_{\Xset^n}} \right| \leq 2 c(\theta,\varphi)  \frac{\udup}{\udlow^2} \| h_m \|_\infty. 
+%\left| \frac{\postmod{m + 1} \retrokmod_{m + 1, n} \addf[n]{m}}{\postmod{m + 1} \retrokmod_{m + 1, n} \1_{\Xset^n}} - \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{m}}{\postmod{m} \retrokmod_{m, n} \1_{\Xset^n}} \right| \leq 2 c(\parvec,\parvar)  \frac{\udup}{\udlow^2} \| h_m \|_\infty. 
 %$$
 %\end{itemize}
-%In both cases, $c(\theta,\varphi)$ is the constant in H
+%In both cases, $c(\parvec,\parvar)$ is the constant in H
 %\ref{assum:bias:bound}. 
 %\end{lemma}
 %
@@ -827,12 +836,12 @@ which concludes the proof.
 %See \cite{gloaguen2019pseudo}.
 %We start with (i). Combining the decomposition 
 %\begin{multline*}
-% \noshift_{m, n} h - \shiftbwd_{m, n} h = \varphi_{m, n}^\precpar h \left( \frac{\postmod{m - 1} \uk{m - 1} \retrokmod_{m, n} \1_{\Xset^n} - \postmod{m - 1} \ukmod{m - 1} \retrokmod_{m, n} \1_{\Xset^n}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{\Xset^n}} \right) \\
+% \noshift_{m, n} h - \shiftbwd_{m, n} h = \parvar_{m, n}^\precpar h \left( \frac{\postmod{m - 1} \uk{m - 1} \retrokmod_{m, n} \1_{\Xset^n} - \postmod{m - 1} \ukmod{m - 1} \retrokmod_{m, n} \1_{\Xset^n}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{\Xset^n}} \right) \\
 %+ \frac{\postmod{m - 1} \ukmod{m - 1}(h \times \retrokmod_{m, n} \1_{\Xset^n}) - \postmod{m - 1} \uk{m - 1}(h \times \retrokmod_{m, n} \1_{\Xset^n})}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{\Xset^n}} 
 %\end{multline*}
 %with H\ref{assum:bias:bound} provides the bound 
 %$$
-%\left| \noshift_{m, n} h - \shiftbwd_{m, n} h \right| \leq 2 c(\theta,\varphi) \frac{\| \retrokmod_{m, n} \1_{\Xset^n} \|_\infty  \| h \|_\infty}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{\Xset^n}}.
+%\left| \noshift_{m, n} h - \shiftbwd_{m, n} h \right| \leq 2 c(\parvec,\parvar) \frac{\| \retrokmod_{m, n} \1_{\Xset^n} \|_\infty  \| h \|_\infty}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{\Xset^n}}.
 %$$
 % Now, since for all $x_m \in \Xset_m$,  
 %\begin{equation*}
@@ -850,7 +859,7 @@ which concludes the proof.
 % \frac{\| \retrokmod_{m, n} \1_{\Xset^n} \|_\infty}{\postmod{m - 1} \uk{m - 1} \retrokmod_{m, n} \1_{\Xset^n}} \leq \frac{\udup}{\udlow^2}, 
 %\end{equation}
 %we may conclude that 
-%$| \noshift_{m, n} h - \shiftbwd_{m, n} h| \leq 2 c(\theta,\varphi) \udup \| h \|_\infty / \udlow^2
+%$| \noshift_{m, n} h - \shiftbwd_{m, n} h| \leq 2 c(\parvec,\parvar) \udup \| h \|_\infty / \udlow^2
 %$. 
 %Along similar lines, the second difference can be bounded by the same quantity by writing   
 %\begin{multline*}
@@ -913,17 +922,17 @@ which concludes the proof.
 %\end{equation}
 %with, by convention, $\tstat{0}^\parvec h_0 \equiv 0$. Here the backward kernel $\bkw{n}^\parvec$ depends on the marginal $\post{n}^\parvec$; thus, the recursion is driven by the marginal flow $(\post{n}^\parvec)_{n \in \nset}$, which may again be expressed recursively. However, as these marginals are, as already mentioned, generally intractable, exact computations need typically to be replaced by approximations. 
 %
-% For all $n\in\nset$, write $\post{0:n}^{\varphi}$ the joint smoothing distribution provided by the variational family. Then,
+% For all $n\in\nset$, write $\post{0:n}^{\parvar}$ the joint smoothing distribution provided by the variational family. Then,
 %$$
-%\post{0:n}^\parvec h - \post{0:n}^{\varphi} h= \post{n}^\parvec \tstat{n}^\parvec h - \post{0:n}^{\varphi} h =  \post{n}^\parvec \left\{\prod_{m = 0}^{n - 1} \bkw{m}^\parvec\right\} h - q_{\varphi,n}\left\{\prod_{k=0}^{n-1}q_{\varphi,k}\right\} h\eqsp.
+%\post{0:n}^\parvec h - \post{0:n}^{\parvar} h= \post{n}^\parvec \tstat{n}^\parvec h - \post{0:n}^{\parvar} h =  \post{n}^\parvec \left\{\prod_{m = 0}^{n - 1} \bkw{m}^\parvec\right\} h - q_{\parvar,n}\left\{\prod_{k=0}^{n-1}q_{\parvar,k}\right\} h\eqsp.
 %$$
 %Write 
 %$$
-%\postmod{0:n} h_n - \post{0:n}^{\varphi} h_n = \sum_{k = 0}^{n - 1} \left( \postmod{0:n} \addf[n]{k} - \post{0:n}^{\varphi} \addf[n]{k} \right), 
+%\postmod{0:n} h_n - \post{0:n}^{\parvar} h_n = \sum_{k = 0}^{n - 1} \left( \postmod{0:n} \addf[n]{k} - \post{0:n}^{\parvar} \addf[n]{k} \right), 
 %$$
 %where each term can be decomposed according to   
 %\begin{equation*}
-%\postmod{0:n} \addf[n]{k} - \post{0:n}^\varphi \addf[n]{k} = 
+%\postmod{0:n} \addf[n]{k} - \post{0:n}^\parvar \addf[n]{k} = 
 %\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} \right)  
 %\end{equation*}
 %
@@ -962,17 +971,17 @@ which concludes the proof.
 %\begin{equation} \label{eq:def:addf}
 %\addf[n]{k}: x_{0:n} \mapsto \addf{k}(x_k, x_{k + 1})  
 %\end{equation}
-%denote the extension of $\addf{k}$ to $\Xset^n$.  For all $n\in\nset$, write $\post{0:n}^{\varphi}$ the joint smoothing distribution provided by the variational family. Then,
+%denote the extension of $\addf{k}$ to $\Xset^n$.  For all $n\in\nset$, write $\post{0:n}^{\parvar}$ the joint smoothing distribution provided by the variational family. Then,
 %$$
-%\post{0:n}^\parvec h - \post{0:n}^{\varphi} h= \post{n}^\parvec \tstat{n}^\parvec h - \post{0:n}^{\varphi} h =  \post{n}^\parvec \left\{\prod_{m = 0}^{n - 1} \bkw{m}^\parvec\right\} h - q_{\varphi,n}\left\{\prod_{k=0}^{n-1}q_{\varphi,k}\right\} h\eqsp.
+%\post{0:n}^\parvec h - \post{0:n}^{\parvar} h= \post{n}^\parvec \tstat{n}^\parvec h - \post{0:n}^{\parvar} h =  \post{n}^\parvec \left\{\prod_{m = 0}^{n - 1} \bkw{m}^\parvec\right\} h - q_{\parvar,n}\left\{\prod_{k=0}^{n-1}q_{\parvar,k}\right\} h\eqsp.
 %$$
 %Write 
 %$$
-%\postmod{0:n} h_n - \post{0:n}^{\varphi} h_n = \sum_{k = 0}^{n - 1} \left( \postmod{0:n} \addf[n]{k} - \post{0:n}^{\varphi} \addf[n]{k} \right), 
+%\postmod{0:n} h_n - \post{0:n}^{\parvar} h_n = \sum_{k = 0}^{n - 1} \left( \postmod{0:n} \addf[n]{k} - \post{0:n}^{\parvar} \addf[n]{k} \right), 
 %$$
 %where each term can be decomposed according to   
 %\begin{equation*}
-%\postmod{0:n} \addf[n]{k} - \post{0:n}^\varphi \addf[n]{k} = 
+%\postmod{0:n} \addf[n]{k} - \post{0:n}^\parvar \addf[n]{k} = 
 %\sum_{m = 1}^n \left( \frac{\postmod{0:m} \uk{m, n - 1} \addf[n]{k}}{\postmod{0:m} \uk{m, n - 1} \1_{\Xset^n}} - \frac{\postmod{0:m - 1} \uk{m - 1, n - 1} \addf[n]{k}}{\postmod{0:m - 1} \uk{m - 1, n - 1} \1_{\Xset^n}} \right)  
 %\end{equation*}
 
@@ -985,230 +994,6 @@ which concludes the proof.
 
 
 
-
-
-
-
-
-
-
-
-
-
-%\documentclass{article}
-%
-%
-%\usepackage[utf8]{inputenc}
-%\usepackage[english]{babel}
-%\usepackage{authblk,url}
-%\usepackage{amssymb,amsmath,amsthm,twoopt,xargs,mathtools}
-%\usepackage{times,ifthen}
-%\usepackage{fancyhdr,xcolor}
-%
-%\title{}
-%\date{}
-%
-%%\author[$\wr$]{Mathis Chagneux}
-%\author[$\dag$]{XXX}
-%%\affil[$\wr$]{{\small LTCI, T\'el\'ecom Paris, Institut Polytechnique de Paris, Palaiseau.}}
-%%\affil[$\dag$]{{\small CMAP, \'Ecole Polytechnique, Institut Polytechnique de Paris, Palaiseau.}}
-%
-%\lhead{}
-%\rhead{}
-%
-%\DeclareUnicodeCharacter{2212}{-}
-%\usepackage{geometry}
-%\pagestyle{fancy}
-%
-%
-%
-%%\newcommand{\E}{\mathbb{E}}
-%\def\dimX{d}
-%\def\dimY{m}
-%%\def\Xset{\mathsf{X}}
-%\def\Xset{\mathbb{R}^d}
-%\def\Yset{\mathsf{Y}}
-%\newcommand{\mk}{\kernel{G}}
-%\newcommand{\hk}{\kernel{Q}}
-%\newcommand{\md}[1]{g_{#1}}
-%\newcommand{\SmoothFigSize}{0.27}
-%
-%\newcommand{\logllh}[1]{\ell_{#1}}
-%\newcommand{\llh}[1]{\mathsf{L}_{#1}}
-%\newcommand{\testf}{\mathsf{h}}
-%
-%\newcommandx\filtderiv[2][1=]{
-%\ifthenelse{\equal{#1}{}}
-%	{\eta_{#2}}
-%	{\eta_{#2}^\N}
-%}
-%\newcommand{\pred}[1]{\pi_{#1}}
-%\newcommand{\parvec}{\theta}
-%\newcommand{\parspace}{\Theta}
-%\newcommand{\tstatletter}{\kernel{T}}
-%\newcommand{\retrok}{\kernel{D}}
-%\newcommandx\tstat[2][1=]{
-%\ifthenelse{\equal{#1}{}}
-%	{\tstatletter_{#2}}
-%	{\tau_{#2}^{#1}}
-%}
-%\newcommandx\tstathat[2][1=]{
-%\ifthenelse{\equal{#1}{}}
-%	{\tstatletter_{#2}}
-%	{\widehat{\tau}_{#2}^{#1}}
-%}
-%\newcommand{\af}[1]{h_{#1}}
-%\newcommand{\deriv}{\nabla_{\parvec}}
-%
-%\newcommand{\kernel}[1]{\mathbf{#1}}
-%\newcommand{\bmf}[1]{\set{F}(#1)}
-%\newcommand{\set}[1]{\mathsf{#1}}
-%
-%\newcommandx{\bk}[2][1=]{
-%\ifthenelse{\equal{#1}{}}
-%{\overleftarrow{\kernel{Q}}_{#2}}
-%{\overleftarrow{\kernel{Q}}_{#2}^{#1}}
-%}
-%
-%\newcommandx{\bkhat}[2][1=]{
-%\ifthenelse{\equal{#1}{}}
-%{\widehat{\kernel{Q}}_{#2}}
-%{\widehat{\kernel{Q}}_{#2}^{#1}}
-%}
-%
-%\newcommand{\lk}{\kernel{L}}
-%\newcommand{\idop}{\operatorname{id}}
-%\newcommand{\hd}[1]{q_{#1}}
-%\newcommand{\hdhat}[1]{\widehat{q}_{#1}}
-%
-%
-%\newcommand{\addf}[1]{\termletter_{#1}}
-%\newcommand{\addfc}[1]{\underline{\termletter}_{#1}}
-%\newcommand{\adds}[1]{\af{#1}}
-%\newcommand{\term}[1]{\termletter_{#1}}
-%\newcommand{\termletter}{\tilde{h}}
-%\newcommand{\N}{N}
-%\newcommand{\partpred}[1]{\pi_{#1}^\N}
-%\newcommand{\tstattil}[2]{\tilde{\tau}_{#2}^{#1}}
-%\newcommandx{\K}[1][1=]{
-%\ifthenelse{\equal{#1}{}}{{\kletter}}{{\widetilde{\N}^{#1}}}}
-%\newcommand{\hkup}{\bar{\varepsilon}}
-%\newcommand{\bi}[3]{J_{#1}^{(#2, #3)}}
-%\newcommand{\bihat}[3]{\widehat{J}_{#1}^{(#2, #3)}}
-%
-%\newcommand{\kletter}{\widetilde{\N}}
-%
-%\def\sigmaX{\mathcal{X}}
-%\def\sigmaY{\mathcal{Y}}
-%\def\1{\mathds{1}}
-%\def\pE{\mathbb{E}}
-%\def\pP{\mathbb{P}}
-%\def\plim{\overset{\pP}{\longrightarrow}}
-%\def\dlim{\Longrightarrow}
-%\def\gauss{\mathcal{N}}
-%
-%
-%\newcommand{\esssup}[2][]
-%{\ifthenelse{\equal{#1}{}}{\left\| #2 \right\|_\infty}{\left\| #2 \right\|^2_{\infty}}}
-%
-%
-%\newcommand{\swght}[2]{\ensuremath{\omega_{#1}^{#2}}}
-%
-%\newtheorem{assumptionA}{\textbf{A}\hspace{-3pt}}
-%\newcommand{\rset}{\ensuremath{\mathbb{R}}}
-%\newcommand{\iid}{i.i.d.}
-%
-%\newcommand{\smwght}[3]{\tilde{\omega}_{#1|#2}^{#3}}
-%\newcommand{\smwghtfunc}[2]{\tilde{\omega}_{#1|#2}}
-%
-%\newcommand{\smpart}[3]{\ensuremath{\tilde{\xi}_{#1|#2}^{#3}}}
-%\def\aux{{\scriptstyle{\mathrm{aux}}}}
-%\newcommand{\bdm}{\mathsf{TwoFilt}_{bdm}}
-%\newcommand{\fwt}{\mathsf{TwoFilt}_{fwt}}
-%
-%\newcommand{\kiss}[3][]
-%{\ifthenelse{\equal{#1}{}}{r_{#2|#3}}
-%{\ifthenelse{\equal{#1}{fully}}{r^{\star}_{#2|#3}}
-%{\ifthenelse{\equal{#1}{smooth}}{\tilde{r}_{#2|#3}}{\mathrm{erreur}}}}}
-%
-%\newcommand{\chunk}[4][]%
-%{\ifthenelse{\equal{#1}{}}{\ensuremath{{#2}_{#3:#4}}}{\ensuremath{#2^#1}_{#3:#4}}
-%}
-%
-%\newcommand{\kissforward}[3][]
-%{\ifthenelse{\equal{#1}{}}{p_{#2}}
-%{\ifthenelse{\equal{#1}{fully}}{p^{\star}_{#2}}
-%{\ifthenelse{\equal{#1}{smooth}}{\tilde{r}_{#2}}{\mathrm{erreur}}}}}
-%
-%\newcommand{\instrpostaux}[1]{\ensuremath{\upsilon_{#1}}}
-%\newcommandx\post[2][1=]{
-%\ifthenelse{\equal{#1}{}}
-%	{\phi_{#2}}
-%	{\phi_{#2}^\N}
-%}
-%
-%\newcommandx\posthat[2][1=]{
-%\ifthenelse{\equal{#1}{}}
-%	{\widehat{\phi}_{#2}}
-%	{\widehat{\phi}_{#2}^\N}
-%}
-%
-%\newcommand{\adjfunc}[4][]
-%{\ifthenelse{\equal{#1}{}}{\ifthenelse{\equal{#4}{}}{\vartheta_{#2|#3}}{\vartheta_{#2|#3}(#4)}}
-%{\ifthenelse{\equal{#1}{smooth}}{\ifthenelse{\equal{#4}{}}{\tilde{\vartheta}_{#2|#3}}{\tilde{\vartheta}_{#2|#3}(#4)}}
-%{\ifthenelse{\equal{#1}{fully}}{\ifthenelse{\equal{#4}{}}{\vartheta^\star_{#2|#3}}{\vartheta^\star_{#2|#3}(#4)}}{\mathrm{erreur}}}}}
-%
-%\newcommand{\XinitIS}[2][]
-%{\ifthenelse{\equal{#1}{}}{\ensuremath{\rho_{#2}}}{\ensuremath{\check{\rho}_{#2}}}}
-%\newcommand{\adjfuncforward}[1]{\vartheta_{#1}}
-%\newcommand{\rmd}{\ensuremath{\mathrm{d}}}
-%\newcommand{\eqdef}{\ensuremath{:=}}
-%\newcommand{\eqsp}{\;}
-%\newcommand{\ewght}[2]{\ensuremath{\omega_{#1}^{#2}}}
-%\newcommand{\ewghthat}[2]{\ensuremath{\widehat{\omega}_{#1}^{#2}}}
-%\newcommand{\epart}[2]{\ensuremath{\xi_{#1}^{#2}}}
-%\newcommand{\filt}[2][]%
-%{%
-%\ifthenelse{\equal{#1}{}}{\ensuremath{\phi_{#2}}}{\ensuremath{\phi_{#1,#2}}}%
-%}
-%\newcommand{\Xinit}{\ensuremath{\chi}}
-%\newcommand{\sumwght}[2][]{%
-%\ifthenelse{\equal{#1}{}}{\ensuremath{\Omega_{#2}}}{\ensuremath{\Omega_{#2}^{(#1)}}}}
-%\newcommand{\sumwghthat}[2][]{%
-%\ifthenelse{\equal{#1}{}}{\ensuremath{\widehat{\Omega}_{#2}}}{\ensuremath{\widehat{\Omega}_{#2}^{(#1)}}}}
-%
-%\newcounter{hypH}
-%\newenvironment{hypH}{\refstepcounter{hypH}\begin{itemize}
-%\item[{\bf H\arabic{hypH}}]}{\end{itemize}}
-%
-%\newcommand{\marginalset}{\mathsf{U}}
-%
-%\newcommand{\calF}[2]{\mathcal{F}_{#1}^{#2}}
-%\newcommand{\calG}[2]{\mathcal{G}_{#1}^{#2}}
-%\newcommand{\Uset}{\mathsf{U}}
-%\newcommand{\tcalF}[2]{\widetilde{\mathcal{F}}_{#1}^{#2}}
-%\newcommand{\tcalG}[2]{\widetilde{\mathcal{G}}_{#1}^{#2}}
-%
-%\newcommand{\kernelmarg}{\mathbf{R}}
-%
-%\newcommand{\pplim}{\overset{\pP}{ \underset{\N \to \infty}{\longrightarrow}}}
-%\newcommand{\ddlim}{\overset{\mathcal{D}}{ \underset{\N \to \infty}{\longrightarrow}}}
-%\newcommand{\aslim}{\overset{\pP\mathrm{-a.s.}}{ \underset{\N \to \infty}{\longrightarrow}}}
-%
-%\newcommand{\qg}[1]{\ell_{#1}}
-%\newcommand{\hatqg}[1]{\mathsf{\ell}_{#1}}
-%
-%\newcommand{\sfd}{\mathsf{d}}
-%\newcommand{\X}{\mathbf{X}}
-%\newcommand{\x}{\mathbf{x}}
-%\newcommand{\y}{\mathbf{y}}
-%\newcommand{\E}{\mathbf{E}}
-%\newcommand{\e}{\text{e}}
-%\newcommand{\W}{\mathbf{W}}
-%\newcommand{\Z}{\mathbf{Z}}
-%\newcommand{\frob}{:}
-%\newcommand{\rme}{\mathrm{e}}
-%\newcommand{\vois}{\mathcal{V}}
 %
 %\begin{document}
 %
@@ -1229,16 +1014,16 @@ which concludes the proof.
 %where $u_t:=u_t^{(i)}$ is a state of a first-order hidden Markov chain $(u_t^{(i)})_{t=1:T}$. Crucially, we assume that the independent components at each time-point are the first elements $y_{t,1}^{(i)}$ of $y_t^{(i)} = (y_{t,1}^{(i)}, \dots, y_{t,d}^{(i)})^T$, i.e. $s_t^{(i)} = y_{t,1}^{(i)}$. The rest of the elements in  $y_{t}^{(i)}$ are latent variables modelling hidden dynamics.
 %The great utility of using such a higher-dimensional latent variable is that this model allows us, for example, as a special case, to consider higher-order ARMA processes, thus modelling each $s_t^{(i)}$ as switching between ARMA processes of an order determined by the dimensionality of $y_t$. The generative model,  can be written as follows.
 %\begin{align}
-%    p_\theta(u_1^{(i)}) &= \prod_{k=1}^K (\pi_k^{(i)})^{\delta(u_1^{(i)} = k)} \\
-%    p_\theta(u_t^{(i)}\mid u_{t-1}^{(i)}) &= \prod_{k=1}^K\prod_{\ell=1}^K (A_{k\ell}^{(i)})^{ \delta(u_t^{(i)}=k)\delta(u_{t-1}^{(i)}=\ell)} \\
-%    p_\theta( y_1^{(i)}\mid u_1^{(i)}) &= \prod_{k=1}^K\mathcal{N}( y_1^{(i)} ; \bar{ b}_k^{(i)}, \bar{Q}_k^{-1^{(i)}})^{\delta(u_1^{(i)}=k)} \\
-%    p_\theta( y_t^{(i)}\mid  y_{t-1}^{(i)}, u_t^{(i)}) &= \prod_{k=1}^K \mathcal{N}( y_t^{(i)} ; B_k^{(i)}  y_{t-1}^{(i)} +  b_k^{(i)}, Q_k^{-1^{(i)}})^{\delta(u_t^{(i)}=k)} \\
-%    p_\theta( x_t\mid  s_t) &= \mathcal{N}( x_t ;  f_\theta(s_t),  R^{-1})
+%    p^\parvec(u_1^{(i)}) &= \prod_{k=1}^K (\pi_k^{(i)})^{\delta(u_1^{(i)} = k)} \\
+%    p^\parvec(u_t^{(i)}\mid u_{t-1}^{(i)}) &= \prod_{k=1}^K\prod_{\ell=1}^K (A_{k\ell}^{(i)})^{ \delta(u_t^{(i)}=k)\delta(u_{t-1}^{(i)}=\ell)} \\
+%    p^\parvec( y_1^{(i)}\mid u_1^{(i)}) &= \prod_{k=1}^K\mathcal{N}( y_1^{(i)} ; \bar{ b}_k^{(i)}, \bar{Q}_k^{-1^{(i)}})^{\delta(u_1^{(i)}=k)} \\
+%    p^\parvec( y_t^{(i)}\mid  y_{t-1}^{(i)}, u_t^{(i)}) &= \prod_{k=1}^K \mathcal{N}( y_t^{(i)} ; B_k^{(i)}  y_{t-1}^{(i)} +  b_k^{(i)}, Q_k^{-1^{(i)}})^{\delta(u_t^{(i)}=k)} \\
+%    p^\parvec( x_t\mid  s_t) &= \mathcal{N}( x_t ;  f^\parvec(s_t),  R^{-1})
 %\end{align}
-%where the superscript $(i)$ again denotes that each independent component $i \in \{1,\dots, N\}$ follows its own switching linear dynamical system. Also, each independent component is part of a higher dimensional latent component $ y_t^{(i)} = (s_t^{(i)}, y_{t, 2}^{(i)},\dots, y_{t, d}^{(i)})$. The mixing function $f_\theta$ and other variables are defined as in the main text. The complete loglikelihood is defined as:
+%where the superscript $(i)$ again denotes that each independent component $i \in \{1,\dots, N\}$ follows its own switching linear dynamical system. Also, each independent component is part of a higher dimensional latent component $ y_t^{(i)} = (s_t^{(i)}, y_{t, 2}^{(i)},\dots, y_{t, d}^{(i)})$. The mixing function $f^\parvec$ and other variables are defined as in the main text. The complete loglikelihood is defined as:
 %\begin{align}
-%	\log p_\theta( x_{1:T}^{(1:N)},  y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)}) &= \sum_{t=1}^T \log p_\theta( x_t \mid  s_t) + \sum_{i=1}^N\left(\log p_\theta(u_1^{(i)}) +\log p_\theta( y_1^{(i)} \mid u_1^{(i)}) \right. \nonumber \\
-%	&\left. \sum_{t=2}^T \log p_\theta(u_t^{(i)}\mid u_{t-1}^{(i)}) + \log p_\theta( y_t^{(i)} \mid  y_{t-1}^{(i)}, u_t^{(i)}) \right) \eqsp.
+%	\log p^\parvec( x_{1:T}^{(1:N)},  y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)}) &= \sum_{t=1}^T \log p^\parvec( x_t \mid  s_t) + \sum_{i=1}^N\left(\log p^\parvec(u_1^{(i)}) +\log p^\parvec( y_1^{(i)} \mid u_1^{(i)}) \right. \nonumber \\
+%	&\left. \sum_{t=2}^T \log p^\parvec(u_t^{(i)}\mid u_{t-1}^{(i)}) + \log p^\parvec( y_t^{(i)} \mid  y_{t-1}^{(i)}, u_t^{(i)}) \right) \eqsp.
 %\end{align}
 %In variational approaches, instead of trying to design Monte Carlo estimators of such expectations (or equivalently of the conditional distribution of the states given the observations), the conditional law of $(y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})$ given $x_{1:T}^{(1:N)}$ is approximated by choosing a candidate in a parametric family $\{q_\phi\}_{\phi \in \Phi}$, where $\Phi$ is a parameter set. Parameters are then estimated by maximizing the  evidence lower bound (ELBO) defined as:
 %$$
@@ -1258,8 +1043,8 @@ which concludes the proof.
 %Using \eqref{eq:backward:variational}, the ELBO is
 %\begin{align*}
 %\mathcal{L}(\parvec,\phi) &= \pE_{q_\phi}\left[\log \frac{p_\parvec(x_{1:T}^{(1:N)},  y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}{q_\phi(y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}\right]\\
-%&= \pE_{q_\phi}\bigg[\sum_{t=1}^T\log p_\theta( x_t\mid s_t^{(1:N)})\bigg]  + \pE_{q_\phi}\left[\log \frac{p_\parvec(y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}{q_\phi(y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}\right]\\
-%&= \pE_{q_\phi}\bigg[\sum_{t=1}^T\log p_\theta( x_t\mid s_t^{(1:N)})\bigg]  + \sum_{i=1}^n\left\{\pE_{q_\phi}\left[\log p_\parvec(y_{1}^{(i)}, u_{1}^{(i)})\right] + \sum_{t=1}^{T-1}\pE_{q_\phi}\left[\log p_\parvec(y_{t+1}^{(i)}, u_{t+1}^{(i)}|y_{t}^{(i)}, u_{t}^{(i)})\right]\right\}\\
+%&= \pE_{q_\phi}\bigg[\sum_{t=1}^T\log p^\parvec( x_t\mid s_t^{(1:N)})\bigg]  + \pE_{q_\phi}\left[\log \frac{p_\parvec(y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}{q_\phi(y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}\right]\\
+%&= \pE_{q_\phi}\bigg[\sum_{t=1}^T\log p^\parvec( x_t\mid s_t^{(1:N)})\bigg]  + \sum_{i=1}^n\left\{\pE_{q_\phi}\left[\log p_\parvec(y_{1}^{(i)}, u_{1}^{(i)})\right] + \sum_{t=1}^{T-1}\pE_{q_\phi}\left[\log p_\parvec(y_{t+1}^{(i)}, u_{t+1}^{(i)}|y_{t}^{(i)}, u_{t}^{(i)})\right]\right\}\\
 %& \hspace{2cm} -  \sum_{i=1}^n\left\{\pE_{q_\phi}\left[\log q_\phi(y_{T}^{(i)}, u_{T}^{(i)})\right] - \sum_{t=1}^{T-1}\pE_{q_\phi}\left[\log q_\phi(y_{t}^{(i)}, u_{t}^{(i)}|y_{t+1}^{(i)}, u_{t+1}^{(i)})\right]\right\}.
 %\end{align*}
 %Here we do not use the online computation of the expectations and we do not compare  directly both backward kernels. Depending on the design of $q_\phi$, it is still maybe possible to obtain a direct computation with a closed-form formula for the ELBO...
@@ -1268,23 +1053,20 @@ which concludes the proof.
 %The ELBO can thus be written as:
 %\begin{equation}
 %\label{eq:ELBO:decomposition}
-%\mathcal{L}(\parvec,\phi)  = \E_{q_\phi}\bigg[\log \frac{p_\theta( x_{1:T},  y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}{q_\phi( y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})} \bigg] = \E_{q_\phi}\left[V_T^{\theta,\phi}( u^{(1:N)}_T,y^{(1:N)}_T)\right]\nonumber
+%\mathcal{L}(\parvec,\phi)  = \E_{q_\phi}\bigg[\log \frac{p^\parvec( x_{1:T},  y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}{q_\phi( y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})} \bigg] = \E_{q_\phi}\left[V_T^{\parvec,\phi}( u^{(1:N)}_T,y^{(1:N)}_T)\right]\nonumber
 %\end{equation}
 %where
 %\begin{align}
-%V_T^{\theta,\phi}( u^{(1:N)}_T,y^{(1:N)}_T) &= \E_{q_\phi}\left[\log \frac{p_\theta( x_{1:T},  y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}{q_\phi( y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}\middle| u^{(1:N)}_T,y^{(1:N)}_T \right]\\
+%V_T^{\parvec,\phi}( u^{(1:N)}_T,y^{(1:N)}_T) &= \E_{q_\phi}\left[\log \frac{p^\parvec( x_{1:T},  y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}{q_\phi( y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}\middle| u^{(1:N)}_T,y^{(1:N)}_T \right]\\
 %&= \ldots
 %\end{align}
 %%\begin{align}
-%%\mathcal{L}(\parvec,\phi)  &= \E_{q_\phi}\bigg[\log \frac{p_\theta( x_{1:T},  y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}{q_\phi( y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})} \bigg] \nonumber\\
-%%    &= \E_{q_\phi}\bigg[\sum_{t=1}^T\log p( x_t\mid s_t^{(1)}, \ldots,  s_t^{(N)}) + \sum_{i=1}^N\log\frac{p_\theta( y_{1:T}^{(i)}\mid u_{1:T}^{(i)}) p_\theta(u_{1:T}^{(i)})}{q_\phi( y_{1:T}^{(i)},u_{1:T}^{(i)})} \bigg] \nonumber\\
-%%    &= \E_{q_\phi}\bigg[\sum_{t=1}^T\log p_\theta( x_t\mid s_t^{(1)}, \ldots,  s_t^{(N)})\bigg] + \sum_{i=1}^N\Bigg(-\mathrm{KL}\bigg[q(u_{1:T}^{(i)})\bigg| p(u_{1:T}^{(i)})\bigg] + \mathrm{H}\bigg[q( y_{1:T}^{(i)})\bigg] \nonumber\\    
+%%\mathcal{L}(\parvec,\phi)  &= \E_{q_\phi}\bigg[\log \frac{p^\parvec( x_{1:T},  y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}{q_\phi( y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})} \bigg] \nonumber\\
+%%    &= \E_{q_\phi}\bigg[\sum_{t=1}^T\log p( x_t\mid s_t^{(1)}, \ldots,  s_t^{(N)}) + \sum_{i=1}^N\log\frac{p^\parvec( y_{1:T}^{(i)}\mid u_{1:T}^{(i)}) p^\parvec(u_{1:T}^{(i)})}{q_\phi( y_{1:T}^{(i)},u_{1:T}^{(i)})} \bigg] \nonumber\\
+%%    &= \E_{q_\phi}\bigg[\sum_{t=1}^T\log p^\parvec( x_t\mid s_t^{(1)}, \ldots,  s_t^{(N)})\bigg] + \sum_{i=1}^N\Bigg(-\mathrm{KL}\bigg[q(u_{1:T}^{(i)})\bigg| p(u_{1:T}^{(i)})\bigg] + \mathrm{H}\bigg[q( y_{1:T}^{(i)})\bigg] \nonumber\\    
 %%    &\qquad+ \E_{q}\bigg[\log p( y_{1:T}^{(i)}\mid u_{1:T}^{(i)})\bigg]\Bigg) \nonumber\\
-%%    &= \E_{q_\phi}\bigg[\sum_{t=1}^T\log p_\theta( x_t\mid s_t^{(1)}, \ldots,  s_t^{(N)})\bigg] + \sum_{i=1}^N\Bigg(- \mathrm{KL}\bigg[q(u_{1:T}^{(i)})\bigg| p(u_{1:T}^{(i)})\bigg] + \mathrm{H}\bigg[q( s_{1:T}^{(i)})\bigg] \nonumber\\
+%%    &= \E_{q_\phi}\bigg[\sum_{t=1}^T\log p^\parvec( x_t\mid s_t^{(1)}, \ldots,  s_t^{(N)})\bigg] + \sum_{i=1}^N\Bigg(- \mathrm{KL}\bigg[q(u_{1:T}^{(i)})\bigg| p(u_{1:T}^{(i)})\bigg] + \mathrm{H}\bigg[q( s_{1:T}^{(i)})\bigg] \nonumber\\
 %%    &\qquad+ \E_{q}\bigg[\log p( s_1^{(i)}\mid u_1^{(i)}) \bigg] + \sum_{t=2}^T \E_{q}\bigg[\log p( s_t^{(i)}\mid s_{t-1}^{(i)}, u_t^{(i)}) \bigg]\Bigg) \label{eq:ELBO}
 %%\end{align}
 %
 %
-%
-%
-%\end{document}
