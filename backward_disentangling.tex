@@ -124,7 +124,7 @@ There exist functions $c_k$, $0\leqslant k \leqslant n$, such that for all $0\le
 %$$
 %The previous assumption should be replaced by
 $$
-\left|\post{k}^{\parvar}Q_{\parvar,k-1} h - \frac{\post{k-1}^{\parvar} \uk{k-1,\parvec}h}{\post{k-1}^{\parvar} \uk{k-1,\parvec}\1}\right| \leqslant c_k(\parvec,\parvar) \| h \|_\infty. 
+\left|\post{k}^{\parvar}Q_{k-1}^{\parvar} h - \frac{\post{k-1}^{\parvar} \uk{k-1}{\parvec}h}{\post{k-1}^{\parvar} \uk{k-1}{\parvec}\1}\right| \leqslant c_k(\parvec,\parvar) \| h \|_\infty. 
 $$ 
 and for all bounded measurable functions $h$ on $\mathbb{R}^d$,
 $$
@@ -584,7 +584,7 @@ Let $x_{m-1}^*$ and $x_m^*$ be arbitrary elements in $\mathbb{R}^d$ and define t
 $$
 \mathcal{L}^{*,\parvar,\parvec}_{m, n}h(x_{m-1},x_m) = \frac{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}h(x_{m-1},x_m) }{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1(x_{m-1},x_m)} - \frac{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}h(x^*_{m-1},x^*_m) }{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1(x^*_{m-1},x^*_m)} = \frac{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}h(x_{m-1},x_m) }{\uk{m, n}{\parvec}\1(x_m)} - \frac{\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}h(x^*_{m-1},x^*_m) }{\uk{m, n}{\parvec}\1(x^*_m)}\eqsp,
 $$
-and define the normalized measure $\tilde\phi^\parvar_mh$ by $\postmod{m - 1} \uk{m-1, n}{\parvec}h/\postmod{m - 1} \uk{m-1,n}{\parvec}\1$, so that
+and define the normalized measure $\tilde\phi^\parvar_mh$ by $\postmod{m - 1} \uk{m-1}{\parvec}h/\postmod{m - 1} \uk{m-1}{\parvec}\1$, so that
 \begin{align*}
  \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} &- \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}  \\
 &= \frac{\postmod{m} Q_{\parvar,m-1} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \uk{m-1}{\parvec} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \\ 
