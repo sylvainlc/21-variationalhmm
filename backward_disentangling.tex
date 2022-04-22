@@ -504,12 +504,12 @@ where $\postmod{0} = \postmod{0:0}$, and since $\chi^\parvec \md{0}{\parvec} \uk
 %%In the following, the notation $\parvec$ may be dropped when there is no confusion. 
 %Define similarly, 
 %$$
-%\bkw{m}^\parvar(x_{m + 1}, \rmd x_m) = q_{\parvar,m}(x_{m+1},x_m)\mu(\rmd x_m)
+%\bkw{m}^\parvar(x_{m + 1}, \rmd x_m) = Q_{m}^{\parvar}(x_{m+1},x_m)\mu(\rmd x_m)
 %$$
 %on $\mathbb{R}^d \times \mathcal{B}(\mathbb{R}^d)$. 
 In addition, define for each $n \in \nsetpos$, the Markov kernel  
 $$
-\tstat{n}^\parvar(x_n, \rmd x_{0:n - 1}) = \prod_{m = 0}^{n - 1} Q_{\parvar,m}(x_{m + 1}, \rmd x_m)
+\tstat{n}^\parvar(x_n, \rmd x_{0:n - 1}) = \prod_{m = 0}^{n - 1} Q_{m}^{\parvar}(x_{m + 1}, \rmd x_m)
 $$ 
 on $\mathbb{R}^d \times \mathcal{B}((\mathbb{R}^d)^n)$. % In the following, the notation $\parvec$ may be dropped when there is no confusion. 
 %\begin{itemize} 
@@ -577,7 +577,7 @@ on  $(\mathbb{R}^d)^2 \times \mathcal{B}((\mathbb{R}^d)^{n+1})$.
 Then, write
 $$
 \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}}
-- \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}  = \frac{\postmod{m} Q_{\parvar,m-1} \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}}
+- \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}  = \frac{\postmod{m} Q_{m-1}^{\parvar} \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}}
 - \frac{\postmod{m - 1} \uk{m-1}{\parvec} \tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \eqsp.
 $$
 Let $x_{m-1}^*$ and $x_m^*$ be arbitrary elements in $\mathbb{R}^d$ and define the kernel
@@ -587,19 +587,19 @@ $$
 and define the normalized measure $\tilde\phi^\parvar_mh$ by $\postmod{m - 1} \uk{m-1}{\parvec}h/\postmod{m - 1} \uk{m-1}{\parvec}\1$, so that
 \begin{align*}
  \frac{\postmod{m} \retrokmod_{m, n} \addf[n]{k}}{\postmod{m} \retrokmod_{m, n} \1_{}} &- \frac{\postmod{m - 1} \retrokmod_{m - 1, n} \addf[n]{k}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}}  \\
-&= \frac{\postmod{m} Q_{\parvar,m-1} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \uk{m-1}{\parvec} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \\ 
-&=  \frac{\postmod{m} Q_{\parvar,m-1} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\tilde\phi^\parvar_m\left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1_{}} \\ \\
-&= \frac{\postmod{m} Q_{\parvar,m-1} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\} - \tilde\phi^\parvar_m \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1_{}} \\
-&\hspace{2.5cm}+  \frac{\postmod{m} Q_{\parvar,m-1}\left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}}\left(\frac{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1-\postmod{m} \retrokmod_{m, n} \1_{}}{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1_{}}\right)\eqsp.
+&= \frac{\postmod{m} Q_{m-1}^{\parvar} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\postmod{m - 1} \uk{m-1}{\parvec} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\postmod{m - 1} \retrokmod_{m - 1, n} \1_{}} \\ 
+&=  \frac{\postmod{m} Q_{m-1}^{\parvar} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}} - \frac{\tilde\phi^\parvar_m\left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1_{}} \\ \\
+&= \frac{\postmod{m} Q_{m-1}^{\parvar} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\} - \tilde\phi^\parvar_m \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1_{}} \\
+&\hspace{2.5cm}+  \frac{\postmod{m} Q_{m-1}^{\parvar}\left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}}\left(\frac{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1-\postmod{m} \retrokmod_{m, n} \1_{}}{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1_{}}\right)\eqsp.
 \end{align*}
 Then, using that
 $$
-\left|\frac{\postmod{m} Q_{\parvar,m-1} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}}\right|\leqslant \left\|\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\right\|_\infty\eqsp,
+\left|\frac{\postmod{m} Q_{m-1}^{\parvar} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\postmod{m} \retrokmod_{m, n} \1_{}}\right|\leqslant \left\|\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\right\|_\infty\eqsp,
 $$
 and by H\ref{assum:bias:bound},
 \begin{align*}
 \left|\frac{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1_{}-\postmod{m} \retrokmod_{m, n} \1_{}}{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1_{}}\right|&\leqslant c_m(\parvec,\parvar)\frac{\left\|\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\|_\infty}{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1_{}}\eqsp,\\
-\left|\frac{\postmod{m} Q_{\parvar,m-1} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\} - \tilde\phi^\parvar_m\left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1_{}}\right| &\leqslant c_m(\parvec,\parvar)\frac{\left\|\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\right\|_\infty\left\|\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\|_\infty}{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1_{}}\eqsp,
+\left|\frac{\postmod{m} Q_{m-1}^{\parvar} \left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\} - \tilde\phi^\parvar_m\left\{\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\}}{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1_{}}\right| &\leqslant c_m(\parvec,\parvar)\frac{\left\|\mathcal{L}^{*,\parvar,\parvec}_{m, n} \addf[n]{k}\right\|_\infty\left\|\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n} \1\right\|_\infty}{\tilde\phi^\parvar_m\tilde{\mathcal{L}}^{\parvar,\parvec}_{m, n}\1_{}}\eqsp,
 \end{align*}
 yields
 $$
