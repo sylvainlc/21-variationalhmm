@@ -88,11 +88,11 @@ may be used as a surrogate for $\llh{n}(\parvec)$ in the maximization procedure,
 \textcolor{red}{Discuter ici les difficult\'es Monte Carlo en grande dimension en particulier num\'eriques : SMC/MCMC, Monte Carlo VAE...}
 In variational approaches, instead of trying to design Monte Carlo estimators of $\post{0:n}^{\parvec} h$ (or equivalently of the conditional distribution of the states given the observations), the conditional law of $X_{0:n}$ given $Y_{0:n}$ is approximated by choosing a candidate in a parametric family $\{ \post{0:n}^{\parvar}\}_{\parvar \in \Phi}$, where $\Phi$ is a parameter set. Parameters are then estimated by maximizing the ELBO defined as:
 $$
-\mathcal{L}(\parvec,\parvar) = \pE_{ \post{0:n}^{\parvar}}\left[\log \frac{p_\parvec(X_{0:n},Y_{0:n})}{ \post{0:n}^{\parvar}(X_{0:n})}\right] = \int \log \frac{p_\parvec(x_{0:n},Y_{0:n})}{ \post{0:n}^{\parvar}(x_{0:n})} \post{0:n}^{\parvar}(x_{0:n})\mu(\rmd x_{0:n})\eqsp.
+\mathcal{L}(\parvec,\parvar) = \pE_{ \post{0:n}^{\parvar}}\left[\log \frac{p^\parvec(X_{0:n},Y_{0:n})}{ \post{0:n}^{\parvar}(X_{0:n})}\right] = \int \log \frac{p^\parvec(x_{0:n},Y_{0:n})}{ \post{0:n}^{\parvar}(x_{0:n})} \post{0:n}^{\parvar}(x_{0:n})\mu(\rmd x_{0:n})\eqsp.
 $$
-Most works in the literature focus on mean field approximations which means that the family $\{ \post{0:n}^{\parvar}\}_{\parvar \in \Phi}$ can be written as a product of independent distributions \textcolor{red}{Discuter ce point : alternatives propos\'ees en pratique et r\'esultats obtenus en particulier pour les s\'eries temporelles/les mod\`eles \`a donn\'ees latentes}. However, such an assumption fails to hold in standard hidden Markov models which may lead to poor result in the approximation of the posterior distribution of some states given the observations. In this paper, we propose another solution to provide a decomposition of   $ \post{0:n}^{\parvar}$ which accounts for the hidden Markov structure of $p_\parvec$. Under the assumptions of this paper, conditionally on $\{Y_{0:n}\}$, the backward chain $(X_n,\ldots,X_0)$ is a Markov chain with inhomogeneous Markov transition kernels. This leads us to introduce a variational family where each $\post{0:n}^{\parvar}$ is of the form:
+Most works in the literature focus on mean field approximations which means that the family $\{ \post{0:n}^{\parvar}\}_{\parvar \in \Phi}$ can be written as a product of independent distributions \textcolor{red}{Discuter ce point : alternatives propos\'ees en pratique et r\'esultats obtenus en particulier pour les s\'eries temporelles/les mod\`eles \`a donn\'ees latentes}. However, such an assumption fails to hold in standard hidden Markov models which may lead to poor result in the approximation of the posterior distribution of some states given the observations. In this paper, we propose another solution to provide a decomposition of   $ \post{0:n}^{\parvar}$ which accounts for the hidden Markov structure of $p^{\parvec}$. Under the assumptions of this paper, conditionally on $\{Y_{0:n}\}$, the backward chain $(X_n,\ldots,X_0)$ is a Markov chain with inhomogeneous Markov transition kernels. This leads us to introduce a variational family where each $\post{0:n}^{\parvar}$ is of the form:
 $$
- \post{0:n}^{\parvar}(x_{0:n})=  \post{n}^{\parvar}(x_n)\prod_{k=0}^{n-1}q_{\parvar,k}(x_{k+1},x_k)\eqsp.
+ \post{0:n}^{\parvar}(x_{0:n})=  \post{n}^{\parvar}(x_n)\prod_{k=0}^{n-1}q_{k}^{\parvar}(x_{k+1},x_k)\eqsp.
 $$
 The variational family parameterizes the backward kernel which naturally appears in the decomposition of the law of $X_{0:n}$ given $Y_{0:n}$. In the following, we write $Q_{\parvar,k}(x_{k+1}, \rmd x_k) = q_{\parvar,k}(x_{k+1},x_k) \mu(\rmd x_k)$. Note that $ \post{n}^{\parvar}$ is the marginal distribution of $ \post{0:n}^{\parvar}$ at time $n$ which therefore targets the filtering distribution at time $n$, i.e. the distribution of $X_n$ given $Y_{0:n}$.
 \textcolor{red}{Discuter le papier de Doucet, le fait que c'est naturel pour les HMM et que \c ca permet l'estimation en ligne : mais que ce n'est pas gratuit. Et ajouter qu'aucun r\'esultat sur la qualit\'e de l'approximation dans l'espace latent n'a \'et\'e obtenu \`a ce jour.}
@@ -102,7 +102,7 @@ The variational family parameterizes the backward kernel which naturally appears
 \section{Control of the variational error for additive functionals}
 \textcolor{red}{Motiver les fonctionnelles additives et mentionner les r\'esultats connus en HMM.}
 \subsection{Control of the variational error}
-%In this section we propose an upper bound for the error $|\mathbb{E}_{q_\parvar}[\af{0:n}(X_{0:n})]-\mathbb{E}^\parvec[\af{0:n}(X_{0:n})|Y_{0:n}]|$  when $\af{0:n}$ is an additive functional of the hidden states as in \eqref{eq:additive:functional}. %Following \cite{gloaguen2019pseudo} this control can be obtained in a broader framework than the HMM setting. Let $(\Xset_n, \Xfd_n)_{n \in \nset}$ be a sequence of general state spaces and let, for all $n \in \nset$ and all $\parvec$, $\uk{n,\parvec}$ defined on  $\Xset_n \times \Xfd_{n + 1}$ be bounded kernels in the sense that $\sup_{x \in \Xset_n} \uk{n,\parvec}(x, \Xset_{n + 1}) < \infty$. We will assume a dominated model where each kernel $\uk{n,\parvec}$ has a kernel density $\ud{n,\parvec}$ with respect to some $\sigma$-finite reference measure $\mu_{n + 1}$ on $\Xfd_{n + 1}$. Finally, let $\chi$ be some bounded measure on $\Xfd_0$. In the following, we denote state-space product sets and $\sigma$-fields by $\Xset^n \eqdef \Xset_0 \times \cdots \times \Xset_n$ and $\Xfd^n \eqdef \Xfd_0 \tensprod \cdots \tensprod \Xfd_n$, respectively, and consider probability measures  
+%In this section we propose an upper bound for the error $|\mathbb{E}_{q^{\parvar}}[\af{0:n}(X_{0:n})]-\mathbb{E}^\parvec[\af{0:n}(X_{0:n})|Y_{0:n}]|$  when $\af{0:n}$ is an additive functional of the hidden states as in \eqref{eq:additive:functional}. %Following \cite{gloaguen2019pseudo} this control can be obtained in a broader framework than the HMM setting. Let $(\Xset_n, \Xfd_n)_{n \in \nset}$ be a sequence of general state spaces and let, for all $n \in \nset$ and all $\parvec$, $\uk{n,\parvec}$ defined on  $\Xset_n \times \Xfd_{n + 1}$ be bounded kernels in the sense that $\sup_{x \in \Xset_n} \uk{n,\parvec}(x, \Xset_{n + 1}) < \infty$. We will assume a dominated model where each kernel $\uk{n,\parvec}$ has a kernel density $\ud{n,\parvec}$ with respect to some $\sigma$-finite reference measure $\mu_{n + 1}$ on $\Xfd_{n + 1}$. Finally, let $\chi$ be some bounded measure on $\Xfd_0$. In the following, we denote state-space product sets and $\sigma$-fields by $\Xset^n \eqdef \Xset_0 \times \cdots \times \Xset_n$ and $\Xfd^n \eqdef \Xfd_0 \tensprod \cdots \tensprod \Xfd_n$, respectively, and consider probability measures  
 %\begin{equation} \label{eq:def:post}
 %\post{0:n}^\parvec(\rmd x_{0:n}) \propto \chi(\rmd x_0) \prod_{m = 0}^{n - 1} \uk{m,\parvec}(x_m, \rmd x_{m + 1}), \quad n \in \nset, 
 %\end{equation}
@@ -226,13 +226,13 @@ where $ \mathrm{Tr}$ is the Trace operator and $\propto$ means up to a multiplic
 \begin{figure}[h]
     \centering
     \includegraphics[width=10cm]{additive_smoothing_errors.png}
-    \caption{Computation of $\big| \postmod{0:n} h_{0:n} -  \post{0:n}^{\parvec} h_{0:n} \big|$ for growing values of $n$ when both $p^\parvec$ and $q_\parvar$ are linear gaussian HMMs}
+    \caption{Computation of $\big| \postmod{0:n} h_{0:n} -  \post{0:n}^{\parvec} h_{0:n} \big|$ for growing values of $n$ when both $p^\parvec$ and $q^{\parvar}$ are linear gaussian HMMs}
 \end{figure}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=10cm]{marginal_smoothing_errors.png}
-    \caption{Computation of $\big| \postmod{0:n} \tilde{h}_{k} -  \post{0:n}^{\parvec} \tilde{h}_{k} \big|$ for different $k$ when both $p^\parvec$ and $q_\parvar$ are linear gaussian HMMs}
+    \caption{Computation of $\big| \postmod{0:n} \tilde{h}_{k} -  \post{0:n}^{\parvec} \tilde{h}_{k} \big|$ for different $k$ when both $p^\parvec$ and $q^{\parvar}$ are linear gaussian HMMs}
 \end{figure}
 
 \subsection{Noisy linear ICA}
@@ -1027,13 +1027,13 @@ which concludes the proof.
 %\end{align}
 %In variational approaches, instead of trying to design Monte Carlo estimators of such expectations (or equivalently of the conditional distribution of the states given the observations), the conditional law of $(y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})$ given $x_{1:T}^{(1:N)}$ is approximated by choosing a candidate in a parametric family $\{q_\phi\}_{\phi \in \Phi}$, where $\Phi$ is a parameter set. Parameters are then estimated by maximizing the  evidence lower bound (ELBO) defined as:
 %$$
-%\mathcal{L}(\parvec,\phi) = \pE_{q_\phi}\left[\log \frac{p_\parvec(x_{1:T}^{(1:N)},  y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}{q_\phi(y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}\right]\eqsp.
+%\mathcal{L}(\parvec,\phi) = \pE_{q_\phi}\left[\log \frac{p^{\parvec}(x_{1:T}^{(1:N)},  y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}{q_\phi(y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}\right]\eqsp.
 %$$
 %In the original $\Delta$-SNICA approach, the marginal likelihood is intractable and hence we instead optimize the ELBO, under the assumption that the posterior factorizes as follows:
 %\begin{align}
 %q_\phi( y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)}) = \prod_{i=1}^N q_\phi( y_{1:T}^{(i)}) q_\phi(u_{1:T}^{(i)}). \label{eq:factorization}
 %\end{align}
-%Most works in the literature focus on such mean field approximations which means that the family $\{q_\phi\}_{\phi \in \Phi}$ can be written as a product of independent distributions. However, such an assumption fails to hold in standard hidden Markov models which may lead to poor result in the approximation of the posterior distribution of some states given the observations. In this paper, we propose another solution to provide a decomposition of   $q_\phi$ which accounts for the hidden Markov structure of $p_\parvec$.  This leads us to introduce a variational family where each $q_\phi$ is of the form,
+%Most works in the literature focus on such mean field approximations which means that the family $\{q_\phi\}_{\phi \in \Phi}$ can be written as a product of independent distributions. However, such an assumption fails to hold in standard hidden Markov models which may lead to poor result in the approximation of the posterior distribution of some states given the observations. In this paper, we propose another solution to provide a decomposition of   $q_\phi$ which accounts for the hidden Markov structure of $p^{\parvec}$.  This leads us to introduce a variational family where each $q_\phi$ is of the form,
 %\begin{equation}
 %\label{eq:backward:variational}
 %q_\phi( y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)}|x_{1:T}^{(1:N)}) =  \prod_{i=1}^N \left\{  q_\phi(y_T^i,u_T^i|x_{1:T}^{i})\prod_{t=0}^{T-1}q_\phi(y_t^i,u_t^i|y_{t+1}^i,u_{t+1}^i,x_{1:t}^{i})\right\}\eqsp.
@@ -1042,9 +1042,9 @@ which concludes the proof.
 %\subsection{Backward variational approximation}
 %Using \eqref{eq:backward:variational}, the ELBO is
 %\begin{align*}
-%\mathcal{L}(\parvec,\phi) &= \pE_{q_\phi}\left[\log \frac{p_\parvec(x_{1:T}^{(1:N)},  y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}{q_\phi(y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}\right]\\
-%&= \pE_{q_\phi}\bigg[\sum_{t=1}^T\log p^\parvec( x_t\mid s_t^{(1:N)})\bigg]  + \pE_{q_\phi}\left[\log \frac{p_\parvec(y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}{q_\phi(y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}\right]\\
-%&= \pE_{q_\phi}\bigg[\sum_{t=1}^T\log p^\parvec( x_t\mid s_t^{(1:N)})\bigg]  + \sum_{i=1}^n\left\{\pE_{q_\phi}\left[\log p_\parvec(y_{1}^{(i)}, u_{1}^{(i)})\right] + \sum_{t=1}^{T-1}\pE_{q_\phi}\left[\log p_\parvec(y_{t+1}^{(i)}, u_{t+1}^{(i)}|y_{t}^{(i)}, u_{t}^{(i)})\right]\right\}\\
+%\mathcal{L}(\parvec,\phi) &= \pE_{q_\phi}\left[\log \frac{p^{\parvec}(x_{1:T}^{(1:N)},  y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}{q_\phi(y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}\right]\\
+%&= \pE_{q_\phi}\bigg[\sum_{t=1}^T\log p^\parvec( x_t\mid s_t^{(1:N)})\bigg]  + \pE_{q_\phi}\left[\log \frac{p^{\parvec}(y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}{q_\phi(y_{1:T}^{(1:N)}, u_{1:T}^{(1:N)})}\right]\\
+%&= \pE_{q_\phi}\bigg[\sum_{t=1}^T\log p^\parvec( x_t\mid s_t^{(1:N)})\bigg]  + \sum_{i=1}^n\left\{\pE_{q_\phi}\left[\log p^{\parvec}(y_{1}^{(i)}, u_{1}^{(i)})\right] + \sum_{t=1}^{T-1}\pE_{q_\phi}\left[\log p^{\parvec}(y_{t+1}^{(i)}, u_{t+1}^{(i)}|y_{t}^{(i)}, u_{t}^{(i)})\right]\right\}\\
 %& \hspace{2cm} -  \sum_{i=1}^n\left\{\pE_{q_\phi}\left[\log q_\phi(y_{T}^{(i)}, u_{T}^{(i)})\right] - \sum_{t=1}^{T-1}\pE_{q_\phi}\left[\log q_\phi(y_{t}^{(i)}, u_{t}^{(i)}|y_{t+1}^{(i)}, u_{t+1}^{(i)})\right]\right\}.
 %\end{align*}
 %Here we do not use the online computation of the expectations and we do not compare  directly both backward kernels. Depending on the design of $q_\phi$, it is still maybe possible to obtain a direct computation with a closed-form formula for the ELBO...
