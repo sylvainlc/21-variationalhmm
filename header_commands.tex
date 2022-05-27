@@ -17,6 +17,8 @@
 \newcommand{\shiftfwd}{\vec{\shiftsymbol}^{\, \precpar}}
 \newcommand{\shiftsymbol}{\Phi}
 \newcommand{\parvar}{\lambda}
+\newcommand{\parvarspace}{\Lambda}
+
 \newcommand{\precpar}{\varphi}
 \newcommand{\intvect}[2]{\{ #1, #2 \}}
 \newcommandx\tstatmod[2][1=]{
@@ -44,7 +46,7 @@
 	{\phi_{#2}^\parvar}
 	{\phi_{#2}^\N}
 }
-\newcommand{\retrokmod}{\boldsymbol{\mathcal{L}}^{\precpar,\theta}}
+\newcommand{\retrokmod}{\boldsymbol{\mathcal{L}}^{\parvar,\theta}}
 \newcommand{\uk}[2]{\mathbf{L}_{#1}^{#2}}
 \newcommand{\tensprod}{\otimes}
 \def\dimX{d}
@@ -102,7 +104,7 @@
 
 \newcommand{\lk}{\kernel{L}}
 \newcommand{\idop}{\operatorname{id}}
-\newcommand{\hd}[2]{q_{#1}^{#2}}
+\newcommand{\hd}[2]{m_{#1}^{#2}}
 %\newcommand{\hdhat}[1]{\widehat{q}_{#1}}
 
 
@@ -254,8 +256,10 @@
 \newcommand{\stateprec}{\inv{Q^\theta}}
 \newcommand{\vstateprec}{\inv{Q^\parvar}}
 \newcommand{\quadform}[2]{#1^T #2 #1}
-
-
+\newcommand{\vd}[1]{q_{#1}^{\parvar}} % Density
+\newcommand{\kvd}[1]{q_{#1}^{\parvar}} % Kernel
+\newcommand{\ivd}[1]{\tilde{q}_{#1}^{\parvar}} % Kernel
+\newcommand{\jvd}{q} % Joint variational distribution
 \DeclareMathOperator*{\argmax}{arg\,max} 
 
 
@@ -273,3 +277,16 @@
 \newcounter{hypH}
 \newenvironment{hypH}{\refstepcounter{hypH}\begin{itemize}
 \item[{\bf H\arabic{hypH}}]}{\end{itemize}}
+
+\newtheorem{axiom}{Axiom}
+\newtheorem{remark}{Remark}
+\newtheorem{claim}[axiom]{Claim}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+%%%%%%
+%% Submission commands
+\newcommand{\PG}[1]{\textcolor{blue}{PG: #1}}
+\newcommand{\MC}[1]{\textcolor{green}{MC: #1}}
