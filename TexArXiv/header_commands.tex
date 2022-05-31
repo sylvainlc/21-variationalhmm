@@ -1,0 +1,292 @@
+\newcommand{\retrokmodnorm}{\bar{\boldsymbol{\mathcal{L}}}^{\precpar,\theta}}
+\newcommand{\xarb}{x^\ast}
+\newcommand{\precparsp}{\mathcal{E}}
+\newcommand{\fk}[2]{\mathbf{F}_{#1 | #2}}
+\newcommand{\probmeas}[1]{\mathsf{M}_1(#1)}
+\newcommand{\Xfd}{\mathcal{X}}
+\newcommand{\uksymbol}{\ell}
+\newcommandx{\bkmod}[2][1=]{ 
+\ifthenelse{\equal{#1}{}}
+{\kernel{B}_{#2}^\precpar}
+{\kernel{B}_{#2}^\precpar}
+}
+
+\newcommand{\cev}[1]{\reflectbox{\ensuremath{\vec{\reflectbox{\ensuremath{#1}}}}}}
+\newcommand{\ukmod}[1]{\mathbf{L}_{#1}^\precpar}
+\newcommand{\shiftbwd}{\cev{\shiftsymbol}^{\precpar}}
+\newcommand{\shiftfwd}{\vec{\shiftsymbol}^{\, \precpar}}
+\newcommand{\shiftsymbol}{\Phi}
+\newcommand{\parvar}{\lambda}
+\newcommand{\parvarspace}{\Lambda}
+
+\newcommand{\precpar}{\varphi}
+\newcommand{\intvect}[2]{\{ #1, #2 \}}
+\newcommandx\tstatmod[2][1=]{
+\ifthenelse{\equal{#1}{}}
+	{\tstatletter^{\precpar}_{#2}}
+	{\tau^{\precpar}_{#2}^{#1}}
+}
+\newcommand{\noshift}{\shiftsymbol^{\precpar}}
+\newcommand{\udlow}{\sigma_-}
+\newcommand{\udup}{\sigma_+}
+\newcommand{\retrok}{\boldsymbol{\mathcal{L}}}
+%\newcommand{\intvect}[2]{\llbracket #1, #2 \rrbracket}
+\newcommandx{\bkw}[2][1=]{ 
+\ifthenelse{\equal{#1}{}}
+{\kernel{B}_{#2}}
+{\kernel{B}_{#2}}
+}
+\newcommand{\retroknorm}{\bar{\boldsymbol{\mathcal{L}}}}
+\newcommand{\ud}[1]{\uksymbol_{#1}} 
+\newcommand{\nset}{\mathbb{N}}
+\newcommand{\nsetpos}{\mathbb{N}_{> 0}}
+\newcommand{\1}{\mathbbm{1}} 
+\newcommandx{\postmod}[2][1=]{
+\ifthenelse{\equal{#1}{}}
+	{\phi_{#2}^\parvar}
+	{\phi_{#2}^\N}
+}
+\newcommand{\retrokmod}{\boldsymbol{\mathcal{L}}^{\parvar,\theta}}
+\newcommand{\uk}[2]{\mathbf{L}_{#1}^{#2}}
+\newcommand{\tensprod}{\otimes}
+\def\dimX{d}
+\def\dimY{m}
+%\def\Xset{\mathsf{X}}
+\newcommand{\Xset}{\mathsf{X}}
+\def\Yset{\mathsf{Y}}
+\newcommand{\mk}{\kernel{G}}
+\newcommand{\hk}{\kernel{Q}}
+\newcommand{\md}[2]{g_{#1}^{#2}}
+\newcommand{\SmoothFigSize}{0.27}
+
+\newcommand{\logllh}[1]{\ell_{#1}}
+\newcommand{\llh}[2]{\mathsf{L}_{#1}^{#2}}
+\newcommand{\testf}{\mathsf{h}}
+
+\newcommandx\filtderiv[2][1=]{
+\ifthenelse{\equal{#1}{}}
+	{\eta_{#2}}
+	{\eta_{#2}^\N}
+}
+\newcommand{\pred}[1]{\pi_{#1}}
+\newcommand{\parvec}{\theta}
+\newcommand{\parspace}{\Theta}
+\newcommand{\tstatletter}{\kernel{T}}
+%\newcommand{\retrok}{\kernel{D}}
+\newcommandx\tstat[2][1=]{
+\ifthenelse{\equal{#1}{}}
+	{\tstatletter_{#2}}
+	{\tau_{#2}^{#1}}
+}
+\newcommandx\tstathat[2][1=]{
+\ifthenelse{\equal{#1}{}}
+	{\tstatletter_{#2}}
+	{\widehat{\tau}_{#2}^{#1}}
+}
+\newcommand{\af}[1]{h_{#1}}
+\newcommand{\deriv}{\nabla_{\parvec}}
+
+\newcommand{\kernel}[1]{\mathbf{#1}}
+\newcommand{\bmf}[1]{\set{F}(#1)}
+\newcommand{\set}[1]{\mathsf{#1}}
+
+\newcommandx{\bk}[2][1=]{
+\ifthenelse{\equal{#1}{}}
+{\overleftarrow{\kernel{Q}}_{#2}}
+{\overleftarrow{\kernel{Q}}_{#2}^{#1}}
+}
+
+\newcommandx{\bkhat}[2][1=]{
+\ifthenelse{\equal{#1}{}}
+{\widehat{\kernel{Q}}_{#2}}
+{\widehat{\kernel{Q}}_{#2}^{#1}}
+}
+
+\newcommand{\lk}{\kernel{L}}
+\newcommand{\idop}{\operatorname{id}}
+\newcommand{\hd}[2]{m_{#1}^{#2}}
+%\newcommand{\hdhat}[1]{\widehat{q}_{#1}}
+
+
+\newcommandx{\addf}[2][1=]{
+\ifthenelse{\equal{#1}{}}{\termletter_{#2}}{\bar{h}_{#2 | #1}}
+}
+\newcommand{\addfc}[1]{\underline{\termletter}_{#1}}
+\newcommand{\adds}[1]{\af{#1}}
+\newcommand{\term}[1]{\termletter_{#1}}
+\newcommand{\termletter}{\tilde{h}}
+\newcommand{\N}{N}
+\newcommand{\partpred}[1]{\pi_{#1}^\N}
+\newcommand{\tstattil}[2]{\tilde{\tau}_{#2}^{#1}}
+\newcommandx{\K}[1][1=]{
+\ifthenelse{\equal{#1}{}}{{\kletter}}{{\widetilde{\N}^{#1}}}}
+\newcommand{\hkup}{\bar{\varepsilon}}
+\newcommand{\bi}[3]{J_{#1}^{(#2, #3)}}
+\newcommand{\bihat}[3]{\widehat{J}_{#1}^{(#2, #3)}}
+
+\newcommand{\kletter}{\widetilde{\N}}
+
+\def\sigmaX{\mathcal{X}}
+\def\sigmaY{\mathcal{Y}}
+\def\1{\mathds{1}}
+\def\pE{\mathbb{E}}
+\def\pP{\mathbb{P}}
+\def\plim{\overset{\pP}{\longrightarrow}}
+\def\dlim{\Longrightarrow}
+\def\gauss{\mathcal{N}}
+
+
+\newcommand{\esssup}[2][]
+{\ifthenelse{\equal{#1}{}}{\left\| #2 \right\|_\infty}{\left\| #2 \right\|^2_{\infty}}}
+
+
+\newcommand{\swght}[2]{\ensuremath{\omega_{#1}^{#2}}}
+
+\newtheorem{assumptionA}{\textbf{A}\hspace{-3pt}}
+\newcommand{\rset}{\ensuremath{\mathbb{R}}}
+\newcommand{\iid}{i.i.d.}
+
+\newcommand{\smwght}[3]{\tilde{\omega}_{#1|#2}^{#3}}
+\newcommand{\smwghtfunc}[2]{\tilde{\omega}_{#1|#2}}
+
+\newcommand{\smpart}[3]{\ensuremath{\tilde{\xi}_{#1|#2}^{#3}}}
+\def\aux{{\scriptstyle{\mathrm{aux}}}}
+\newcommand{\bdm}{\mathsf{TwoFilt}_{bdm}}
+\newcommand{\fwt}{\mathsf{TwoFilt}_{fwt}}
+
+\newcommand{\kiss}[3][]
+{\ifthenelse{\equal{#1}{}}{r_{#2|#3}}
+{\ifthenelse{\equal{#1}{fully}}{r^{\star}_{#2|#3}}
+{\ifthenelse{\equal{#1}{smooth}}{\tilde{r}_{#2|#3}}{\mathrm{erreur}}}}}
+
+\newcommand{\chunk}[4][]%
+{\ifthenelse{\equal{#1}{}}{\ensuremath{{#2}_{#3:#4}}}{\ensuremath{#2^#1}_{#3:#4}}
+}
+
+\newcommand{\kissforward}[3][]
+{\ifthenelse{\equal{#1}{}}{p_{#2}}
+{\ifthenelse{\equal{#1}{fully}}{p^{\star}_{#2}}
+{\ifthenelse{\equal{#1}{smooth}}{\tilde{r}_{#2}}{\mathrm{erreur}}}}}
+
+\newcommand{\instrpostaux}[1]{\ensuremath{\upsilon_{#1}}}
+\newcommandx\post[2][1=]{
+\ifthenelse{\equal{#1}{}}
+	{\phi_{#2}}
+	{\phi_{#2}^\N}
+}
+
+\newcommandx\posthat[2][1=]{
+\ifthenelse{\equal{#1}{}}
+	{\widehat{\phi}_{#2}}
+	{\widehat{\phi}_{#2}^\N}
+}
+
+\newcommand{\adjfunc}[4][]
+{\ifthenelse{\equal{#1}{}}{\ifthenelse{\equal{#4}{}}{\vartheta_{#2|#3}}{\vartheta_{#2|#3}(#4)}}
+{\ifthenelse{\equal{#1}{smooth}}{\ifthenelse{\equal{#4}{}}{\tilde{\vartheta}_{#2|#3}}{\tilde{\vartheta}_{#2|#3}(#4)}}
+{\ifthenelse{\equal{#1}{fully}}{\ifthenelse{\equal{#4}{}}{\vartheta^\star_{#2|#3}}{\vartheta^\star_{#2|#3}(#4)}}{\mathrm{erreur}}}}}
+
+\newcommand{\XinitIS}[2][]
+{\ifthenelse{\equal{#1}{}}{\ensuremath{\rho_{#2}}}{\ensuremath{\check{\rho}_{#2}}}}
+\newcommand{\adjfuncforward}[1]{\vartheta_{#1}}
+\newcommand{\rmd}{\ensuremath{\mathrm{d}}}
+\newcommand{\eqdef}{\ensuremath{:=}}
+\newcommand{\eqsp}{\;}
+\newcommand{\ewght}[2]{\ensuremath{\omega_{#1}^{#2}}}
+\newcommand{\ewghthat}[2]{\ensuremath{\widehat{\omega}_{#1}^{#2}}}
+\newcommand{\epart}[2]{\ensuremath{\xi_{#1}^{#2}}}
+\newcommand{\filt}[2][]%
+{%
+\ifthenelse{\equal{#1}{}}{\ensuremath{\phi_{#2}}}{\ensuremath{\phi_{#1,#2}}}%
+}
+\newcommand{\Xinit}{\ensuremath{\chi}}
+
+\newcommand{\sumwght}[2][]{%
+\ifthenelse{\equal{#1}{}}{\ensuremath{\Omega_{#2}}}{\ensuremath{\Omega_{#2}^{(#1)}}}}
+
+\newcommand{\sumwghthat}[2][]{%
+\ifthenelse{\equal{#1}{}}{\ensuremath{\widehat{\Omega}_{#2}}}{\ensuremath{\widehat{\Omega}_{#2}^{(#1)}}}}
+
+
+
+\newcommand{\marginalset}{\mathsf{U}}
+
+\newcommand{\calF}[2]{\mathcal{F}_{#1}^{#2}}
+\newcommand{\calG}[2]{\mathcal{G}_{#1}^{#2}}
+\newcommand{\Uset}{\mathsf{U}}
+\newcommand{\tcalF}[2]{\widetilde{\mathcal{F}}_{#1}^{#2}}
+\newcommand{\tcalG}[2]{\widetilde{\mathcal{G}}_{#1}^{#2}}
+
+\newcommand{\kernelmarg}{\mathbf{R}}
+
+\newcommand{\pplim}{\overset{\pP}{ \underset{\N \to \infty}{\longrightarrow}}}
+\newcommand{\ddlim}{\overset{\mathcal{D}}{ \underset{\N \to \infty}{\longrightarrow}}}
+\newcommand{\aslim}{\overset{\pP\mathrm{-a.s.}}{ \underset{\N \to \infty}{\longrightarrow}}}
+
+%\newcommand{\qg}[1]{\ell_{#1}}
+\newcommand{\qg}[2]{\ell_{#1}^{#2}}
+\newcommand{\hatqg}[1]{\mathsf{\ell}_{#1}}
+
+\newcommand{\sfd}{\mathsf{d}}
+\newcommand{\X}{\mathbf{X}}
+\newcommand{\x}{\mathbf{x}}
+\newcommand{\y}{\mathbf{y}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\e}{\text{e}}
+\newcommand{\W}{\mathbf{W}}
+\newcommand{\Z}{\mathbf{Z}}
+\newcommand{\frob}{:}
+\newcommand{\rme}{\mathrm{e}}
+\newcommand{\vois}{\mathcal{V}}
+
+
+
+\newcommand{\expect}[2]{\mathbb{E}_{#1}\left[#2\right]}
+\newcommand{\gaussian}[2]{\mathcal{N}\left( #1, #2 \right)}
+\newcommand{\backward}[1]{\overleftarrow{#1}}
+\newcommand{\vbackward}[1]{q_{1:#1}(z_{#1}|z_{#1 + 1})}
+\newcommand{\vfilt}[1]{q_{1:#1}(z_{#1})}
+\newcommand{\vbackwardparam}[2]{\backward{#1}_{1:#2}^\parvar}
+\newcommand{\vbackwardmean}[1]{\vbackwardparam{\mu}{#1}}
+\newcommand{\vbackwardcov}[1]{\vbackwardparam{\Sigma}{#1}}
+\newcommand{\vfiltparam}[2]{#1_{1:#2}^\parvar}
+\newcommand{\vfiltmean}[1]{\vfiltparam{\mu}{#1}}
+\newcommand{\vfiltcov}[1]{\vfiltparam{\Sigma}{#1}}
+\newcommand{\inv}[1]{{#1}^{-1}}
+\newcommand{\stateprec}{\inv{Q^\theta}}
+\newcommand{\vstateprec}{\inv{Q^\parvar}}
+\newcommand{\quadform}[2]{#1^T #2 #1}
+\newcommand{\vd}[1]{q_{#1}^{\parvar}} % Density
+\newcommand{\kvd}[1]{q_{#1}^{\parvar}} % Kernel
+\newcommand{\ivd}[1]{\tilde{q}_{#1}^{\parvar}} % Kernel
+\newcommand{\jvd}{q} % Joint variational distribution
+\DeclareMathOperator*{\argmax}{arg\,max} 
+
+
+%%%%%%
+%% Counters
+
+% For examples
+
+\newcounter{example}[section]
+\newenvironment{example}[1][]{\refstepcounter{example}\par\medskip
+   \noindent \textbf{Example~\theexample:} \textit{#1} \text \rmfamily}{\medskip}
+   
+% For hypothesis
+
+\newcounter{hypH}
+\newenvironment{hypH}{\refstepcounter{hypH}\begin{itemize}
+\item[{\bf H\arabic{hypH}}]}{\end{itemize}}
+
+\newtheorem{axiom}{Axiom}
+\newtheorem{remark}{Remark}
+\newtheorem{claim}[axiom]{Claim}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+%%%%%%
+%% Submission commands
+\newcommand{\PG}[1]{\textcolor{blue}{PG: #1}}
+\newcommand{\MC}[1]{\textcolor{green}{MC: #1}}
