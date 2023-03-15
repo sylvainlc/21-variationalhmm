@@ -374,8 +374,43 @@ Understand the bias (that is: the maximizers of $M_{\infty}$) in interesting exa
 
 \subsubsection{HMM encoding/ Forward / Backward encoding}
 
-Look at Mathis computations. Understand what are the good ways to write encoding so that the $M$-estimation theory can be written down. In \cite{campbell2021online} forward encoding, also with $\varphi$'s varying with $t$ in the examples ....
-
+\begin{itemize}
+\item {\bf Parameterization as in Chagneux et al. } Assume that the variational family is parameterized by $\{\phi^T_{\varphi,t},q_{\varphi,t-1|t}\}_{0\leq t\leq T}$ where for all $0\leq t\leq T$, $\phi_{\varphi,t}$ is a probability density on $\rset^d$, and $q_{\varphi,t-1|t}$ a transition kernel on $\rset^d\times \rset^d$. Then, write
+$$
+q_{\varphi,0:T}(x_{0:T}) = \phi^T_{\varphi,T}(x_T)\prod_{t=1}^Tq_{\varphi,t-1|t}(x_t,x_{t-1})\,.
+$$
+In this decomposition, $q_{\varphi,t-1|t}$ aims at approximating the true backward kernel of the hidden chain. In this setting, we can write
+$$
+q_{\varphi,0:T}(x_{0:T}) = \frac{\phi^T_{\varphi,T}(x_T)}{\phi^{T-1}_{\varphi,T-1}(x_{T-1})}q_{\varphi,T-1|T}(x_T,x_{T-1})q_{\varphi,0:T-1}(x_{0:T-1})
+$$
+and the ELBO writes
+\begin{align*}
+\mathcal{L}_T(\theta,\varphi) &= \mathbb{E}_{q_{\varphi,0:T}}\left[F_{\theta,\varphi,T}(X_{0:T},Y_{0:T})\right] = \mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{p_{\theta,0:T}(X_{0:T},Y_{0:T})}{q_{\varphi,0:T}(X_{0:T})}\right]\\
+&= \mathbb{E}_{q_{\varphi,0:T}}\left[\log  \frac{p_{\theta,T}(X_{T-1},X_T)g_{\theta,T}(X_T)\phi^{T-1}_{\varphi,T-1}(X_{T-1})}{q_{\varphi,T-1|T}(X_T,X_{T-1})\phi^T_{\varphi,T}(X_T)}\right] + \mathbb{E}_{q_{\varphi,0:T}}\left[F_{\theta,\varphi,T-1}(X_{0:T-1},Y_{0:T-1})\right]\,.
+\end{align*}
+Let 
+$$
+\nu_{\varphi,T-1:T}(x_{T-1},x_T) = \phi^T_{\varphi,T}(x_T)q_{\varphi,T-1|T}(x_T,x_{T-1})$$ and 
+\begin{align*}
+\mu_{\theta,\varphi,T-1:T}(x_{T-1},x_T) &\propto p_{\theta,T}(X_{T-1},X_T)g_{\theta,T}(X_T)\phi^{T-1}_{\varphi,T-1}(X_{T-1}) \\
+&= c_{\theta,\varphi,T}p_{\theta,T}(X_{T-1},X_T)g_{\theta,T}(X_T)\phi^{T-1}_{\varphi,T-1}(X_{T-1})\,.
+\end{align*}
+Then,
+\begin{align*}
+\mathcal{L}_T(\theta,\varphi) &= - \log c_{\theta,\varphi,T}  + \mathbb{E}_{\nu_{\varphi,T-1:T}}\left[\log \frac{\mu_{\theta,\varphi,T-1:T}}{\nu_{\varphi,T-1:T}}\right]  + \mathbb{E}_{q_{\varphi,0:T}}\left[F_{\theta,\varphi,T-1}(X_{0:T-1},Y_{0:T-1})\right]\,,\\
+&= - \log c_{\theta,\varphi,T}  -\mathrm{KL}(\nu_{\varphi,T-1:T}\|\nu_{\varphi,T-1:T})  + \mathbb{E}_{q_{\varphi,0:T}}\left[F_{\theta,\varphi,T-1}(X_{0:T-1},Y_{0:T-1})\right]\,.
+\end{align*}
+\item {\bf Parameterization using forward kernels and filtering distributions. } Assume that the variational family is parameterized by $\{\phi_{\varphi,t},m_{\varphi,t|t-1}\}_{0\leq t\leq T}$ where for all $0\leq t\leq T$, $\phi_{\varphi,t}$ is a probability density on $\rset^d$, and $m_{\varphi,t|t-1}$ a transition kernel on $\rset^d\times \rset^d$. Then, write
+$$
+q_{\varphi,0:T}(x_{0:T}) = \phi_{\varphi,T}(x_T)\prod_{t=1}^Tq_{\varphi,t-1|t}(x_t,x_{t-1})\,,
+$$
+where $q_{\varphi,t-1|t}(x_t,x_{t-1}) \propto \phi_{\varphi,t-1}(x_{t-1})m_{\varphi,t|t-1}(x_{t-1},x_t) = c_{\varphi,t}(x_t)\phi_{\varphi,t-1}(x_{t-1})m_{\varphi,t|t-1}(x_{t-1},x_t)$. In this decomposition, $q_{\varphi,t-1|t}$ aims at approximating the true prior kernel of the hidden chain and $\phi_{\varphi,t}$ the true filtering distribution at time $t$. In this setting, the ELBO writes
+\begin{align*}
+\mathcal{L}(\theta,\varphi) &= \mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{p_{\theta,0:T}(X_{0:T},Y_{0:T})}{q_{\varphi,0:T}(X_{0:T})}\right]\\
+&= -\sum_{t=1}^T\mathbb{E}_{q_{\varphi,0:T}}\left[\log c_{\varphi,t}(x_t)\right] + \sum_{t=1}^T\mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{p_\theta(x_{t-1},x_t)g_\theta(y_t|x_t)}{ \phi_{\varphi,t-1}(X_{t-1})m_{\varphi,t|t-1}(X_{t-1},X_t) }\right]\,,
+\end{align*}
+with $p_\theta(x_{-1},x_0) = \nu_\theta(x_0)$.
+\end{itemize}
 
 \bibliographystyle{apalike}
 \bibliography{variationalhmm}
