@@ -412,6 +412,133 @@ where $q_{\varphi,t-1|t}(x_t,x_{t-1}) \propto \phi_{\varphi,t-1}(x_{t-1})m_{\var
 with $p_\theta(x_{-1},x_0) = \nu_\theta(x_0)$.
 \end{itemize}
 
+\subsection*{Limiting ELBO}
+\textcolor{red}{A modifier plus tard, on pourra avoir des bornes qui d\'ependent du temps et des $Y_t$. On v\'erifie d'abord que tout passe sous les hypoth\`eses fortes.}
+\begin{assumptionA}
+\label{assum:transition:hmm}
+$\mathrm{inf}_{\theta\in\Theta}\mathrm{inf}_{x,x'\in\Xset} m_\theta(x,x') = \sigma_->0$ and $\mathrm{sup}_{\theta\in\Theta}\mathrm{sup}_{x,x'\in\Xset} m_\theta(x,x') = \sigma_+<\infty$. 
+\end{assumptionA}
+\begin{assumptionA}
+\label{assum:transition:variational}
+For all $t\geq 1$, $y_{0:t-1}$, $\mathrm{inf}_{\phi\in\Phi}\mathrm{inf}_{x,x'\in\Xset} q^{y_{0:t-1}}_{\phi,t-1|t}(x,x') = \varpi_->0$ and $\mathrm{sup}_{\phi\in\Phi}\mathrm{sup}_{x,x'\in\Xset} q^{y_{0:t-1}}_{\phi,t-1|t}(x,x') = \varpi_+<\infty$. 
+\end{assumptionA}
+\textcolor{red}{On peut se passer de A3 a priori}
+\begin{assumptionA}
+\label{assum:bound:likelihood}
+For all $y$, $\mathrm{inf}_{\theta\in\Theta}\mathrm{inf}_{x\in\Xset} g_\theta^y(x) = c_-(y)>0$ and $\mathrm{sup}_{\theta\in\Theta}\mathrm{sup}_{x\in\Xset} g_\theta^y(x)  = c_+(y)<\infty$. 
+\end{assumptionA}
+For all $t\geq 1$, consider the joint variational distribution
+$$
+q^{y_{0:t}}_{\varphi,0:t}(x_{0:t}) = \phi^{y_{0:t}}_{\varphi,t}(x_t)\prod_{s=1}^tq^{y_{0:s-1}}_{\varphi,s-1|s}(x_s,x_{s-1})\,,
+$$
+and, using the backward decomposition of the joint smoothing distribution,
+$$
+\phi^{y_{0:t}}_{\theta,0:t}(x_{0:t}) = \phi^{y_{0:t}}_{\theta,t}(x_t)\prod_{s=1}^tb^{y_{0:s-1}}_{\theta,s-1|s}(x_s,x_{s-1})\,,
+$$
+where $\phi^{y_{0:t}}_{\theta,t}$ is the filtering distribution at time $t$, i.e. the distribution of $X_t$  conditionally to $Y_{0:t}$ evaluated at $y_{0:t}$ and $b^{y_{0:s-1}}_{\theta,s-1|s}$ is the backward kernel at time $s$:
+\begin{equation}
+\label{eq:backwardk}
+b^{y_{0:s-1}}_{\theta,s-1|s}(x_s,x_{s-1}) \propto \phi^{y_{0:s-1}}_{\theta,s-1}(x_{s-1})m_\theta(x_{s-1},x_s)\,.
+\end{equation}
+The ELBO writes
+$$
+\frac{1}{t}\mathcal{L}^{y_{0:t}}(\theta,\varphi)= \frac{1}{t}\mathbb{E}_{\phi^{y_{0:t}}_{\varphi,t}}\left[\log \frac{\phi^{y_{0:t}}_{\theta,t}(X_{t})}{q^{y_{0:t}}_{\varphi,t}(X_{t})}\right] + \frac{1}{t}\sum_{s=1}^t\mathbb{E}_{q^{y_{0:t}}_{\varphi,0:t}}\left[\log \frac{b^{y_{0:s-1}}_{\theta,s-1|s}(X_{s-1},X_s)}{q^{y_{0:s-1}}_{\varphi,s-1|s}(X_{s-1},X_s)}\right]\,.
+$$
+
+\begin{lemma}
+\label{lem:forgetting:elbo}
+Assume that A\ref{assum:transition:variational} holds. For all bounded measurable functions  $h$, all $\theta\in\Theta$, $\varphi\in\Phi$, all $0\leq s\leq t$, and all $1\leq u\leq s$,
+$$
+\left| \mathbb{E}_{q^{y_{0:t}}_{\varphi,0:t}}\left[h(X_{u-1},X_u)\right] - \mathbb{E}_{q^{y_{0:s}}_{\varphi,0:s}}\left[h(X_{u-1},X_u)\right]\right|\leq \left(1-\varpi_-/\varpi_+\right)^{s-u}\|h\|_\infty\,.
+$$
+\end{lemma}
+
+\begin{proof}
+Define the probability density function $q_{\varphi,s|t}$ by:
+$$
+q^{y_{0:t}}_{\varphi,s|t}: x_s \mapsto \int   \phi^{y_{0:t}}_{\varphi,t}(x_t)\prod_{r=s+1}^tq^{y_{0:r-1}}_{\varphi,r-1|r}(x_r,x_{r-1}) \rmd x_{s+1:t}\,,
+$$
+i.e. $q^{y_{0:t}}_{\varphi,s|t}$ is the marginal density of $X_s$ under $q^{y_{0:t}}_{\varphi,0:t}$. Then,
+$$
+\mathbb{E}_{q^{y_{0:t}}_{\varphi,0:t}}\left[h(X_{u-1},X_u)\right]  = \int q^{y_{0:t}}_{\varphi,s|t}(x_s)\prod_{r = u+1}^{s}q^{y_{0:r-1}}_{\varphi,r-1|r}(x_r,x_{r-1})  h(x_{u-1},x_u)\prod_{r = 1}^{u}q^{y_{0:r-1}}_{\varphi,r-1|r}(x_r,x_{r-1}) \rmd x_{0:s}\,.
+$$
+Therefore, under A\ref{assum:transition:variational},
+$$
+\left| \mathbb{E}_{q^{y_{0:t}}_{\varphi,0:t}}\left[h(X_{u-1},X_u)\right] - \mathbb{E}_{q^{y_{0:s}}_{\varphi,0:s}}\left[h(X_{u-1},X_u)\right]\right|\leq \left(1-\varpi_-/\varpi_+\right)^{s-u}\|\tilde h_{u}\|_\infty\,,
+$$
+where $\tilde h_{u}: x_{u}\mapsto \int  h(x_{u-1},x_u)\prod_{r = 1}^{u}q^{y_{0:r-1}}_{\varphi,r-1|r}(x_r,x_{r-1}) \rmd x_{0:u-1}$. The proof is completed by noting that
+$ \|\tilde h_{u}\|_\infty \leq \|h\|_\infty$.
+\end{proof}
+
+\begin{lemma}
+\label{lem:bound:filter}
+Assume that A\ref{assum:transition:hmm} and A\ref{assum:bound:likelihood} hold. For all $\theta\in\Theta$,  all $t\geq 0$, all $y_{0:t}$,
+$$
+\sigma_- c_-(y_t)/c_+(y_t)\leq \phi^{y_{0:t}}_{\theta,t}(x_{t})\leq \sigma_+ c_+(y_t)/c_-(y_t)\,.
+$$
+\end{lemma}
+\begin{proof}
+At time 0, we have $\phi^{y_{0}}_{\theta,0}(x_{0}) \propto \mu(x_0)g^{y_0}_\theta(x_0)$, so that $\sigma_- c_-(y_t)/c_+(y_t)\leq \phi^{y_{0}}_{\theta,0}(x_{0})\leq \sigma_+ c_+(y_t)/c_-(y_t)$. Similarly, 
+$$
+\phi^{y_{0:t}}_{\theta,t}(x_{t}) \propto g^{y_t}_\theta(x_t)\int \phi^{y_{0:t-1}}_{\theta,t-1}(x_{t-1})m_\theta(x_{t-1},x_t)\rmd x_{t-1}\,,
+$$
+so that $\sigma_- c_-(y_t)/c_+(y_t)\leq \phi^{y_{0:t}}_{\theta,t}(x_{t})\leq \sigma_+ c_+(y_t)/c_-(y_t)$.
+\end{proof}
+
+By Lemma~\ref{lem:forgetting:elbo} and Lemma~\ref{lem:bound:filter}, using that
+$$
+\left|\log \frac{b^{y_{0:s-1}}_{\theta,s-1|s}(x_{s-1},x_s)}{q^{y_{0:s-1}}_{\varphi,s-1|s}(x_{s-1},x_s)}\right|\leq \frac{\left|\log b^{y_{0:s-1}}_{\theta,s-1|s}(x_{s-1},x_s) - \log q^{y_{0:s-1}}_{\varphi,s-1|s}(x_{s-1},x_s)\right|}{b^{y_{0:s-1}}_{\theta,s-1|s}(x_{s-1},x_s)\wedge q^{y_{0:s-1}}_{\varphi,s-1|s}(x_{s-1},x_s)}\,,
+$$
+$\{\mathbb{E}_{q_{\varphi,0:t}}[\log b_{\theta,s-1|s}(X_{s-1},X_s)/q_{\varphi,s-1|s}(X_{s-1},X_s)]\}_{t\geq 1}$ is a uniform Cauchy sequence. Therefore, we can write
+$$
+\lim_{t\to\infty}\mathbb{E}_{q_{\varphi,0:t}}[\log b_{\theta,s-1|s}(X_{s-1},X_s)/q_{\varphi,s-1|s}(X_{s-1},X_s)] = \delta^{\theta,\varphi}_{\infty,s}(\mathsf{Y}_{0:\infty})\,,
+$$  uniformly almost surely.
+%$\{\mathbb{E}_{q_{\varphi,0:t}}[\log b_{\theta,s-1|s}(X_{s-1},X_s)/q_{\varphi,s-1|s}(X_{s-1},X_s})]\}$
+
+\begin{lemma}
+\label{lem:bound:limit}
+Assume that A\ref{assum:transition:variational} holds. For all all $\theta\in\Theta$, $\varphi\in\Phi$, all $s\geq 0$, and all $1\leq u\leq s$,
+$$
+\left| \delta^{\theta,\varphi}_{\infty,s}(\mathsf{Y}_{0:\infty}) - \mathbb{E}_{q_{\varphi,0:s}}\left[\log \frac{b_{\theta,u-1|u}(X_{u-1},X_u)}{q_{\varphi,u-1|u}(X_{u-1},X_u)}\right] \right|\leq \left(1-\varpi_-/\varpi_+\right)^{s-u}\|h\|_\infty\,.
+$$
+\end{lemma}
+\begin{proof}
+By Lemma~\ref{lem:forgetting:elbo},
+$$
+\left| \mathbb{E}_{q_{\varphi,0:t}}\left[\log \frac{b_{\theta,u-1|u}(X_{u-1},X_u)}{q_{\varphi,u-1|u}(X_{u-1},X_u)}\right] - \mathbb{E}_{q_{\varphi,0:s}}\left[\log \frac{b_{\theta,u-1|u}(X_{u-1},X_u)}{q_{\varphi,u-1|u}(X_{u-1},X_u)}\right]\right|\leq \left(1-\varpi_-/\varpi_+\right)^{s-u}\|h\|_\infty\,.
+$$
+Then, when $t$ grows to $\infty$, this yields
+$$
+\left| \delta^{\theta,\varphi}_{\infty,u}(\mathsf{Y}_{0:\infty}) - \mathbb{E}_{q_{\varphi,0:s}}\left[\log \frac{b_{\theta,u-1|u}(X_{u-1},X_u)}{q_{\varphi,u-1|u}(X_{u-1},X_u)}\right]\right|\leq \left(1-\varpi_-/\varpi_+\right)^{s-u}\|h\|_\infty\,.
+$$
+\end{proof}
+Then,
+$$
+\sum_{s=1}^t\mathrm{sup}_{\theta\in\Theta}\mathrm{sup}_{\phi\in\Phi}\left|\mathbb{E}_{q_{\varphi,0:t}}\left[\log \frac{b_{\theta,s-1|s}(X_{s-1},X_s)}{q_{\varphi,s-1|s}(X_{s-1},X_s)}\right]- \delta^{\theta,\varphi}_{\infty,s}(\mathsf{Y}_{0:\infty})\right| \leq \frac{\varpi_+}{\varpi_-}\,. 
+$$
+Since $\delta^{\theta,\varphi}_{\infty,s}(\mathsf{Y}_{0:\infty})$ is integrable, the ergodic theorem implies that $\pi$-almost surely and in $\mathrm{L}^1(\pi)$,
+$$
+\lim_{t\to \infty}\frac{1}{t}\mathcal{L}(\theta,\varphi) = \mathbb{E}\left[\delta^{\theta,\varphi}_{\infty,s}(\mathsf{Y}_{0:\infty})\right]
+$$
+%\begin{lemma}
+%\label{lem:bound:limit}
+%For all all $\theta\in\Theta$, $\varphi\in\Phi$, all $s\geq 0$, and all $1\leq u\leq s$,
+%$$
+%\left| \delta^{\theta,\varphi}_{\infty,s}(\mathsf{Y}_{0:\infty}) - - \mathbb{E}_{q_{\varphi,0:s}}\left[\log \frac{b_{\theta,u-1|u}(X_{u-1},X_u)}{q_{\varphi,u-1|u}(X_{u-1},X_u)}\right] \right|\leq \left(1-\varpi_-/\varpi_+\right)^{s-u}\|h\|_\infty\,.
+%$$
+%\end{lemma}
+%\begin{proof}
+%By Lemma~\ref{lem:forgetting:elbo},
+%$$
+%\left| \mathbb{E}_{q_{\varphi,0:t}}\left[\log \frac{b_{\theta,u-1|u}(X_{u-1},X_u)}{q_{\varphi,u-1|u}(X_{u-1},X_u)}\right] - \mathbb{E}_{q_{\varphi,0:s}}\left[\log \frac{b_{\theta,u-1|u}(X_{u-1},X_u)}{q_{\varphi,u-1|u}(X_{u-1},X_u)}\right]\right|\leq \left(1-\varpi_-/\varpi_+\right)^{s-u}\|h\|_\infty\,.
+%$$
+%Then, when $t$ grows to $\infty$, this yields
+%$$
+%\left| \delta^{\theta,\varphi}_{\infty,u}(\mathsf{Y}_{0:\infty}) - \mathbb{E}_{q_{\varphi,0:s}}\left[\log \frac{b_{\theta,u-1|u}(X_{u-1},X_u)}{q_{\varphi,u-1|u}(X_{u-1},X_u)}\right]\right|\leq \left(1-\varpi_-/\varpi_+\right)^{s-u}\|h\|_\infty\,.
+%$$
+%\end{proof}
+
+
 \bibliographystyle{apalike}
 \bibliography{variationalhmm}
  
