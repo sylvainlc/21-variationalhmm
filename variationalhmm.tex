@@ -294,6 +294,11 @@
 \newcommand{\quadform}[2]{#1^T #2 #1}
 
 
+
+\newcommand{\shift}{\vartheta}
+\newcommand{\bfy}{\mathbf{y}}
+\newcommand{\Zset}{\mathbb{Z}}
+
 \DeclareMathOperator*{\argmax}{arg\,max} 
 
 \begin{document}
@@ -413,45 +418,116 @@ with $p_\theta(x_{-1},x_0) = \nu_\theta(x_0)$.
 \end{itemize}
 
 \subsection*{Limiting ELBO}
-\textcolor{red}{A modifier plus tard, on pourra avoir des bornes qui d\'ependent du temps et des $Y_t$. On v\'erifie d'abord que tout passe sous les hypoth\`eses fortes.}
+
+For any probability density distribution $\chi$, $s>m$, $\bfy\in\Yset^{\Zset}$, $\theta$ write
+$$
+\phi^{\bfy_{0:s}}_{\theta,s|m,\chi}(x_{s}) \propto \int \chi(\rmd x_m)g_\theta^{\bfy_m}(x_m)\prod_{u=m+1}^s m_\theta(x_{u-1},x_u)g_\theta^{\bfy_u}(x_u)\rmd x_{m:s-1}
+$$
+the filtering distribution at time $s$ for the model started at time $m$ with distribution $\chi$. We use the convention $\phi^{\bfy_{0:s}}_{\theta,s} = \phi^{\bfy_{0:s}}_{\theta,s|0,\eta}$.
+For all $t\geq 1$, consider the joint variational distribution
+$$
+q^{\bfy}_{\varphi,0:t}(x_{0:t}) = \phi^{\bfy}_{\varphi,t}(x_t)\prod_{s=1}^tq^{\bfy}_{\varphi,s-1|s}(x_s,x_{s-1})\,,
+$$
+and, using the backward decomposition of the joint smoothing distribution,
+$$
+\phi^{\bfy_{0:t}}_{\theta,0:t}(x_{0:t}) = \phi^{\bfy_{0:t}}_{\theta,t}(x_t)\prod_{s=1}^tb^{\bfy_{0:s-1}}_{\theta,s-1|s}(x_s,x_{s-1})\,,
+$$
+where $b^{\bfy_{0:s-1}}_{\theta,s-1|s}$ is the backward kernel at time $s$:
+\begin{equation}
+\label{eq:backwardk}
+b^{\bfy_{0:s-1}}_{\theta,s-1|s}(x_s,x_{s-1}) \propto \phi^{\bfy_{0:s-1}}_{\theta,s-1}(x_{s-1})m_\theta(x_{s-1},x_s)\,.
+\end{equation}
+The ELBO writes, for all $\bfy\in\Yset^{\Zset}$, $\theta\in\Theta$, $\varphi\in\Phi$,
+$$
+\frac{1}{t}\mathcal{L}^{\bfy_{0:t}}(\theta,\varphi)= \frac{1}{t}\ell^{\bfy_{0:t}}(\theta) +  \frac{1}{t}\mathbb{E}_{\phi^{\bfy_{0:t}}_{\varphi,t}}\left[\log \frac{\phi^{\bfy_{0:t}}_{\theta,t}(X_{t})}{q^{\bfy}_{\varphi,t}(X_{t})}\right] + \frac{1}{t}\sum_{s=1}^t\mathbb{E}_{q^{\bfy}_{\varphi,0:t}}\left[\log \frac{b^{\bfy_{0:s-1}}_{\theta,s-1|s}(X_{s-1},X_s)}{q^{\bfy}_{\varphi,s-1|s}(X_{s-1},X_s)}\right]\,,
+$$
+where $\ell^{\bfy_{0:t}}(\theta)$ is the loglikelihood of the observations. Let $\shift: \Yset^\Zset\to \Yset^\Zset$ be the shift operator i.e., for all $\bfy\in\Yset^\Zset$ and all $s\in\Zset$, $\shift(\bfy)_s = \bfy_{s+1}$.
 \begin{assumptionA}
 \label{assum:transition:hmm}
 $\mathrm{inf}_{\theta\in\Theta}\mathrm{inf}_{x,x'\in\Xset} m_\theta(x,x') = \sigma_->0$ and $\mathrm{sup}_{\theta\in\Theta}\mathrm{sup}_{x,x'\in\Xset} m_\theta(x,x') = \sigma_+<\infty$. 
 \end{assumptionA}
-\begin{assumptionA}
-\label{assum:transition:variational}
-For all $t\geq 1$, $y_{0:t-1}$, $\mathrm{inf}_{\phi\in\Phi}\mathrm{inf}_{x,x'\in\Xset} q^{y_{0:t-1}}_{\phi,t-1|t}(x,x') = \varpi_->0$ and $\mathrm{sup}_{\phi\in\Phi}\mathrm{sup}_{x,x'\in\Xset} q^{y_{0:t-1}}_{\phi,t-1|t}(x,x') = \varpi_+<\infty$. 
-\end{assumptionA}
-\textcolor{red}{On peut se passer de A3 a priori}
+
 \begin{assumptionA}
 \label{assum:bound:likelihood}
-For all $y$, $\mathrm{inf}_{\theta\in\Theta}\mathrm{inf}_{x\in\Xset} g_\theta^y(x) = c_-(y)>0$ and $\mathrm{sup}_{\theta\in\Theta}\mathrm{sup}_{x\in\Xset} g_\theta^y(x)  = c_+(y)<\infty$. 
+For all $y$, $\mathrm{inf}_{\theta\in\Theta}\int g_\theta^y(x)\mu(\rmd x) = c_-(y)>0$ and $\mathrm{sup}_{\theta\in\Theta}\int g_\theta^y(x) \mu(\rmd x) = c_+(y)<\infty$. 
+
+In addition, $\mathrm{sup}_{y\in\Yset} c_+(y)/c_-(y)<\infty$.
 \end{assumptionA}
-For all $t\geq 1$, consider the joint variational distribution
+
+%\begin{assumptionA}
+%\label{assum:bound:likelihood:bis}
+%For all $y$, $\mathrm{inf}_{\theta\in\Theta}\mathrm{inf}_{x\in\Xset} g_\theta^y(x) = c_-(y)>0$ and $\mathrm{sup}_{\theta\in\Theta}\mathrm{sup}_{x\in\Xset} g_\theta^y(x)  = c_+(y)<\infty$. 
+%
+%In addition, $\mathrm{sup}_{y\in\Yset} c_+(y)/c_-(y)<\infty$.
+%\end{assumptionA}
+
+%\begin{assumptionA}
+%\label{assum:transition:hmm:bis}
+%For all $\theta\in\Theta$, there exist a transition kernel $K_\theta: \Xset\to \Yset$ and nonnegative measurable functions $\zeta_{-,\theta}$ and $\zeta_{+,\theta}$ defined on $\Yset$ such that for all $x\in\Xset$, $y\in\Yset$, all measurable set $A$,
+%$$
+%\zeta_{-,\theta}(y)K(y,A)\leq \int m_\theta (x,\rmd x')g_\theta^y(x') \1_{A}(x')\leq \zeta_{+,\theta}(y)K(y,A)\eqsp.
+%$$
+%\end{assumptionA}
+
+\begin{assumptionA}
+\label{assum:transition:variational}
+For all $t\geq 1$, $\mathrm{inf}_{\bfy\in\Yset^{\Zset}}\mathrm{inf}_{\phi\in\Phi}\mathrm{inf}_{x,x'\in\Xset} q^{\bfy}_{\phi,t-1|t}(x,x') = \varpi_->0$ and $\mathrm{sup}_{\bfy\in\Yset^{\Zset}}\mathrm{sup}_{\phi\in\Phi}\mathrm{sup}_{x,x'\in\Xset} q^{\bfy}_{\phi,t-1|t}(x,x') = \varpi_+<\infty$. 
+\end{assumptionA}
+
+\begin{assumptionA}
+\label{assum:variational:shift}
+For all $s\in \mathbb{Z}$, $\bfy\in\Yset^{\Zset}$, 
 $$
-q^{y_{0:t}}_{\varphi,0:t}(x_{0:t}) = \phi^{y_{0:t}}_{\varphi,t}(x_t)\prod_{s=1}^tq^{y_{0:s-1}}_{\varphi,s-1|s}(x_s,x_{s-1})\,,
+q^{\bfy}_{\phi,s-1|s} = q^{\shift (\bfy)}_{\phi,s-2|s-1} \eqsp.
 $$
-and, using the backward decomposition of the joint smoothing distribution,
+\end{assumptionA}
+
+Note that under A\ref{assum:variational:shift}, the last term of the ELBO writes
 $$
-\phi^{y_{0:t}}_{\theta,0:t}(x_{0:t}) = \phi^{y_{0:t}}_{\theta,t}(x_t)\prod_{s=1}^tb^{y_{0:s-1}}_{\theta,s-1|s}(x_s,x_{s-1})\,,
-$$
-where $\phi^{y_{0:t}}_{\theta,t}$ is the filtering distribution at time $t$, i.e. the distribution of $X_t$  conditionally to $Y_{0:t}$ evaluated at $y_{0:t}$ and $b^{y_{0:s-1}}_{\theta,s-1|s}$ is the backward kernel at time $s$:
-\begin{equation}
-\label{eq:backwardk}
-b^{y_{0:s-1}}_{\theta,s-1|s}(x_s,x_{s-1}) \propto \phi^{y_{0:s-1}}_{\theta,s-1}(x_{s-1})m_\theta(x_{s-1},x_s)\,.
-\end{equation}
-The ELBO writes
-$$
-\frac{1}{t}\mathcal{L}^{y_{0:t}}(\theta,\varphi)= \frac{1}{t}\mathbb{E}_{\phi^{y_{0:t}}_{\varphi,t}}\left[\log \frac{\phi^{y_{0:t}}_{\theta,t}(X_{t})}{q^{y_{0:t}}_{\varphi,t}(X_{t})}\right] + \frac{1}{t}\sum_{s=1}^t\mathbb{E}_{q^{y_{0:t}}_{\varphi,0:t}}\left[\log \frac{b^{y_{0:s-1}}_{\theta,s-1|s}(X_{s-1},X_s)}{q^{y_{0:s-1}}_{\varphi,s-1|s}(X_{s-1},X_s)}\right]\,.
+\frac{1}{t}\sum_{s=1}^t\mathbb{E}_{q^{\bfy}_{\varphi,0:t}}\left[\log \frac{b^{\bfy_{0:s-1}}_{\theta,s-1|s}(X_{s-1},X_s)}{q^{\bfy}_{\varphi,s-1|s}(X_{s-1},X_s)}\right]=\frac{1}{t}\sum_{s=1}^t\mathbb{E}_{q^{\bfy}_{\varphi,0:t}}\left[\log \frac{b^{\bfy_{0:s-1}}_{\theta,s-1|s}(X_{s-1},X_s)}{q^{\shift^s(\bfy)}_{\varphi,-1|0}(X_{s-1},X_s)}\right]\,.
 $$
 
+\textcolor{red}{
+\begin{itemize}
+\item Hypotheses pour stationnariser les noyaux backwards: ok.
+\item Oubli du filtre sous A1, A2: ok.
+\item Stationnarisation des esperances sous $q_\varphi$ lorsque $t$ temps vers l'infini:  ok (cf lemmes plus bas).
+\item Stationnarisation des vrais noyaux backwards $b^{\bfy_{0:s-1}}_{\theta,s-1|s}$: probleme restant ici, on a l'oubli du filtre et un controle de l'erreur en TV qui se propage a la TV entre les noyaux backwards mais dans la ELBO on a le log !
+\end{itemize}}
+
+
+\subsubsection*{Uniform forgetting of the filtering distribution}
+
+\begin{lemma}
+\label{lem:forgetting:filter}
+Assume that A\ref{assum:transition:hmm} and A\ref{assum:bound:likelihood} hold. For all bounded measurable functions  $h$, all $\theta\in\Theta$, all $0\leq s\leq t$, and all $1\leq u\leq s$, $m'<m\leq 0$,
+$$
+\left| \phi^{y_{m':s}}_{\theta,s|m',\chi}h - \phi^{y_{m:s}}_{\theta,s|m,\chi}h\right|\leq \left(1-\sigma_-/\sigma_+\right)^{s-m}\|h\|_\infty\,.
+$$
+\end{lemma}
+\begin{proof}
+This is a classical result under the strong mixing assumption A\ref{assum:transition:hmm} and the likelihood assumption A\ref{assum:bound:likelihood}. Consider the distribution
+$$
+\tilde \chi (\rmd x_m) \propto  \int \chi(\rmd x_{m'})g_\theta^{y_{m'}}(x_{m'})\left\{\prod_{u=m'+1}^{m-1} m_\theta(x_{u-1},x_u)g_\theta^{y_u}(x_u)\right\}m_\theta(x_{m-1},x_m)\rmd x_{m'+1:m}\,,
+$$
+so that $\phi^{y_{m':s}}_{\theta,s|m',\chi} = \phi^{y_{m:s}}_{\theta,s|m,\tilde\chi}$.
+This is a direct consequence of \cite[Corollary 1]{douc2004asymptotic} which states, under A\ref{assum:transition:hmm} and A\ref{assum:bound:likelihood},  that 
+$$
+\left\|\phi^{y_{m:s}}_{\theta,s|m,\tilde\chi}-\phi^{y_{m:s}}_{\theta,s|m,\chi}\right\|_{\mathrm{tv}}\leq \left(1-\sigma_-/\sigma_+\right)^{s-m}\,.
+$$
+\end{proof}
+By Lemma~\ref{lem:forgetting:filter}, for all $0\leq s\leq t$, $(\phi^{Y_{m:s}}_{\theta,s|m,\chi}h)_{m\leq s}$ is a uniform Cauchy sequence with respect to $\theta$ and $(\phi^{Y_{m:s}}_{\theta,s|m,\chi}h)_{m\leq s}$ converges uniformly a.s. The limit of this sequence is denoted by $(\phi^{Y_{-\infty:s}}_{\theta,s,\infty}h)_{m\leq s}$ and does not depend on $\chi$.
+
+
+\subsubsection*{Uniform forgetting of the variational smoothing distribution}
 \begin{lemma}
 \label{lem:forgetting:elbo}
-Assume that A\ref{assum:transition:variational} holds. For all bounded measurable functions  $h$, all $\theta\in\Theta$, $\varphi\in\Phi$, all $0\leq s\leq t$, and all $1\leq u\leq s$,
+Assume that A\ref{assum:transition:variational} holds. For all bounded measurable functions  $h$, all $\theta\in\Theta$, $\varphi\in\Phi$, all $0\leq s\leq t$, and all $1\leq u\leq s$, 
 $$
 \left| \mathbb{E}_{q^{y_{0:t}}_{\varphi,0:t}}\left[h(X_{u-1},X_u)\right] - \mathbb{E}_{q^{y_{0:s}}_{\varphi,0:s}}\left[h(X_{u-1},X_u)\right]\right|\leq \left(1-\varpi_-/\varpi_+\right)^{s-u}\|h\|_\infty\,.
 $$
 \end{lemma}
+
 
 \begin{proof}
 Define the probability density function $q_{\varphi,s|t}$ by:
@@ -520,6 +596,10 @@ Since $\delta^{\theta,\varphi}_{\infty,s}(\mathsf{Y}_{0:\infty})$ is integrable,
 $$
 \lim_{t\to \infty}\frac{1}{t}\mathcal{L}(\theta,\varphi) = \mathbb{E}\left[\delta^{\theta,\varphi}_{\infty,s}(\mathsf{Y}_{0:\infty})\right]
 $$
+
+
+
+
 %\begin{lemma}
 %\label{lem:bound:limit}
 %For all all $\theta\in\Theta$, $\varphi\in\Phi$, all $s\geq 0$, and all $1\leq u\leq s$,
