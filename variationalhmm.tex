@@ -417,6 +417,68 @@ where $q_{\varphi,t-1|t}(x_t,x_{t-1}) \propto \phi_{\varphi,t-1}(x_{t-1})m_{\var
 with $p_\theta(x_{-1},x_0) = \nu_\theta(x_0)$.
 \end{itemize}
 
+\subsection*{Excess risk bound}
+In this setting, the ELBO writes
+\begin{align*}
+\mathcal{L}(\theta,\varphi) &= \mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{p_{\theta,0:T}(X_{0:T},Y_{0:T})}{q_{\varphi,0:T}(X_{0:T})}\right]\\
+&= \log \int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y_{0:T}|x_{0:T}) \rmd x_{0:T}-\mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})\int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y_{0:T}|x_{0:T})\rmd x_{0:T})}{p_{\theta,0:T}(X_{0:T},Y_{0:T})}\right]\,,\\
+&= \log \int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y_{0:T}|x_{0:T}) \rmd x_{0:T}- \mathrm{KL}\left(q_{\varphi,0:T}\middle\| \frac{p_{\theta,0:T}(\cdot)p_{\theta,0:T}(Y_{0:T}|\cdot)}{\int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y_{0:T}|x_{0:T})}\right)\,.
+\end{align*}
+Following \cite{}, we define the following loss function to be minimized
+$$
+\mathcal{L}(\theta,\varphi) = \frac{1}{n}\sum_{i=1}^nm(\theta,\varphi,Y^i_{0:T})\,,
+$$
+where
+$$
+m(\theta,\varphi,Y^i_{0:T}) = \log \frac{p_{\mathcal{D}}(Y^i_{0:T})}{\int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y^i_{0:T}|x_{0:T}) \rmd x_{0:T}} + \mathrm{KL}\left(q_{\varphi,0:T}\middle\| \frac{p_{\theta,0:T}(\cdot)p_{\theta,0:T}(Y^i_{0:T}|\cdot)}{\int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y^i_{0:T}|x_{0:T})}\right)\,.
+$$
+
+\subsection*{Assumption A}
+
+\subsection*{Condition A}
+In order to check Assumption A, we need to control for all $\theta$, $\theta'$, $\varphi$, $\varphi'$,
+$$
+\Delta(\theta, \theta', \varphi, \varphi', y_{0:T}) = \left|m(\theta,\varphi,y_{0:T})  - m(\theta',\varphi',y_{0:T}) \right|\,.
+$$
+Note that
+\begin{align*}
+\Delta(\theta, \theta', \varphi, \varphi', y_{0:T}) &= \left|m(\theta,\varphi,y_{0:T})  - m(\theta',\varphi',y_{0:T}) \right|\\
+&\leq \left|\ell_T^{y_{0:T}}(\theta) - \ell_T^{y_{0:T}}(\theta')\right| + \left|\mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi',0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta',0:T|T}(X_{0:T})}\right]\right|\,.
+\end{align*}
+Write
+\begin{multline*}
+\left|\mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi',0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta',0:T|T}(X_{0:T})}\right]\right| \leq \Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T}) + \Delta_2(\theta, \theta', \varphi, \varphi', y_{0:T})\,,
+\end{multline*}
+where
+\begin{align*}
+\Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T})  &= \left|\mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right]\right|\,,\\
+\Delta_2(\theta, \theta', \varphi, \varphi', y_{0:T})&= \left|\mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi',0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta',0:T|T}(X_{0:T})}\right]\right|
+\end{align*}
+Steps of the proof.
+\begin{itemize}
+\item The first term can be written
+$$
+\left|\ell_T^{y_{0:T}}(\theta) - \ell_T^{y_{0:T}}(\theta')\right| \leq \sum_{t=0}^T\left| \log p_{\theta}(y_{t}|y_{1:t-1})  - \log p_{\theta'}(y_{t}|y_{1:t-1})\right|\,,
+$$
+where by convention $p_{\theta}(y_{0}|y_{-1}) = p_{\theta}(y_{0})$ and $p_{\theta'}(y_{0}|y_{-1}) = p_{\theta'}(y_{0})$. This term can be upper bounded by $\|\theta-\theta'\|$ regularity assumptions on the HMMs.
+\item $\Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T})$ can be written
+$$
+\Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T}) =  \left|\mathbb{E}_{q_{\varphi,0:T}}\left[\sum_{t=0}^Th_{\theta,\varphi,t}(X_{t-1},X_t)\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[\sum_{t=0}^Th_{\theta,\varphi,t}(X_{t-1},X_t)\right]\right|\,,
+$$
+which can be controlled using the upper bound for smoothing expectations of additive functionals.
+\item Obtaining 
+$$
+\Delta_2(\theta, \theta', \varphi, \varphi', y_{0:T}) \leq c_2(y_{0:T}) \|(\theta,\varphi)-(\theta',\varphi')\|_2
+$$
+requires regularity assumptions on $\varphi\mapsto q_{\varphi,0:T}$ and $\theta\mapsto \phi^{y_{0:T}}_{\theta,0:T|T}$.
+\end{itemize}
+
+
+
+
+\clearpage
+\newpage
+
 \subsection*{Limiting ELBO}
 
 For any probability density distribution $\chi$, $s>m$, $\bfy\in\Yset^{\Zset}$, $\theta$ write
