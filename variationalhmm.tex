@@ -423,9 +423,9 @@ Results already derived in the literature. Checking "good" conditions since \cit
 \end{proof}
 
 \begin{proposition}
-Assume that H\ref{assum:strong:mixing} holds. Then,
+Assume that H\ref{assum:strong:mixing} and H\ref{assum:lip} hold. Then,
 $$
-\Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T}) \leq \frac{1}{2}\sum_{t=1}^T\sum_{s=t-1}^T \mathrm{sup}_{x_{s+1}} \|q_{\varphi',s|s+1}(x_{s+1},\cdot)-q_{\varphi,s|s+1}(x_{s+1},\cdot)\|_{\mathrm{tv}}\rho^{s-t}\mathrm{osc}\left(q_{\varphi',t-1|t}h_{t,\theta,\varphi}\right) \eqsp,
+\Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T}) \leq \frac{\|\varphi-\varphi'\|_2}{2}\sum_{t=1}^T\left(q_{\varphi,T}\prod_{s=t+1}^Tq_{\varphi,s-1|s}K_{s|s+1}\right)\sum_{s=t-1}^T \rho^{s-t}\mathrm{osc}\left(q_{\varphi',t-1|t}h_{t,\theta,\varphi}\right) \eqsp,
 $$
 where $\rho = 1-\udlow/\udup$ and $h_{t,\theta,\varphi}$ is defined in \eqref{eq:def:addfunc}.
 \end{proposition}
@@ -461,10 +461,14 @@ and, using A\ref{assum:strong:mixing},
 $$
 \mathbb{E}_{\tilde q_{\varphi,\varphi',s|T}}\left[h_{t,\theta,\varphi}(X_{t-1},X_t)\right]  \leq \frac{1}{2}\|\mu_{\varphi,s}-\tilde\mu_{\varphi,\varphi',s}\|_{\mathrm{tv}}\rho^{s-t}\mathrm{osc}\left(q_{\varphi',t-1|t}h_{t,\theta,\varphi}\right)\eqsp.
 $$
-Noting that $\|\mu_{\varphi,s}-\tilde\mu_{\varphi,\varphi',s}\|_{\mathrm{tv}} \leq \sup_{x_{s+1}} \|q_{\varphi',s|s+1}(x_{s+1},\cdot)-q_{\varphi,s|s+1}(x_{s+1},\cdot)\|_{\mathrm{tv}}$.
+Noting that by H\ref{assum:lip},
+$$
+\|\mu_{\varphi,s}-\tilde\mu_{\varphi,\varphi',s}\|_{\mathrm{tv}} \leq q_{\varphi,T}\prod_{s=t+1}^Tq_{\varphi,s-1|s}K_{s|s+1}\|\varphi-\varphi'\|_2\eqsp,
+$$
+concludes the proof.
 \end{proof}
 \begin{proposition}
-Assume that H\ref{assum:strong:mixing} and H\ref{assum:bound:likelihood} hold. Then,
+Assume that H\ref{assum:strong:mixing}, H\ref{assum:bound:likelihood} and H\ref{assum:lip} hold. Then,
 $$
 \Delta_2(\theta, \theta', \varphi, \varphi', y_{0:T}) \leq  \eqsp,
 $$
