@@ -425,7 +425,7 @@ Results already derived in the literature. Checking "good" conditions since \cit
 \begin{proposition}
 Assume that H\ref{assum:strong:mixing} and H\ref{assum:lip} hold. Then,
 $$
-\Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T}) \leq \frac{\|\varphi-\varphi'\|_2}{2}\sum_{t=1}^T\left(q_{\varphi,T}\prod_{s=t+1}^Tq_{\varphi,s-1|s}K_{s|s+1}\right)\sum_{s=t-1}^T \rho^{s-t}\mathrm{osc}\left(q_{\varphi',t-1|t}h_{t,\theta,\varphi}\right) \eqsp,
+\Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T}) \leq \frac{\|\varphi-\varphi'\|_2}{2}\sum_{t=1}^T\sum_{s=t-1}^T \left(q_{\varphi,T}\prod_{u=s+1}^Tq_{\varphi,u-1|u}K_{s|s+1}\right) \rho^{s-t}\mathrm{osc}\left(q_{\varphi',t-1|t}h_{t,\theta,\varphi}\right) \eqsp,
 $$
 where $\rho = 1-\udlow/\udup$ and $h_{t,\theta,\varphi}$ is defined in \eqref{eq:def:addfunc}.
 \end{proposition}
@@ -467,12 +467,32 @@ $$
 $$
 concludes the proof.
 \end{proof}
+
+\begin{lemma}
+Assume that H\ref{assum:strong:mixing}, H\ref{assum:bound:likelihood} and H\ref{assum:lip} hold. Then, for all $\theta$, $\theta'$, $t\geq 0$
+$$
+\left|\phi_{\theta,t}^{y_{0:t}}(x_{t}) - \phi_{\theta',t}^{y_{0:t}}(x_{t})\right| \leq  L_t(x_t,y_{0:t})\|\theta-\theta'\|_2\eqsp,
+$$
+where
+$$
+L_t(x_t,y_{0:t}) = \eqsp.
+$$
+\end{lemma}
+\begin{proof}
+
+\end{proof}
+
 \begin{proposition}
 Assume that H\ref{assum:strong:mixing}, H\ref{assum:bound:likelihood} and H\ref{assum:lip} hold. Then,
-$$
-\Delta_2(\theta, \theta', \varphi, \varphi', y_{0:T}) \leq  \eqsp,
-$$
-where $\rho = 1-\udlow/\udup$ and $h_{t,\theta,\varphi}$ is defined in \eqref{eq:def:addfunc}.
+\begin{multline*}
+\Delta_2(\theta, \theta', \varphi, \varphi', y_{0:T}) \leq  \sigma_-\|\varphi-\varphi'\|_2\sum_{t=1}^Tq_{\varphi',0:T}K_{t-1|t}\\
++\|\theta-\theta'\|_2\sum_{t=1}^T\frac{\sigma_+c_+(y_t)}{\sigma^2_-c_-(y_t)}\left(R_{1,t|T,\varphi'}(y_{0:t-1})  + R_{2,t,\theta'}(y_{0:t-1}) \right)\eqsp,
+\end{multline*}
+where 
+\begin{align*}
+R_{1,t|T,\varphi'}(y_{0:t-1}) &= \int q_{\varphi',0:T}(\rmd x_{0:T})M(x_{t-1},x_t) + \frac{\sigma_+}{\sigma_-}q_{\varphi',0:T}L_{t-1}(\cdot,y_{0:t-1})\eqsp,\\
+R_{2,t,\theta'}(y_{0:t-1}) &= \int \phi_{\theta',t-1}^{y_{0:t-1}}(x_{t-1})M(x_{t-1},X_t)\mu(\rmd x_{t-1}) + \int L_{t-1}(x_{t-1},y_{0:t-1})m_{\theta'}(x_{t-1},X_t)\mu(\rmd x_{t-1})\eqsp.
+\end{align*}
 \end{proposition}
 \begin{proof}
 By definition, 
