@@ -16,6 +16,12 @@
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
 
+
+\newcommand{\parvar}{\varphi}
+\newcommand{\parvarspace}{\Phi}
+\newcommand{\vd}[1]{q_{\parvar,#1}} % Density
+
+
 \title{Backward variational inference for hidden Markov models}
 \date{}
 
@@ -309,6 +315,241 @@
 
 \end{abstract}
 
+
+
+\section{Excess risk bound - Theorem 3 of \cite{tang21a}}
+The joint smoothing distribution is given by
+$$
+\phi^{y_{0:T}}_{\theta,0:T|T}(x_{0:T}) \propto \chi(x_{0})g_\theta^{y_0}(x_0) \prod_{t=1}^Tm_\theta(x_{t-1},x_t)g_\theta^{y_t}(x_t)\,.
+$$
+It can also be written
+$$
+\phi^{y_{0:T}}_{\theta,0:T|T}(x_{0:T}) = \phi^{y_{0:T}}_{\theta,T}(x_{T}) \prod_{t=1}^Tb^{y_{0:t-1}}_{\theta,t-1|t}(x_t,x_{t-1})\,,
+$$
+where $\phi^{y_{0:T}}_{\theta,T}(x_{T})$ is the filtering distribution at time $T$ and for all $1\leq t \leq T$, $b^{y_{0:t-1}}_{\theta,t-1|t}(x_t,x_{t-1})$ is the backward kernel at time $t$: $b^{y_{0:t-1}}_{\theta,t-1|t}(x_t,x_{t-1})\propto \phi^{y_{0:t-1}}_{\theta,t-1}(x_{t-1})m_\theta(x_{t-1},x_t)$. The backward variational formulation is given by:
+$$
+q_{\varphi,0:T}^{y_{0:T}}(x_{0:T}) = q_{\varphi,T}(x_T)\prod_{t=1}^Tq_{\varphi,t-1|t}(x_t,x_{t-1})\,,
+$$
+so that the ELBO writes
+\begin{align*}
+\mathcal{L}(\theta,\varphi) &= \mathbb{E}_{q^{y_{0:T}}_{\varphi,0:T}}\left[\log \frac{p_{\theta,0:T}(X_{0:T},Y_{0:T})}{q_{\varphi,0:T}(X_{0:T})}\right]\\
+&= \log \int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y_{0:T}|x_{0:T}) \rmd x_{0:T}\\
+&\hspace{3cm}-\mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})\int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y_{0:T}|x_{0:T})\rmd x_{0:T})}{p_{\theta,0:T}(X_{0:T},Y_{0:T})}\right]\,,\\
+&= \log \int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y_{0:T}|x_{0:T}) \rmd x_{0:T}- \mathrm{KL}\left(q_{\varphi,0:T}\middle\| \frac{p_{\theta,0:T}(\cdot)p_{\theta,0:T}(Y_{0:T}|\cdot)}{\int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y_{0:T}|x_{0:T})}\right)\,.
+\end{align*}
+Following \cite{tang21a}, we define the following loss function to be minimized
+$$
+\mathcal{L}(\theta,\varphi) = \frac{1}{n}\sum_{i=1}^nm(\theta,\varphi,Y^i_{0:T})\,,
+$$
+where
+$$
+m(\theta,\varphi,Y^i_{0:T}) = \log \frac{p_{\mathcal{D}}(Y^i_{0:T})}{\int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y^i_{0:T}|x_{0:T}) \rmd x_{0:T}} + \mathrm{KL}\left(q_{\varphi,0:T}\middle\| \frac{p_{\theta,0:T}(\cdot)p_{\theta,0:T}(Y^i_{0:T}|\cdot)}{\int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y^i_{0:T}|x_{0:T})}\right)\,.
+$$
+
+\begin{hypH}
+\label{assum:strong:mixing}
+There exist constants $0 < \udlow < \udup < \infty$ such that for all $k \in \nset$, $\parvec\in\Theta$, $\parvar\in\parvarspace$ and $(x_k, x_{k + 1}) \in \mathbb{R}^d \times \mathbb{R}^d$, 
+$$
+    \udlow \leq m_{\parvec}(x_k, x_{k + 1}) \leq \udup
+$$ 
+and 
+$$
+    \udlow \leq  \vd{k\vert k+1}(x_{k+1}, x_{k}) \leq \udup. 
+$$ 
+\end{hypH}
+
+\begin{hypH}
+\label{assum:bound:likelihood}
+For all $y$, $\mathrm{inf}_{\theta\in\Theta}\int g_\theta^y(x)\mu(\rmd x) = c_-(y)>0$ and $\mathrm{sup}_{\theta\in\Theta}\int g_\theta^y(x) \mu(\rmd x) = c_+(y)<\infty$. 
+
+In addition, $\mathrm{sup}_{y\in\Yset} c_+(y)/c_-(y)<\infty$.
+\end{hypH}
+
+\begin{hypH}
+\label{assum:lip}
+There exists $M$ such that for all $\theta, \theta'$ and $x,x'$,
+$$
+\left| m_{\theta}(x,x') - m_{\theta'}(x,x')\right| \leq  M(x,x')\|\theta-\theta'\|_2\eqsp.
+$$
+For all $1\leq t \leq T$, there exists $K_{t-1|t}$ such that for all $\varphi, \varphi'$ and $x,x'$,
+$$
+\left| q_{\varphi,t-1|t}(x,x') - q_{\varphi',t-1|t}(x,x')\right| \leq  K_{t-1|t}(x',x)\|\varphi-\varphi'\|_2\eqsp.
+$$
+\end{hypH}
+
+
+\subsection*{Checking Condition A}
+In order to check Assumption A, we need to control for all $\theta$, $\theta'$, $\varphi$, $\varphi'$,
+$$
+\Delta(\theta, \theta', \varphi, \varphi', y_{0:T}) = \left|m(\theta,\varphi,y_{0:T})  - m(\theta',\varphi',y_{0:T}) \right|\,.
+$$
+Note that
+\begin{align*}
+\Delta(\theta, \theta', \varphi, \varphi', y_{0:T}) &= \left|m(\theta,\varphi,y_{0:T})  - m(\theta',\varphi',y_{0:T}) \right|\\
+&\leq \left|\ell_T^{y_{0:T}}(\theta) - \ell_T^{y_{0:T}}(\theta')\right| + \left|\mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi',0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta',0:T|T}(X_{0:T})}\right]\right|\,.
+\end{align*}
+Write
+\begin{multline*}
+\left|\mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi',0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta',0:T|T}(X_{0:T})}\right]\right| \leq \Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T}) + \Delta_2(\theta, \theta', \varphi, \varphi', y_{0:T})\,,
+\end{multline*}
+where
+\begin{align*}
+\Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T})  &= \left|\mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right]\right|\,,\\
+\Delta_2(\theta, \theta', \varphi, \varphi', y_{0:T})&= \left|\mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi',0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta',0:T|T}(X_{0:T})}\right]\right|
+\end{align*}
+Therefore, 
+$$
+\Delta(\theta, \theta', \varphi, \varphi', y_{0:T}) \leq \left|\ell_T^{y_{0:T}}(\theta) - \ell_T^{y_{0:T}}(\theta')\right| + \Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T}) + \Delta_2(\theta, \theta', \varphi, \varphi', y_{0:T}) \,.
+$$
+Note that
+$$
+\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})} = \sum_{t=1}^Th_{t,\theta,\varphi}(X_{t-1},X_t)\eqsp,
+$$
+where for $1\leq t \leq T-1$, 
+\begin{equation}
+\label{eq:def:addfunc}
+h_{t,\theta,\varphi}(X_{t-1},X_t) = \log q_{\varphi,t-1|t}(X_t,X_{t-1}) - \log b_{\theta,t-1|t}(X_t,X_{t-1})
+\end{equation} 
+and, by convention,  $h_{T,\theta,\varphi}(X_{T-1},X_T) = \log q_{\varphi,T}(x_T) - \log \phi_{\theta,T}(x_T)$. 
+\begin{proposition}
+\label{prop:loglikelihood:lipschitz}
+For all $\theta$, $\theta'$, and all $y_{0:T}$,
+$$
+\left|\ell_T^{y_{0:T}}(\theta) - \ell_T^{y_{0:T}}(\theta')\right| \leq c(y_{0:T})\|\theta-\theta'\|_2\eqsp.
+$$
+\end{proposition}
+\begin{proof}
+Results already derived in the literature. Checking "good" conditions since \cite{douc2001asymptotics}.
+\end{proof}
+
+\begin{proposition}
+Assume that H\ref{assum:strong:mixing} holds. Then,
+$$
+\Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T}) \leq \frac{1}{2}\sum_{t=1}^T\sum_{s=t-1}^T \mathrm{sup}_{x_{s+1}} \|q_{\varphi',s|s+1}(x_{s+1},\cdot)-q_{\varphi,s|s+1}(x_{s+1},\cdot)\|_{\mathrm{tv}}\rho^{s-t}\mathrm{osc}\left(q_{\varphi',t-1|t}h_{t,\theta,\varphi}\right) \eqsp,
+$$
+where $\rho = 1-\udlow/\udup$ and $h_{t,\theta,\varphi}$ is defined in \eqref{eq:def:addfunc}.
+\end{proposition}
+\begin{proof}
+For all $\varphi,\varphi'$, $0\leq s \leq T-1$, define
+\begin{multline*}
+\tilde q_{\varphi,\varphi',t|T}(x_{0:T}) = q_{\varphi,T}(x_T)\prod_{s=t+1}^Tq_{\varphi,s-1|s}(x_s,x_{s-1})\prod_{s=1}^tq_{\varphi',s-1|s}(x_s,x_{s-1}) \\
+- q_{\varphi,T}(x_T)\prod_{s=t+2}^Tq_{\varphi,s-1|s}(x_s,x_{s-1})\prod_{s=1}^{t+1}q_{\varphi',s-1|s}(x_s,x_{s-1})
+\end{multline*}
+and for $s=T$,
+$$
+\tilde q_{\varphi,\varphi',T|T}(x_{0:T}) = q_{\varphi,T}(x_T)\prod_{s=1}^Tq_{\varphi',s-1|s}(x_s,x_{s-1}) 
+- q_{\varphi',T}(x_T)\prod_{s=1}^Tq_{\varphi',s-1|s}(x_s,x_{s-1})\eqsp.
+$$
+Therefore,
+$$
+\mathbb{E}_{q_{\varphi,0:T}}\left[h_{t,\theta,\varphi}(X_{t-1},X_t)\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[h_{t,\theta,\varphi}(X_{t-1},X_t)\right] = \sum_{s=0}^T \mathbb{E}_{\tilde q_{\varphi,\varphi',s|T}}\left[h_{t,\theta,\varphi}(X_{t-1},X_t)\right] \eqsp.
+$$
+Note first that if $t> s+1$, then $\mathbb{E}_{\tilde q_{\varphi,\varphi',s|T}}\left[h_{t,\theta,\varphi}(X_{t-1},X_t)\right] = 0$ so that
+$$
+\mathbb{E}_{q_{\varphi,0:T}}\left[h_{t,\theta,\varphi}(X_{t-1},X_t)\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[h_{t,\theta,\varphi}(X_{t-1},X_t)\right] = \sum_{s=t-1}^T \mathbb{E}_{\tilde q_{\varphi,\varphi',s|T}}\left[h_{t,\theta,\varphi}(X_{t-1},X_t)\right] \eqsp.
+$$
+For all $t\leq s+1$, write for all measurable set $A$
+\begin{align*}
+\mu_{\varphi,s}(A) &= \int \mathds{1}_A(x_s) q_{\varphi,T}(\rmd x_T)\prod_{t=s+1}^Tq_{\varphi,t-1|t}(x_t,\rmd x_{t-1})\eqsp,\\
+\tilde\mu_{\varphi,\varphi',s}(A) &= \int \mathds{1}_A(x_s) q_{\varphi,T}(\rmd x_T)\prod_{t=s+2}^Tq_{\varphi,t-1|t}(x_t,\rmd x_{t-1})q_{\varphi',s|s+1}(x_{s+1},\rmd x_{s})\eqsp.
+\end{align*}
+Therefore,
+$$
+\mathbb{E}_{\tilde q_{\varphi,\varphi',s|T}}\left[h_{t,\theta,\varphi}(X_{t-1},X_t)\right] = \left(\mu_{\varphi,s} - \tilde\mu_{\varphi,\varphi',s}\right)\left\{\prod_{u=s}^{t+1}q_{\varphi',u-1|u}\right\}q_{\varphi',t-1|t}h_{t,\theta,\varphi}
+$$
+and, using A\ref{assum:strong:mixing},
+$$
+\mathbb{E}_{\tilde q_{\varphi,\varphi',s|T}}\left[h_{t,\theta,\varphi}(X_{t-1},X_t)\right]  \leq \frac{1}{2}\|\mu_{\varphi,s}-\tilde\mu_{\varphi,\varphi',s}\|_{\mathrm{tv}}\rho^{s-t}\mathrm{osc}\left(q_{\varphi',t-1|t}h_{t,\theta,\varphi}\right)\eqsp.
+$$
+Noting that $\|\mu_{\varphi,s}-\tilde\mu_{\varphi,\varphi',s}\|_{\mathrm{tv}} \leq \sup_{x_{s+1}} \|q_{\varphi',s|s+1}(x_{s+1},\cdot)-q_{\varphi,s|s+1}(x_{s+1},\cdot)\|_{\mathrm{tv}}$.
+\end{proof}
+\begin{proposition}
+Assume that H\ref{assum:strong:mixing} and H\ref{assum:bound:likelihood} hold. Then,
+$$
+\Delta_2(\theta, \theta', \varphi, \varphi', y_{0:T}) \leq  \eqsp,
+$$
+where $\rho = 1-\udlow/\udup$ and $h_{t,\theta,\varphi}$ is defined in \eqref{eq:def:addfunc}.
+\end{proposition}
+\begin{proof}
+By definition, 
+\begin{align*}
+\Delta_2(\theta, \theta', \varphi, \varphi', y_{0:T}) &= \left|\mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi',0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta',0:T|T}(X_{0:T})}\right]\right|\,,\\
+&\leq \mathbb{E}_{q_{\varphi',0:T}}\left[\left|\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})} - \log \frac{q_{\varphi',0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta',0:T|T}(X_{0:T})}\right|\right]\,,\\
+&\leq \sum_{t=1}^T\mathbb{E}_{q_{\varphi',0:T}}\left[\left|h_{t,\theta,\varphi}(X_{t-1},X_t)-h_{t,\theta',\varphi'}(X_{t-1},X_t)\right|\right]\,,
+\end{align*}
+where $h_{t,\theta,\varphi}$, $1\leq t\leq T$,  are defined in \eqref{eq:def:addfunc}. For $t>1$,
+\begin{multline*}
+\left|h_{t,\theta,\varphi}(X_{t-1},X_t)-h_{t,\theta',\varphi'}(X_{t-1},X_t)\right| \leq \left|\log q_{\varphi,t-1|t}(X_t,X_{t-1}) - \log q_{\varphi',t-1|t}(X_t,X_{t-1})\right|\\
++ \left|\log b^{y_{0:t-1}}_{\theta,t-1|t}(X_t,X_{t-1})- \log b^{y_{0:t-1}}_{\theta',t-1|t}(X_t,X_{t-1})\right|\eqsp.
+\end{multline*}
+By H\ref{assum:lip},
+\begin{multline*}
+\left|h_{t,\theta,\varphi}(X_{t-1},X_t)-h_{t,\theta',\varphi'}(X_{t-1},X_t)\right| \leq \sigma_- K_{t-1|t}(X_{t-1},X_t)\|\varphi-\varphi'\|_2 \\
++ \left|\log b^{y_{0:t-1}}_{\theta,t-1|t}(X_t,X_{t-1})- \log b^{y_{0:t-1}}_{\theta',t-1|t}(X_t,X_{t-1})\right|\eqsp.
+\end{multline*}
+Note that, by Lemma~\ref{lem:bound:filter},
+$$
+b^{y_{0:t-1}}_{\theta,t-1|t}(X_t,X_{t-1}) = \frac{\phi_{\theta,t-1}^{y_{0:t-1}}(X_{t-1})m_\theta(X_{t-1},X_t)}{\int \phi_{\theta,t-1}^{y_{0:t-1}}(x_{t-1})m_\theta(x_{t-1},X_t)\mu(\rmd x_{t-1})}\geq \frac{\sigma^2_-c_-(y_t)}{\sigma_+c_+(y_t)}\eqsp,
+$$
+so that
+\begin{multline*}
+\left|h_{t,\theta,\varphi}(X_{t-1},X_t)-h_{t,\theta',\varphi'}(X_{t-1},X_t)\right| \leq \sigma_- K_{t-1|t}(X_{t-1},X_t)\|\varphi-\varphi'\|_2 \\
++ \frac{\sigma_+c_+(y_t)}{\sigma^2_-c_-(y_t)}\left|b^{y_{0:t-1}}_{\theta,t-1|t}(X_t,X_{t-1})- b^{y_{0:t-1}}_{\theta',t-1|t}(X_t,X_{t-1})\right|\eqsp.
+\end{multline*}
+In addition,
+\begin{align*}
+\left|b^{y_{0:t-1}}_{\theta,t-1|t}(X_t,X_{t-1})- \log b^{y_{0:t-1}}_{\theta',t-1|t}(X_t,X_{t-1})\right| &= \frac{\phi_{\theta,t-1}^{y_{0:t-1}}(X_{t-1})m_\theta(X_{t-1},X_t) - \phi_{\theta',t-1}^{y_{0:t-1}}(X_{t-1})m_{\theta'}(X_{t-1},X_t)}{\int \phi_{\theta,t-1}^{y_{0:t-1}}(x_{t-1})m_\theta(x_{t-1},X_t)\mu(\rmd x_{t-1})}\\
+&+ \phi_{\theta',t-1}^{y_{0:t-1}}(X_{t-1})m_{\theta'}(X_{t-1},X_t)\left(\frac{1}{\int \phi_{\theta,t-1}^{y_{0:t-1}}(x_{t-1})m_\theta(x_{t-1},X_t)\mu(\rmd x_{t-1})} - \frac{1}{\int \phi_{\theta',t-1}^{y_{0:t-1}}(x_{t-1})m_{\theta'}(x_{t-1},X_t)\mu(\rmd x_{t-1})}\right)\eqsp.
+\end{align*}
+This yields
+\begin{multline*}
+\left|b^{y_{0:t-1}}_{\theta,t-1|t}(X_t,X_{t-1})- \log b^{y_{0:t-1}}_{\theta',t-1|t}(X_t,X_{t-1})\right| \leq \left(\frac{\sigma_+c_+(y_t)}{\sigma_-c_-(y_t)}M(X_{t-1},X_t) + \frac{\sigma_+}{\sigma_-}L_{t-1}(x_{t-1},y_{0:t-1})\right)\|\theta-\theta'\|_2\\
++ \frac{\sigma^2_+c_+(y_t)}{\sigma^2_-c_-(y_t)}\left(\int \phi_{\theta',t-1}^{y_{0:t-1}}(x_{t-1})M(x_{t-1},X_t)\mu(\rmd x_{t-1}) + \int L_{t-1}(x_{t-1},y_{0:t-1})m_{\theta'}(x_{t-1},X_t)\mu(\rmd x_{t-1})\right)\|\theta-\theta'\|_2
+\end{multline*}
+\end{proof}
+\subsection*{Checking Assumption A}
+%Steps of the proof.
+%\begin{itemize}
+%\item The first term can be written
+%$$
+%\left|\ell_T^{y_{0:T}}(\theta) - \ell_T^{y_{0:T}}(\theta')\right| \leq \sum_{t=0}^T\left| \log p_{\theta}(y_{t}|y_{1:t-1})  - \log p_{\theta'}(y_{t}|y_{1:t-1})\right|\,,
+%$$
+%where by convention $p_{\theta}(y_{0}|y_{-1}) = p_{\theta}(y_{0})$ and $p_{\theta'}(y_{0}|y_{-1}) = p_{\theta'}(y_{0})$. This term can be upper bounded by $\|\theta-\theta'\|$ regularity assumptions on the HMMs.
+%\item $\Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T})$ can be written
+%$$
+%\Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T}) =  \left|\mathbb{E}_{q_{\varphi,0:T}}\left[\sum_{t=0}^Th_{\theta,\varphi,t}(X_{t-1},X_t)\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[\sum_{t=0}^Th_{\theta,\varphi,t}(X_{t-1},X_t)\right]\right|\,,
+%$$
+%which can be controlled using the upper bound for smoothing expectations of additive functionals.
+%\item Obtaining 
+%$$
+%\Delta_2(\theta, \theta', \varphi, \varphi', y_{0:T}) \leq c_2(y_{0:T}) \|(\theta,\varphi)-(\theta',\varphi')\|_2
+%$$
+%requires regularity assumptions on $\varphi\mapsto q_{\varphi,0:T}$ and $\theta\mapsto \phi^{y_{0:T}}_{\theta,0:T|T}$.
+%\end{itemize}
+
+\section{Technical results}
+\begin{lemma}
+\label{lem:bound:filter}
+Assume that A\ref{assum:transition:hmm} and A\ref{assum:bound:likelihood} hold. For all $\theta\in\Theta$,  all $t\geq 0$, all $y_{0:t}$,
+$$
+\sigma_- c_-(y_t)/c_+(y_t)\leq \phi^{y_{0:t}}_{\theta,t}(x_{t})\leq \sigma_+ c_+(y_t)/c_-(y_t)\,.
+$$
+\end{lemma}
+\begin{proof}
+At time 0, we have $\phi^{y_{0}}_{\theta,0}(x_{0}) \propto \chi(x_0)g^{y_0}_\theta(x_0)$, so that $\sigma_- c_-(y_t)/c_+(y_t)\leq \phi^{y_{0}}_{\theta,0}(x_{0})\leq \sigma_+ c_+(y_0)/c_-(y_0)$. Similarly, 
+$$
+\phi^{y_{0:t}}_{\theta,t}(x_{t}) \propto g^{y_t}_\theta(x_t)\int \phi^{y_{0:t-1}}_{\theta,t-1}(x_{t-1})m_\theta(x_{t-1},x_t)\rmd x_{t-1}\,,
+$$
+so that $\sigma_- c_-(y_t)/c_+(y_t)\leq \phi^{y_{0:t}}_{\theta,t}(x_{t})\leq \sigma_+ c_+(y_t)/c_-(y_t)$.
+\end{proof}
+
+\clearpage
+\newpage
+
+\appendix
+
+\textcolor{red}{Other results for other projects...}
+
 \section{Theoretical perspectives}
 
 Observations $(Y_{t})_{1\leq t \leq T}$, latent variables $(X_{t})_{1\leq t \leq T}$.\\
@@ -416,65 +657,6 @@ where $q_{\varphi,t-1|t}(x_t,x_{t-1}) \propto \phi_{\varphi,t-1}(x_{t-1})m_{\var
 \end{align*}
 with $p_\theta(x_{-1},x_0) = \nu_\theta(x_0)$.
 \end{itemize}
-
-\subsection*{Excess risk bound}
-In this setting, the ELBO writes
-\begin{align*}
-\mathcal{L}(\theta,\varphi) &= \mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{p_{\theta,0:T}(X_{0:T},Y_{0:T})}{q_{\varphi,0:T}(X_{0:T})}\right]\\
-&= \log \int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y_{0:T}|x_{0:T}) \rmd x_{0:T}-\mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})\int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y_{0:T}|x_{0:T})\rmd x_{0:T})}{p_{\theta,0:T}(X_{0:T},Y_{0:T})}\right]\,,\\
-&= \log \int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y_{0:T}|x_{0:T}) \rmd x_{0:T}- \mathrm{KL}\left(q_{\varphi,0:T}\middle\| \frac{p_{\theta,0:T}(\cdot)p_{\theta,0:T}(Y_{0:T}|\cdot)}{\int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y_{0:T}|x_{0:T})}\right)\,.
-\end{align*}
-Following \cite{}, we define the following loss function to be minimized
-$$
-\mathcal{L}(\theta,\varphi) = \frac{1}{n}\sum_{i=1}^nm(\theta,\varphi,Y^i_{0:T})\,,
-$$
-where
-$$
-m(\theta,\varphi,Y^i_{0:T}) = \log \frac{p_{\mathcal{D}}(Y^i_{0:T})}{\int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y^i_{0:T}|x_{0:T}) \rmd x_{0:T}} + \mathrm{KL}\left(q_{\varphi,0:T}\middle\| \frac{p_{\theta,0:T}(\cdot)p_{\theta,0:T}(Y^i_{0:T}|\cdot)}{\int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y^i_{0:T}|x_{0:T})}\right)\,.
-$$
-
-\subsection*{Assumption A}
-
-\subsection*{Condition A}
-In order to check Assumption A, we need to control for all $\theta$, $\theta'$, $\varphi$, $\varphi'$,
-$$
-\Delta(\theta, \theta', \varphi, \varphi', y_{0:T}) = \left|m(\theta,\varphi,y_{0:T})  - m(\theta',\varphi',y_{0:T}) \right|\,.
-$$
-Note that
-\begin{align*}
-\Delta(\theta, \theta', \varphi, \varphi', y_{0:T}) &= \left|m(\theta,\varphi,y_{0:T})  - m(\theta',\varphi',y_{0:T}) \right|\\
-&\leq \left|\ell_T^{y_{0:T}}(\theta) - \ell_T^{y_{0:T}}(\theta')\right| + \left|\mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi',0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta',0:T|T}(X_{0:T})}\right]\right|\,.
-\end{align*}
-Write
-\begin{multline*}
-\left|\mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi',0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta',0:T|T}(X_{0:T})}\right]\right| \leq \Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T}) + \Delta_2(\theta, \theta', \varphi, \varphi', y_{0:T})\,,
-\end{multline*}
-where
-\begin{align*}
-\Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T})  &= \left|\mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right]\right|\,,\\
-\Delta_2(\theta, \theta', \varphi, \varphi', y_{0:T})&= \left|\mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi',0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta',0:T|T}(X_{0:T})}\right]\right|
-\end{align*}
-Steps of the proof.
-\begin{itemize}
-\item The first term can be written
-$$
-\left|\ell_T^{y_{0:T}}(\theta) - \ell_T^{y_{0:T}}(\theta')\right| \leq \sum_{t=0}^T\left| \log p_{\theta}(y_{t}|y_{1:t-1})  - \log p_{\theta'}(y_{t}|y_{1:t-1})\right|\,,
-$$
-where by convention $p_{\theta}(y_{0}|y_{-1}) = p_{\theta}(y_{0})$ and $p_{\theta'}(y_{0}|y_{-1}) = p_{\theta'}(y_{0})$. This term can be upper bounded by $\|\theta-\theta'\|$ regularity assumptions on the HMMs.
-\item $\Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T})$ can be written
-$$
-\Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T}) =  \left|\mathbb{E}_{q_{\varphi,0:T}}\left[\sum_{t=0}^Th_{\theta,\varphi,t}(X_{t-1},X_t)\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[\sum_{t=0}^Th_{\theta,\varphi,t}(X_{t-1},X_t)\right]\right|\,,
-$$
-which can be controlled using the upper bound for smoothing expectations of additive functionals.
-\item Obtaining 
-$$
-\Delta_2(\theta, \theta', \varphi, \varphi', y_{0:T}) \leq c_2(y_{0:T}) \|(\theta,\varphi)-(\theta',\varphi')\|_2
-$$
-requires regularity assumptions on $\varphi\mapsto q_{\varphi,0:T}$ and $\theta\mapsto \phi^{y_{0:T}}_{\theta,0:T|T}$.
-\end{itemize}
-
-
-
 
 \clearpage
 \newpage
