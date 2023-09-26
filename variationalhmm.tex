@@ -533,7 +533,7 @@ so that
 \end{multline*}
 In addition,
 \begin{align*}
-\left|b^{y_{0:t-1}}_{\theta,t-1|t}(X_t,X_{t-1})- \log b^{y_{0:t-1}}_{\theta',t-1|t}(X_t,X_{t-1})\right| &= \frac{\phi_{\theta,t-1}^{y_{0:t-1}}(X_{t-1})m_\theta(X_{t-1},X_t) - \phi_{\theta',t-1}^{y_{0:t-1}}(X_{t-1})m_{\theta'}(X_{t-1},X_t)}{\int \phi_{\theta,t-1}^{y_{0:t-1}}(x_{t-1})m_\theta(x_{t-1},X_t)\mu(\rmd x_{t-1})}\\
+\left|\log b^{y_{0:t-1}}_{\theta,t-1|t}(X_t,X_{t-1})- \log b^{y_{0:t-1}}_{\theta',t-1|t}(X_t,X_{t-1})\right| &= \frac{\phi_{\theta,t-1}^{y_{0:t-1}}(X_{t-1})m_\theta(X_{t-1},X_t) - \phi_{\theta',t-1}^{y_{0:t-1}}(X_{t-1})m_{\theta'}(X_{t-1},X_t)}{\int \phi_{\theta,t-1}^{y_{0:t-1}}(x_{t-1})m_\theta(x_{t-1},X_t)\mu(\rmd x_{t-1})}\\
 &+ \phi_{\theta',t-1}^{y_{0:t-1}}(X_{t-1})m_{\theta'}(X_{t-1},X_t)\left(\frac{1}{\int \phi_{\theta,t-1}^{y_{0:t-1}}(x_{t-1})m_\theta(x_{t-1},X_t)\mu(\rmd x_{t-1})} - \frac{1}{\int \phi_{\theta',t-1}^{y_{0:t-1}}(x_{t-1})m_{\theta'}(x_{t-1},X_t)\mu(\rmd x_{t-1})}\right)\eqsp.
 \end{align*}
 This yields
@@ -565,7 +565,7 @@ This yields
 \section{Technical results}
 \begin{lemma}
 \label{lem:bound:filter}
-Assume that H\ref{assum:transition:hmm} and H\ref{assum:bound:likelihood} hold. For all $\theta\in\Theta$,  all $t\geq 0$, all $y_{0:t}$,
+Assume that H\ref{assum:strong:mixing} and H\ref{assum:bound:likelihood} hold. For all $\theta\in\Theta$,  all $t\geq 0$, all $y_{0:t}$,
 $$
 \sigma_- c_-(y_t)/c_+(y_t)\leq \phi^{y_{0:t}}_{\theta,t}(x_{t})\leq \sigma_+ c_+(y_t)/c_-(y_t)\,.
 $$
@@ -587,306 +587,310 @@ $$
 where $h_{t,\theta,\varphi}$, $1\leq t\leq T$,  are defined in \eqref{eq:def:addfunc}.
 \end{lemma}
 \begin{proof}
-Note that by \eqref{eq:def:addfunc} $h^{y_{0:T}}_{t,\theta,\varphi}(X_{t-1},X_t) = \log q^{y_{0:T}}_{\varphi,t-1|t}(X_t,X_{t-1}) - \log b^{y_{0:t-1}}_{\theta,t-1|t}(X_t,X_{t-1})$ and, by convention,  $h^{y_{0:T}}_{T,\theta,\varphi}(X_{T-1},X_T) = \log q^{y_{0:T}}_{\varphi,T}(x_T) - \log \phi^{y_{0:T}}_{\theta,T}(x_T)$. 
+Note that by \eqref{eq:def:addfunc}, for $1\leq t \leq T-1$,  $h^{y_{0:T}}_{t,\theta,\varphi}(X_{t-1},X_t) = \log q^{y_{0:T}}_{\varphi,t-1|t}(X_t,X_{t-1}) - \log b^{y_{0:t-1}}_{\theta,t-1|t}(X_t,X_{t-1})$ and, by convention,  $h^{y_{0:T}}_{T,\theta,\varphi}(X_{T-1},X_T) = \log q^{y_{0:T}}_{\varphi,T}(x_T) - \log \phi^{y_{0:T}}_{\theta,T}(x_T)$. Note that, by Lemma~\ref{lem:bound:filter},
+$$
+\frac{\sigma^2_-c_-(y_t)}{\sigma_+c_+(y_t)}\leq b^{y_{0:t-1}}_{\theta,t-1|t}(X_t,X_{t-1}) = \frac{\phi_{\theta,t-1}^{y_{0:t-1}}(X_{t-1})m_\theta(X_{t-1},X_t)}{\int \phi_{\theta,t-1}^{y_{0:t-1}}(x_{t-1})m_\theta(x_{t-1},X_t)\mu(\rmd x_{t-1})}\leq \frac{\sigma^2_-+c_+(y_t)}{\sigma_-c_-(y_t)}\eqsp.
+$$
+
 \end{proof}
 
-\clearpage
-\newpage
-
-\appendix
-
-\textcolor{red}{Other results for other projects...}
-
-\section{Theoretical perspectives}
-
-Observations $(Y_{t})_{1\leq t \leq T}$, latent variables $(X_{t})_{1\leq t \leq T}$.\\
-True (unknown) density distribution $p^{\star}$.\\
-Decoding (= model) $p_{\theta}$: joint density of $(X_{t}, Y_{t})_{1\leq t \leq T}$. Write $\theta$ even if non parametric.\\
-Encoding $q_{\varphi}$: joint density of $(X_{t})_{1\leq t \leq T}$ given $(Y_{t})_{1\leq t \leq T}$, that is a joint density which is random, and $\sigma(Y_{1},\ldots,Y_{T})$-measurable. May also be non parametric.  The estimators $\widehat{\theta}$ and $\widehat{\phi}$ maximize the ELBO:
-$$
-{\cal L}(\theta,\phi; T)= \E_{q_{\varphi}} \left[ \log \left( \frac{p_{\theta}(X_{1},\ldots,X_{T},Y_{1},\ldots,Y_{T})}{q_{\varphi}(X_{1},\ldots,X_{T})}\right)\middle\vert Y_{1:T}\right].
-$$
-
-\subsection{Independent variables}
-
-We consider that the true distribution, decoder and encoder distributions are defined by:
-\begin{align*}
-p^{\star}(x_{1},\ldots,x_{T},y_{1},\ldots,y_{T})&=\prod_{t=1}^{T}p^{\star}(x_{t},y_{t})\,,\\
-p_{\theta}(x_{1},\ldots,x_{T},y_{1},\ldots,y_{T})&=\prod_{t=1}^{T}p_{\theta}(x_{t},y_{t})\,,\\
-q_{\varphi}(x_{1},\ldots,x_{T})&=\prod_{t=1}^{T}q_{\varphi,t}(x_{t})\,.
-\end{align*}
-Therefore,
-$$
-\frac{1}{T}{\cal L}(\theta,\phi; T) = \frac{1}{T}\sum_{t=1}^T\log p_\theta(Y_t) + \frac{1}{T}\sum_{t=1}^T\E_{q_{\varphi,t}}\left[\log \frac{p_\theta(X_t|Y_t)}{q_{\varphi,t}(X_t)}\right]\,.
-$$
-When $q_{\varphi,t}(x_{t})=q_{\varphi}(x_{t}|y_t)$ does not depend on $t$, then ${\cal L}(\theta,\phi; T)/T$ has a a.s. limit:
-$$
-\lim_{T\mapsto \infty}\frac{1}{T}{\cal L}(\theta,\phi; T) = M_{\infty}(\theta,\phi)=\int p^{\star}(y)\log p_{\theta}(y) dy - \int \log \left(\frac{q_{\varphi}(x\vert y)}{p_{\theta}(x \vert y) } \right)q_{\varphi}(x\vert y)\,.
-p^{\star}(y)dxdy
-$$
-The maximizers of this limit are investigated in \cite{koehler2021variational} in scenarii used in VAE.  The analysis of $(\widehat{\theta},\widehat{\phi})$ as $M-estimators$ with oracle inequalities and applications is in \cite{tang21a}.
-If we assume that the $q_{\varphi,t}$ indeed depend on $t$, then if we write for each $\theta$,
-$$
-\widehat{q}_{\theta,t}=q_{\widehat{\varphi}_{t}(\theta),t}= \underset{{q \text{ of form }q_{\varphi},t}}{\mathrm{argmin}} \int  \left[\log \left(\frac{q(x\vert Y_{t})}{p_{\theta}(x \vert Y_{t}) } \right)\right]q(x\vert Y_{t})dx,
-$$
-then $\widehat{\theta}$ maximizes
-$$
-\ell_{T}(\theta)-\sum_{t=1}^{T} D\left(\widehat{q}_{t,\theta} \vert p_{\theta}(\cdot \vert Y_{t})\right),
-$$
-where $\ell_{T}$ is the log-likelihood, thus something like a penalized likelihood. All of this is  interesting only if such VAE with so many parameters for the encoding   is used for computational convenience or so. If this is the case, then write a theory to investigate questions such as:
-\begin{itemize}
-\item If the encoder is a good approximating family then the penalization is small; can it be build so that the penalty is $o(T)$ ? 
-\item
-And then possible to analyse that for large $T$ (or asymptotically) if $p^{\star}$ is in the decoding class,  for large $t$ is close to $p_{\widehat{\theta}}(\cdot \vert Y)$ for $\widehat{\theta}$ having good asymptotic properties ?
-\end{itemize}
-
- 
-\subsection{State space decoding}
-We consider that 
-
-$$p_{\theta}(x_{1},\ldots,x_{T},y_{1},\ldots,y_{T})=p_{\theta}(x_{1})g_{\theta}(y_{1}\vert x_{1})\prod_{t=2}^{T}p_{\theta}(x_{t-1},x_{t})g_{\theta}(y_{t} \vert x_{t}).
-$$ 
-
-
-\subsubsection{Mean-field encoding}
-The case where
-$$q_{\varphi}(x_{1},\ldots,x_{T})=\prod_{t=1}^{T}q_{\varphi}(x_{t}).$$
-Then ${\cal L}(\theta,\phi; T)/T$ has a limit (as soon as under $p^{\star}$ the $(Y_{t})_{t\geq 1}$ satisfy some dependence properties allowing laws of large numbers):
-$$
-\lim_{T\mapsto \infty}\frac{1}{T}{\cal L}(\theta,\phi; T) = M_{\infty}(\theta,\phi)=\int p^{\star}(y) q_{\varphi}(x_{1}\vert y)q_{\varphi}(x_{2}\vert y)
- \left[\log \left(\frac{p_{\theta}(x_{1},x_{2} ) g_{\theta}(x_{2}\vert y)}{q_{\varphi}(x_{2}\vert y)} \right)\right]
-dx_{1}dx_{2}dy
-$$
-What can be said ?
-\begin{itemize}
-\item
-Write the $M$-estimator  oracle inequality theory. Or at least the asymptotic theory.
-\item
-Understand the bias (that is: the maximizers of $M_{\infty}$) in interesting examples.
-\end{itemize}
-
-\subsubsection{HMM encoding/ Forward / Backward encoding}
-
-\begin{itemize}
-\item {\bf Parameterization as in Chagneux et al. } Assume that the variational family is parameterized by $\{\phi^T_{\varphi,t},q_{\varphi,t-1|t}\}_{0\leq t\leq T}$ where for all $0\leq t\leq T$, $\phi_{\varphi,t}$ is a probability density on $\rset^d$, and $q_{\varphi,t-1|t}$ a transition kernel on $\rset^d\times \rset^d$. Then, write
-$$
-q_{\varphi,0:T}(x_{0:T}) = \phi^T_{\varphi,T}(x_T)\prod_{t=1}^Tq_{\varphi,t-1|t}(x_t,x_{t-1})\,.
-$$
-In this decomposition, $q_{\varphi,t-1|t}$ aims at approximating the true backward kernel of the hidden chain. In this setting, we can write
-$$
-q_{\varphi,0:T}(x_{0:T}) = \frac{\phi^T_{\varphi,T}(x_T)}{\phi^{T-1}_{\varphi,T-1}(x_{T-1})}q_{\varphi,T-1|T}(x_T,x_{T-1})q_{\varphi,0:T-1}(x_{0:T-1})
-$$
-and the ELBO writes
-\begin{align*}
-\mathcal{L}_T(\theta,\varphi) &= \mathbb{E}_{q_{\varphi,0:T}}\left[F_{\theta,\varphi,T}(X_{0:T},Y_{0:T})\right] = \mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{p_{\theta,0:T}(X_{0:T},Y_{0:T})}{q_{\varphi,0:T}(X_{0:T})}\right]\\
-&= \mathbb{E}_{q_{\varphi,0:T}}\left[\log  \frac{p_{\theta,T}(X_{T-1},X_T)g_{\theta,T}(X_T)\phi^{T-1}_{\varphi,T-1}(X_{T-1})}{q_{\varphi,T-1|T}(X_T,X_{T-1})\phi^T_{\varphi,T}(X_T)}\right] + \mathbb{E}_{q_{\varphi,0:T}}\left[F_{\theta,\varphi,T-1}(X_{0:T-1},Y_{0:T-1})\right]\,.
-\end{align*}
-Let 
-$$
-\nu_{\varphi,T-1:T}(x_{T-1},x_T) = \phi^T_{\varphi,T}(x_T)q_{\varphi,T-1|T}(x_T,x_{T-1})$$ and 
-\begin{align*}
-\mu_{\theta,\varphi,T-1:T}(x_{T-1},x_T) &\propto p_{\theta,T}(X_{T-1},X_T)g_{\theta,T}(X_T)\phi^{T-1}_{\varphi,T-1}(X_{T-1}) \\
-&= c_{\theta,\varphi,T}p_{\theta,T}(X_{T-1},X_T)g_{\theta,T}(X_T)\phi^{T-1}_{\varphi,T-1}(X_{T-1})\,.
-\end{align*}
-Then,
-\begin{align*}
-\mathcal{L}_T(\theta,\varphi) &= - \log c_{\theta,\varphi,T}  + \mathbb{E}_{\nu_{\varphi,T-1:T}}\left[\log \frac{\mu_{\theta,\varphi,T-1:T}}{\nu_{\varphi,T-1:T}}\right]  + \mathbb{E}_{q_{\varphi,0:T}}\left[F_{\theta,\varphi,T-1}(X_{0:T-1},Y_{0:T-1})\right]\,,\\
-&= - \log c_{\theta,\varphi,T}  -\mathrm{KL}(\nu_{\varphi,T-1:T}\|\nu_{\varphi,T-1:T})  + \mathbb{E}_{q_{\varphi,0:T}}\left[F_{\theta,\varphi,T-1}(X_{0:T-1},Y_{0:T-1})\right]\,.
-\end{align*}
-\item {\bf Parameterization using forward kernels and filtering distributions. } Assume that the variational family is parameterized by $\{\phi_{\varphi,t},m_{\varphi,t|t-1}\}_{0\leq t\leq T}$ where for all $0\leq t\leq T$, $\phi_{\varphi,t}$ is a probability density on $\rset^d$, and $m_{\varphi,t|t-1}$ a transition kernel on $\rset^d\times \rset^d$. Then, write
-$$
-q_{\varphi,0:T}(x_{0:T}) = \phi_{\varphi,T}(x_T)\prod_{t=1}^Tq_{\varphi,t-1|t}(x_t,x_{t-1})\,,
-$$
-where $q_{\varphi,t-1|t}(x_t,x_{t-1}) \propto \phi_{\varphi,t-1}(x_{t-1})m_{\varphi,t|t-1}(x_{t-1},x_t) = c_{\varphi,t}(x_t)\phi_{\varphi,t-1}(x_{t-1})m_{\varphi,t|t-1}(x_{t-1},x_t)$. In this decomposition, $q_{\varphi,t-1|t}$ aims at approximating the true prior kernel of the hidden chain and $\phi_{\varphi,t}$ the true filtering distribution at time $t$. In this setting, the ELBO writes
-\begin{align*}
-\mathcal{L}(\theta,\varphi) &= \mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{p_{\theta,0:T}(X_{0:T},Y_{0:T})}{q_{\varphi,0:T}(X_{0:T})}\right]\\
-&= -\sum_{t=1}^T\mathbb{E}_{q_{\varphi,0:T}}\left[\log c_{\varphi,t}(x_t)\right] + \sum_{t=1}^T\mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{p_\theta(x_{t-1},x_t)g_\theta(y_t|x_t)}{ \phi_{\varphi,t-1}(X_{t-1})m_{\varphi,t|t-1}(X_{t-1},X_t) }\right]\,,
-\end{align*}
-with $p_\theta(x_{-1},x_0) = \nu_\theta(x_0)$.
-\end{itemize}
-
-\clearpage
-\newpage
-
-\subsection*{Limiting ELBO}
-
-For any probability density distribution $\chi$, $s>m$, $\bfy\in\Yset^{\Zset}$, $\theta$ write
-$$
-\phi^{\bfy_{0:s}}_{\theta,s|m,\chi}(x_{s}) \propto \int \chi(\rmd x_m)g_\theta^{\bfy_m}(x_m)\prod_{u=m+1}^s m_\theta(x_{u-1},x_u)g_\theta^{\bfy_u}(x_u)\rmd x_{m:s-1}
-$$
-the filtering distribution at time $s$ for the model started at time $m$ with distribution $\chi$. We use the convention $\phi^{\bfy_{0:s}}_{\theta,s} = \phi^{\bfy_{0:s}}_{\theta,s|0,\eta}$.
-For all $t\geq 1$, consider the joint variational distribution
-$$
-q^{\bfy}_{\varphi,0:t}(x_{0:t}) = \phi^{\bfy}_{\varphi,t}(x_t)\prod_{s=1}^tq^{\bfy}_{\varphi,s-1|s}(x_s,x_{s-1})\,,
-$$
-and, using the backward decomposition of the joint smoothing distribution,
-$$
-\phi^{\bfy_{0:t}}_{\theta,0:t}(x_{0:t}) = \phi^{\bfy_{0:t}}_{\theta,t}(x_t)\prod_{s=1}^tb^{\bfy_{0:s-1}}_{\theta,s-1|s}(x_s,x_{s-1})\,,
-$$
-where $b^{\bfy_{0:s-1}}_{\theta,s-1|s}$ is the backward kernel at time $s$:
-\begin{equation}
-\label{eq:backwardk}
-b^{\bfy_{0:s-1}}_{\theta,s-1|s}(x_s,x_{s-1}) \propto \phi^{\bfy_{0:s-1}}_{\theta,s-1}(x_{s-1})m_\theta(x_{s-1},x_s)\,.
-\end{equation}
-The ELBO writes, for all $\bfy\in\Yset^{\Zset}$, $\theta\in\Theta$, $\varphi\in\Phi$,
-$$
-\frac{1}{t}\mathcal{L}^{\bfy_{0:t}}(\theta,\varphi)= \frac{1}{t}\ell^{\bfy_{0:t}}(\theta) +  \frac{1}{t}\mathbb{E}_{\phi^{\bfy_{0:t}}_{\varphi,t}}\left[\log \frac{\phi^{\bfy_{0:t}}_{\theta,t}(X_{t})}{q^{\bfy}_{\varphi,t}(X_{t})}\right] + \frac{1}{t}\sum_{s=1}^t\mathbb{E}_{q^{\bfy}_{\varphi,0:t}}\left[\log \frac{b^{\bfy_{0:s-1}}_{\theta,s-1|s}(X_{s-1},X_s)}{q^{\bfy}_{\varphi,s-1|s}(X_{s-1},X_s)}\right]\,,
-$$
-where $\ell^{\bfy_{0:t}}(\theta)$ is the loglikelihood of the observations. Let $\shift: \Yset^\Zset\to \Yset^\Zset$ be the shift operator i.e., for all $\bfy\in\Yset^\Zset$ and all $s\in\Zset$, $\shift(\bfy)_s = \bfy_{s+1}$.
-\begin{assumptionA}
-\label{assum:transition:hmm}
-$\mathrm{inf}_{\theta\in\Theta}\mathrm{inf}_{x,x'\in\Xset} m_\theta(x,x') = \sigma_->0$ and $\mathrm{sup}_{\theta\in\Theta}\mathrm{sup}_{x,x'\in\Xset} m_\theta(x,x') = \sigma_+<\infty$. 
-\end{assumptionA}
-
-\begin{assumptionA}
-\label{assum:bound:likelihood}
-For all $y$, $\mathrm{inf}_{\theta\in\Theta}\int g_\theta^y(x)\mu(\rmd x) = c_-(y)>0$ and $\mathrm{sup}_{\theta\in\Theta}\int g_\theta^y(x) \mu(\rmd x) = c_+(y)<\infty$. 
-
-In addition, $\mathrm{sup}_{y\in\Yset} c_+(y)/c_-(y)<\infty$.
-\end{assumptionA}
-
+%\clearpage
+%\newpage
+%
+%\appendix
+%
+%\textcolor{red}{Other results for other projects...}
+%
+%\section{Theoretical perspectives}
+%
+%Observations $(Y_{t})_{1\leq t \leq T}$, latent variables $(X_{t})_{1\leq t \leq T}$.\\
+%True (unknown) density distribution $p^{\star}$.\\
+%Decoding (= model) $p_{\theta}$: joint density of $(X_{t}, Y_{t})_{1\leq t \leq T}$. Write $\theta$ even if non parametric.\\
+%Encoding $q_{\varphi}$: joint density of $(X_{t})_{1\leq t \leq T}$ given $(Y_{t})_{1\leq t \leq T}$, that is a joint density which is random, and $\sigma(Y_{1},\ldots,Y_{T})$-measurable. May also be non parametric.  The estimators $\widehat{\theta}$ and $\widehat{\phi}$ maximize the ELBO:
+%$$
+%{\cal L}(\theta,\phi; T)= \E_{q_{\varphi}} \left[ \log \left( \frac{p_{\theta}(X_{1},\ldots,X_{T},Y_{1},\ldots,Y_{T})}{q_{\varphi}(X_{1},\ldots,X_{T})}\right)\middle\vert Y_{1:T}\right].
+%$$
+%
+%\subsection{Independent variables}
+%
+%We consider that the true distribution, decoder and encoder distributions are defined by:
+%\begin{align*}
+%p^{\star}(x_{1},\ldots,x_{T},y_{1},\ldots,y_{T})&=\prod_{t=1}^{T}p^{\star}(x_{t},y_{t})\,,\\
+%p_{\theta}(x_{1},\ldots,x_{T},y_{1},\ldots,y_{T})&=\prod_{t=1}^{T}p_{\theta}(x_{t},y_{t})\,,\\
+%q_{\varphi}(x_{1},\ldots,x_{T})&=\prod_{t=1}^{T}q_{\varphi,t}(x_{t})\,.
+%\end{align*}
+%Therefore,
+%$$
+%\frac{1}{T}{\cal L}(\theta,\phi; T) = \frac{1}{T}\sum_{t=1}^T\log p_\theta(Y_t) + \frac{1}{T}\sum_{t=1}^T\E_{q_{\varphi,t}}\left[\log \frac{p_\theta(X_t|Y_t)}{q_{\varphi,t}(X_t)}\right]\,.
+%$$
+%When $q_{\varphi,t}(x_{t})=q_{\varphi}(x_{t}|y_t)$ does not depend on $t$, then ${\cal L}(\theta,\phi; T)/T$ has a a.s. limit:
+%$$
+%\lim_{T\mapsto \infty}\frac{1}{T}{\cal L}(\theta,\phi; T) = M_{\infty}(\theta,\phi)=\int p^{\star}(y)\log p_{\theta}(y) dy - \int \log \left(\frac{q_{\varphi}(x\vert y)}{p_{\theta}(x \vert y) } \right)q_{\varphi}(x\vert y)\,.
+%p^{\star}(y)dxdy
+%$$
+%The maximizers of this limit are investigated in \cite{koehler2021variational} in scenarii used in VAE.  The analysis of $(\widehat{\theta},\widehat{\phi})$ as $M-estimators$ with oracle inequalities and applications is in \cite{tang21a}.
+%If we assume that the $q_{\varphi,t}$ indeed depend on $t$, then if we write for each $\theta$,
+%$$
+%\widehat{q}_{\theta,t}=q_{\widehat{\varphi}_{t}(\theta),t}= \underset{{q \text{ of form }q_{\varphi},t}}{\mathrm{argmin}} \int  \left[\log \left(\frac{q(x\vert Y_{t})}{p_{\theta}(x \vert Y_{t}) } \right)\right]q(x\vert Y_{t})dx,
+%$$
+%then $\widehat{\theta}$ maximizes
+%$$
+%\ell_{T}(\theta)-\sum_{t=1}^{T} D\left(\widehat{q}_{t,\theta} \vert p_{\theta}(\cdot \vert Y_{t})\right),
+%$$
+%where $\ell_{T}$ is the log-likelihood, thus something like a penalized likelihood. All of this is  interesting only if such VAE with so many parameters for the encoding   is used for computational convenience or so. If this is the case, then write a theory to investigate questions such as:
+%\begin{itemize}
+%\item If the encoder is a good approximating family then the penalization is small; can it be build so that the penalty is $o(T)$ ? 
+%\item
+%And then possible to analyse that for large $T$ (or asymptotically) if $p^{\star}$ is in the decoding class,  for large $t$ is close to $p_{\widehat{\theta}}(\cdot \vert Y)$ for $\widehat{\theta}$ having good asymptotic properties ?
+%\end{itemize}
+%
+% 
+%\subsection{State space decoding}
+%We consider that 
+%
+%$$p_{\theta}(x_{1},\ldots,x_{T},y_{1},\ldots,y_{T})=p_{\theta}(x_{1})g_{\theta}(y_{1}\vert x_{1})\prod_{t=2}^{T}p_{\theta}(x_{t-1},x_{t})g_{\theta}(y_{t} \vert x_{t}).
+%$$ 
+%
+%
+%\subsubsection{Mean-field encoding}
+%The case where
+%$$q_{\varphi}(x_{1},\ldots,x_{T})=\prod_{t=1}^{T}q_{\varphi}(x_{t}).$$
+%Then ${\cal L}(\theta,\phi; T)/T$ has a limit (as soon as under $p^{\star}$ the $(Y_{t})_{t\geq 1}$ satisfy some dependence properties allowing laws of large numbers):
+%$$
+%\lim_{T\mapsto \infty}\frac{1}{T}{\cal L}(\theta,\phi; T) = M_{\infty}(\theta,\phi)=\int p^{\star}(y) q_{\varphi}(x_{1}\vert y)q_{\varphi}(x_{2}\vert y)
+% \left[\log \left(\frac{p_{\theta}(x_{1},x_{2} ) g_{\theta}(x_{2}\vert y)}{q_{\varphi}(x_{2}\vert y)} \right)\right]
+%dx_{1}dx_{2}dy
+%$$
+%What can be said ?
+%\begin{itemize}
+%\item
+%Write the $M$-estimator  oracle inequality theory. Or at least the asymptotic theory.
+%\item
+%Understand the bias (that is: the maximizers of $M_{\infty}$) in interesting examples.
+%\end{itemize}
+%
+%\subsubsection{HMM encoding/ Forward / Backward encoding}
+%
+%\begin{itemize}
+%\item {\bf Parameterization as in Chagneux et al. } Assume that the variational family is parameterized by $\{\phi^T_{\varphi,t},q_{\varphi,t-1|t}\}_{0\leq t\leq T}$ where for all $0\leq t\leq T$, $\phi_{\varphi,t}$ is a probability density on $\rset^d$, and $q_{\varphi,t-1|t}$ a transition kernel on $\rset^d\times \rset^d$. Then, write
+%$$
+%q_{\varphi,0:T}(x_{0:T}) = \phi^T_{\varphi,T}(x_T)\prod_{t=1}^Tq_{\varphi,t-1|t}(x_t,x_{t-1})\,.
+%$$
+%In this decomposition, $q_{\varphi,t-1|t}$ aims at approximating the true backward kernel of the hidden chain. In this setting, we can write
+%$$
+%q_{\varphi,0:T}(x_{0:T}) = \frac{\phi^T_{\varphi,T}(x_T)}{\phi^{T-1}_{\varphi,T-1}(x_{T-1})}q_{\varphi,T-1|T}(x_T,x_{T-1})q_{\varphi,0:T-1}(x_{0:T-1})
+%$$
+%and the ELBO writes
+%\begin{align*}
+%\mathcal{L}_T(\theta,\varphi) &= \mathbb{E}_{q_{\varphi,0:T}}\left[F_{\theta,\varphi,T}(X_{0:T},Y_{0:T})\right] = \mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{p_{\theta,0:T}(X_{0:T},Y_{0:T})}{q_{\varphi,0:T}(X_{0:T})}\right]\\
+%&= \mathbb{E}_{q_{\varphi,0:T}}\left[\log  \frac{p_{\theta,T}(X_{T-1},X_T)g_{\theta,T}(X_T)\phi^{T-1}_{\varphi,T-1}(X_{T-1})}{q_{\varphi,T-1|T}(X_T,X_{T-1})\phi^T_{\varphi,T}(X_T)}\right] + \mathbb{E}_{q_{\varphi,0:T}}\left[F_{\theta,\varphi,T-1}(X_{0:T-1},Y_{0:T-1})\right]\,.
+%\end{align*}
+%Let 
+%$$
+%\nu_{\varphi,T-1:T}(x_{T-1},x_T) = \phi^T_{\varphi,T}(x_T)q_{\varphi,T-1|T}(x_T,x_{T-1})$$ and 
+%\begin{align*}
+%\mu_{\theta,\varphi,T-1:T}(x_{T-1},x_T) &\propto p_{\theta,T}(X_{T-1},X_T)g_{\theta,T}(X_T)\phi^{T-1}_{\varphi,T-1}(X_{T-1}) \\
+%&= c_{\theta,\varphi,T}p_{\theta,T}(X_{T-1},X_T)g_{\theta,T}(X_T)\phi^{T-1}_{\varphi,T-1}(X_{T-1})\,.
+%\end{align*}
+%Then,
+%\begin{align*}
+%\mathcal{L}_T(\theta,\varphi) &= - \log c_{\theta,\varphi,T}  + \mathbb{E}_{\nu_{\varphi,T-1:T}}\left[\log \frac{\mu_{\theta,\varphi,T-1:T}}{\nu_{\varphi,T-1:T}}\right]  + \mathbb{E}_{q_{\varphi,0:T}}\left[F_{\theta,\varphi,T-1}(X_{0:T-1},Y_{0:T-1})\right]\,,\\
+%&= - \log c_{\theta,\varphi,T}  -\mathrm{KL}(\nu_{\varphi,T-1:T}\|\nu_{\varphi,T-1:T})  + \mathbb{E}_{q_{\varphi,0:T}}\left[F_{\theta,\varphi,T-1}(X_{0:T-1},Y_{0:T-1})\right]\,.
+%\end{align*}
+%\item {\bf Parameterization using forward kernels and filtering distributions. } Assume that the variational family is parameterized by $\{\phi_{\varphi,t},m_{\varphi,t|t-1}\}_{0\leq t\leq T}$ where for all $0\leq t\leq T$, $\phi_{\varphi,t}$ is a probability density on $\rset^d$, and $m_{\varphi,t|t-1}$ a transition kernel on $\rset^d\times \rset^d$. Then, write
+%$$
+%q_{\varphi,0:T}(x_{0:T}) = \phi_{\varphi,T}(x_T)\prod_{t=1}^Tq_{\varphi,t-1|t}(x_t,x_{t-1})\,,
+%$$
+%where $q_{\varphi,t-1|t}(x_t,x_{t-1}) \propto \phi_{\varphi,t-1}(x_{t-1})m_{\varphi,t|t-1}(x_{t-1},x_t) = c_{\varphi,t}(x_t)\phi_{\varphi,t-1}(x_{t-1})m_{\varphi,t|t-1}(x_{t-1},x_t)$. In this decomposition, $q_{\varphi,t-1|t}$ aims at approximating the true prior kernel of the hidden chain and $\phi_{\varphi,t}$ the true filtering distribution at time $t$. In this setting, the ELBO writes
+%\begin{align*}
+%\mathcal{L}(\theta,\varphi) &= \mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{p_{\theta,0:T}(X_{0:T},Y_{0:T})}{q_{\varphi,0:T}(X_{0:T})}\right]\\
+%&= -\sum_{t=1}^T\mathbb{E}_{q_{\varphi,0:T}}\left[\log c_{\varphi,t}(x_t)\right] + \sum_{t=1}^T\mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{p_\theta(x_{t-1},x_t)g_\theta(y_t|x_t)}{ \phi_{\varphi,t-1}(X_{t-1})m_{\varphi,t|t-1}(X_{t-1},X_t) }\right]\,,
+%\end{align*}
+%with $p_\theta(x_{-1},x_0) = \nu_\theta(x_0)$.
+%\end{itemize}
+%
+%\clearpage
+%\newpage
+%
+%\subsection*{Limiting ELBO}
+%
+%For any probability density distribution $\chi$, $s>m$, $\bfy\in\Yset^{\Zset}$, $\theta$ write
+%$$
+%\phi^{\bfy_{0:s}}_{\theta,s|m,\chi}(x_{s}) \propto \int \chi(\rmd x_m)g_\theta^{\bfy_m}(x_m)\prod_{u=m+1}^s m_\theta(x_{u-1},x_u)g_\theta^{\bfy_u}(x_u)\rmd x_{m:s-1}
+%$$
+%the filtering distribution at time $s$ for the model started at time $m$ with distribution $\chi$. We use the convention $\phi^{\bfy_{0:s}}_{\theta,s} = \phi^{\bfy_{0:s}}_{\theta,s|0,\eta}$.
+%For all $t\geq 1$, consider the joint variational distribution
+%$$
+%q^{\bfy}_{\varphi,0:t}(x_{0:t}) = \phi^{\bfy}_{\varphi,t}(x_t)\prod_{s=1}^tq^{\bfy}_{\varphi,s-1|s}(x_s,x_{s-1})\,,
+%$$
+%and, using the backward decomposition of the joint smoothing distribution,
+%$$
+%\phi^{\bfy_{0:t}}_{\theta,0:t}(x_{0:t}) = \phi^{\bfy_{0:t}}_{\theta,t}(x_t)\prod_{s=1}^tb^{\bfy_{0:s-1}}_{\theta,s-1|s}(x_s,x_{s-1})\,,
+%$$
+%where $b^{\bfy_{0:s-1}}_{\theta,s-1|s}$ is the backward kernel at time $s$:
+%\begin{equation}
+%\label{eq:backwardk}
+%b^{\bfy_{0:s-1}}_{\theta,s-1|s}(x_s,x_{s-1}) \propto \phi^{\bfy_{0:s-1}}_{\theta,s-1}(x_{s-1})m_\theta(x_{s-1},x_s)\,.
+%\end{equation}
+%The ELBO writes, for all $\bfy\in\Yset^{\Zset}$, $\theta\in\Theta$, $\varphi\in\Phi$,
+%$$
+%\frac{1}{t}\mathcal{L}^{\bfy_{0:t}}(\theta,\varphi)= \frac{1}{t}\ell^{\bfy_{0:t}}(\theta) +  \frac{1}{t}\mathbb{E}_{\phi^{\bfy_{0:t}}_{\varphi,t}}\left[\log \frac{\phi^{\bfy_{0:t}}_{\theta,t}(X_{t})}{q^{\bfy}_{\varphi,t}(X_{t})}\right] + \frac{1}{t}\sum_{s=1}^t\mathbb{E}_{q^{\bfy}_{\varphi,0:t}}\left[\log \frac{b^{\bfy_{0:s-1}}_{\theta,s-1|s}(X_{s-1},X_s)}{q^{\bfy}_{\varphi,s-1|s}(X_{s-1},X_s)}\right]\,,
+%$$
+%where $\ell^{\bfy_{0:t}}(\theta)$ is the loglikelihood of the observations. Let $\shift: \Yset^\Zset\to \Yset^\Zset$ be the shift operator i.e., for all $\bfy\in\Yset^\Zset$ and all $s\in\Zset$, $\shift(\bfy)_s = \bfy_{s+1}$.
 %\begin{assumptionA}
-%\label{assum:bound:likelihood:bis}
-%For all $y$, $\mathrm{inf}_{\theta\in\Theta}\mathrm{inf}_{x\in\Xset} g_\theta^y(x) = c_-(y)>0$ and $\mathrm{sup}_{\theta\in\Theta}\mathrm{sup}_{x\in\Xset} g_\theta^y(x)  = c_+(y)<\infty$. 
+%\label{assum:transition:hmm}
+%$\mathrm{inf}_{\theta\in\Theta}\mathrm{inf}_{x,x'\in\Xset} m_\theta(x,x') = \sigma_->0$ and $\mathrm{sup}_{\theta\in\Theta}\mathrm{sup}_{x,x'\in\Xset} m_\theta(x,x') = \sigma_+<\infty$. 
+%\end{assumptionA}
+%
+%\begin{assumptionA}
+%\label{assum:bound:likelihood}
+%For all $y$, $\mathrm{inf}_{\theta\in\Theta}\int g_\theta^y(x)\mu(\rmd x) = c_-(y)>0$ and $\mathrm{sup}_{\theta\in\Theta}\int g_\theta^y(x) \mu(\rmd x) = c_+(y)<\infty$. 
 %
 %In addition, $\mathrm{sup}_{y\in\Yset} c_+(y)/c_-(y)<\infty$.
 %\end{assumptionA}
-
+%
+%%\begin{assumptionA}
+%%\label{assum:bound:likelihood:bis}
+%%For all $y$, $\mathrm{inf}_{\theta\in\Theta}\mathrm{inf}_{x\in\Xset} g_\theta^y(x) = c_-(y)>0$ and $\mathrm{sup}_{\theta\in\Theta}\mathrm{sup}_{x\in\Xset} g_\theta^y(x)  = c_+(y)<\infty$. 
+%%
+%%In addition, $\mathrm{sup}_{y\in\Yset} c_+(y)/c_-(y)<\infty$.
+%%\end{assumptionA}
+%
+%%\begin{assumptionA}
+%%\label{assum:transition:hmm:bis}
+%%For all $\theta\in\Theta$, there exist a transition kernel $K_\theta: \Xset\to \Yset$ and nonnegative measurable functions $\zeta_{-,\theta}$ and $\zeta_{+,\theta}$ defined on $\Yset$ such that for all $x\in\Xset$, $y\in\Yset$, all measurable set $A$,
+%%$$
+%%\zeta_{-,\theta}(y)K(y,A)\leq \int m_\theta (x,\rmd x')g_\theta^y(x') \1_{A}(x')\leq \zeta_{+,\theta}(y)K(y,A)\eqsp.
+%%$$
+%%\end{assumptionA}
+%
 %\begin{assumptionA}
-%\label{assum:transition:hmm:bis}
-%For all $\theta\in\Theta$, there exist a transition kernel $K_\theta: \Xset\to \Yset$ and nonnegative measurable functions $\zeta_{-,\theta}$ and $\zeta_{+,\theta}$ defined on $\Yset$ such that for all $x\in\Xset$, $y\in\Yset$, all measurable set $A$,
+%\label{assum:transition:variational}
+%For all $t\geq 1$, $\mathrm{inf}_{\bfy\in\Yset^{\Zset}}\mathrm{inf}_{\phi\in\Phi}\mathrm{inf}_{x,x'\in\Xset} q^{\bfy}_{\phi,t-1|t}(x,x') = \varpi_->0$ and $\mathrm{sup}_{\bfy\in\Yset^{\Zset}}\mathrm{sup}_{\phi\in\Phi}\mathrm{sup}_{x,x'\in\Xset} q^{\bfy}_{\phi,t-1|t}(x,x') = \varpi_+<\infty$. 
+%\end{assumptionA}
+%
+%\begin{assumptionA}
+%\label{assum:variational:shift}
+%For all $s\in \mathbb{Z}$, $\bfy\in\Yset^{\Zset}$, 
 %$$
-%\zeta_{-,\theta}(y)K(y,A)\leq \int m_\theta (x,\rmd x')g_\theta^y(x') \1_{A}(x')\leq \zeta_{+,\theta}(y)K(y,A)\eqsp.
+%q^{\bfy}_{\phi,s-1|s} = q^{\shift (\bfy)}_{\phi,s-2|s-1} \eqsp.
 %$$
 %\end{assumptionA}
-
-\begin{assumptionA}
-\label{assum:transition:variational}
-For all $t\geq 1$, $\mathrm{inf}_{\bfy\in\Yset^{\Zset}}\mathrm{inf}_{\phi\in\Phi}\mathrm{inf}_{x,x'\in\Xset} q^{\bfy}_{\phi,t-1|t}(x,x') = \varpi_->0$ and $\mathrm{sup}_{\bfy\in\Yset^{\Zset}}\mathrm{sup}_{\phi\in\Phi}\mathrm{sup}_{x,x'\in\Xset} q^{\bfy}_{\phi,t-1|t}(x,x') = \varpi_+<\infty$. 
-\end{assumptionA}
-
-\begin{assumptionA}
-\label{assum:variational:shift}
-For all $s\in \mathbb{Z}$, $\bfy\in\Yset^{\Zset}$, 
-$$
-q^{\bfy}_{\phi,s-1|s} = q^{\shift (\bfy)}_{\phi,s-2|s-1} \eqsp.
-$$
-\end{assumptionA}
-
-Note that under A\ref{assum:variational:shift}, the last term of the ELBO writes
-$$
-\frac{1}{t}\sum_{s=1}^t\mathbb{E}_{q^{\bfy}_{\varphi,0:t}}\left[\log \frac{b^{\bfy_{0:s-1}}_{\theta,s-1|s}(X_{s-1},X_s)}{q^{\bfy}_{\varphi,s-1|s}(X_{s-1},X_s)}\right]=\frac{1}{t}\sum_{s=1}^t\mathbb{E}_{q^{\bfy}_{\varphi,0:t}}\left[\log \frac{b^{\bfy_{0:s-1}}_{\theta,s-1|s}(X_{s-1},X_s)}{q^{\shift^s(\bfy)}_{\varphi,-1|0}(X_{s-1},X_s)}\right]\,.
-$$
-
-\textcolor{red}{
-\begin{itemize}
-\item Hypotheses pour stationnariser les noyaux backwards: ok.
-\item Oubli du filtre sous A1, A2: ok.
-\item Stationnarisation des esperances sous $q_\varphi$ lorsque $t$ temps vers l'infini:  ok (cf lemmes plus bas).
-\item Stationnarisation des vrais noyaux backwards $b^{\bfy_{0:s-1}}_{\theta,s-1|s}$: probleme restant ici, on a l'oubli du filtre et un controle de l'erreur en TV qui se propage a la TV entre les noyaux backwards mais dans la ELBO on a le log !
-\end{itemize}}
+%
+%Note that under A\ref{assum:variational:shift}, the last term of the ELBO writes
+%$$
+%\frac{1}{t}\sum_{s=1}^t\mathbb{E}_{q^{\bfy}_{\varphi,0:t}}\left[\log \frac{b^{\bfy_{0:s-1}}_{\theta,s-1|s}(X_{s-1},X_s)}{q^{\bfy}_{\varphi,s-1|s}(X_{s-1},X_s)}\right]=\frac{1}{t}\sum_{s=1}^t\mathbb{E}_{q^{\bfy}_{\varphi,0:t}}\left[\log \frac{b^{\bfy_{0:s-1}}_{\theta,s-1|s}(X_{s-1},X_s)}{q^{\shift^s(\bfy)}_{\varphi,-1|0}(X_{s-1},X_s)}\right]\,.
+%$$
+%
+%\textcolor{red}{
+%\begin{itemize}
+%\item Hypotheses pour stationnariser les noyaux backwards: ok.
+%\item Oubli du filtre sous A1, A2: ok.
+%\item Stationnarisation des esperances sous $q_\varphi$ lorsque $t$ temps vers l'infini:  ok (cf lemmes plus bas).
+%\item Stationnarisation des vrais noyaux backwards $b^{\bfy_{0:s-1}}_{\theta,s-1|s}$: probleme restant ici, on a l'oubli du filtre et un controle de l'erreur en TV qui se propage a la TV entre les noyaux backwards mais dans la ELBO on a le log !
+%\end{itemize}}
 
 
-\subsubsection*{Uniform forgetting of the filtering distribution}
-
-\begin{lemma}
-\label{lem:forgetting:filter}
-Assume that A\ref{assum:transition:hmm} and A\ref{assum:bound:likelihood} hold. For all bounded measurable functions  $h$, all $\theta\in\Theta$, all $0\leq s\leq t$, and all $1\leq u\leq s$, $m'<m\leq 0$,
-$$
-\left| \phi^{y_{m':s}}_{\theta,s|m',\chi}h - \phi^{y_{m:s}}_{\theta,s|m,\chi}h\right|\leq \left(1-\sigma_-/\sigma_+\right)^{s-m}\|h\|_\infty\,.
-$$
-\end{lemma}
-\begin{proof}
-This is a classical result under the strong mixing assumption A\ref{assum:transition:hmm} and the likelihood assumption A\ref{assum:bound:likelihood}. Consider the distribution
-$$
-\tilde \chi (\rmd x_m) \propto  \int \chi(\rmd x_{m'})g_\theta^{y_{m'}}(x_{m'})\left\{\prod_{u=m'+1}^{m-1} m_\theta(x_{u-1},x_u)g_\theta^{y_u}(x_u)\right\}m_\theta(x_{m-1},x_m)\rmd x_{m'+1:m}\,,
-$$
-so that $\phi^{y_{m':s}}_{\theta,s|m',\chi} = \phi^{y_{m:s}}_{\theta,s|m,\tilde\chi}$.
-This is a direct consequence of \cite[Corollary 1]{douc2004asymptotic} which states, under A\ref{assum:transition:hmm} and A\ref{assum:bound:likelihood},  that 
-$$
-\left\|\phi^{y_{m:s}}_{\theta,s|m,\tilde\chi}-\phi^{y_{m:s}}_{\theta,s|m,\chi}\right\|_{\mathrm{tv}}\leq \left(1-\sigma_-/\sigma_+\right)^{s-m}\,.
-$$
-\end{proof}
-By Lemma~\ref{lem:forgetting:filter}, for all $0\leq s\leq t$, $(\phi^{Y_{m:s}}_{\theta,s|m,\chi}h)_{m\leq s}$ is a uniform Cauchy sequence with respect to $\theta$ and $(\phi^{Y_{m:s}}_{\theta,s|m,\chi}h)_{m\leq s}$ converges uniformly a.s. The limit of this sequence is denoted by $(\phi^{Y_{-\infty:s}}_{\theta,s,\infty}h)_{m\leq s}$ and does not depend on $\chi$.
-
-
-\subsubsection*{Uniform forgetting of the variational smoothing distribution}
-\begin{lemma}
-\label{lem:forgetting:elbo}
-Assume that A\ref{assum:transition:variational} holds. For all bounded measurable functions  $h$, all $\theta\in\Theta$, $\varphi\in\Phi$, all $0\leq s\leq t$, and all $1\leq u\leq s$, 
-$$
-\left| \mathbb{E}_{q^{y_{0:t}}_{\varphi,0:t}}\left[h(X_{u-1},X_u)\right] - \mathbb{E}_{q^{y_{0:s}}_{\varphi,0:s}}\left[h(X_{u-1},X_u)\right]\right|\leq \left(1-\varpi_-/\varpi_+\right)^{s-u}\|h\|_\infty\,.
-$$
-\end{lemma}
-
-
-\begin{proof}
-Define the probability density function $q_{\varphi,s|t}$ by:
-$$
-q^{y_{0:t}}_{\varphi,s|t}: x_s \mapsto \int   \phi^{y_{0:t}}_{\varphi,t}(x_t)\prod_{r=s+1}^tq^{y_{0:r-1}}_{\varphi,r-1|r}(x_r,x_{r-1}) \rmd x_{s+1:t}\,,
-$$
-i.e. $q^{y_{0:t}}_{\varphi,s|t}$ is the marginal density of $X_s$ under $q^{y_{0:t}}_{\varphi,0:t}$. Then,
-$$
-\mathbb{E}_{q^{y_{0:t}}_{\varphi,0:t}}\left[h(X_{u-1},X_u)\right]  = \int q^{y_{0:t}}_{\varphi,s|t}(x_s)\prod_{r = u+1}^{s}q^{y_{0:r-1}}_{\varphi,r-1|r}(x_r,x_{r-1})  h(x_{u-1},x_u)\prod_{r = 1}^{u}q^{y_{0:r-1}}_{\varphi,r-1|r}(x_r,x_{r-1}) \rmd x_{0:s}\,.
-$$
-Therefore, under A\ref{assum:transition:variational},
-$$
-\left| \mathbb{E}_{q^{y_{0:t}}_{\varphi,0:t}}\left[h(X_{u-1},X_u)\right] - \mathbb{E}_{q^{y_{0:s}}_{\varphi,0:s}}\left[h(X_{u-1},X_u)\right]\right|\leq \left(1-\varpi_-/\varpi_+\right)^{s-u}\|\tilde h_{u}\|_\infty\,,
-$$
-where $\tilde h_{u}: x_{u}\mapsto \int  h(x_{u-1},x_u)\prod_{r = 1}^{u}q^{y_{0:r-1}}_{\varphi,r-1|r}(x_r,x_{r-1}) \rmd x_{0:u-1}$. The proof is completed by noting that
-$ \|\tilde h_{u}\|_\infty \leq \|h\|_\infty$.
-\end{proof}
-
-\begin{lemma}
-\label{lem:bound:filter}
-Assume that A\ref{assum:transition:hmm} and A\ref{assum:bound:likelihood} hold. For all $\theta\in\Theta$,  all $t\geq 0$, all $y_{0:t}$,
-$$
-\sigma_- c_-(y_t)/c_+(y_t)\leq \phi^{y_{0:t}}_{\theta,t}(x_{t})\leq \sigma_+ c_+(y_t)/c_-(y_t)\,.
-$$
-\end{lemma}
-\begin{proof}
-At time 0, we have $\phi^{y_{0}}_{\theta,0}(x_{0}) \propto \mu(x_0)g^{y_0}_\theta(x_0)$, so that $\sigma_- c_-(y_t)/c_+(y_t)\leq \phi^{y_{0}}_{\theta,0}(x_{0})\leq \sigma_+ c_+(y_t)/c_-(y_t)$. Similarly, 
-$$
-\phi^{y_{0:t}}_{\theta,t}(x_{t}) \propto g^{y_t}_\theta(x_t)\int \phi^{y_{0:t-1}}_{\theta,t-1}(x_{t-1})m_\theta(x_{t-1},x_t)\rmd x_{t-1}\,,
-$$
-so that $\sigma_- c_-(y_t)/c_+(y_t)\leq \phi^{y_{0:t}}_{\theta,t}(x_{t})\leq \sigma_+ c_+(y_t)/c_-(y_t)$.
-\end{proof}
-
-By Lemma~\ref{lem:forgetting:elbo} and Lemma~\ref{lem:bound:filter}, using that
-$$
-\left|\log \frac{b^{y_{0:s-1}}_{\theta,s-1|s}(x_{s-1},x_s)}{q^{y_{0:s-1}}_{\varphi,s-1|s}(x_{s-1},x_s)}\right|\leq \frac{\left|\log b^{y_{0:s-1}}_{\theta,s-1|s}(x_{s-1},x_s) - \log q^{y_{0:s-1}}_{\varphi,s-1|s}(x_{s-1},x_s)\right|}{b^{y_{0:s-1}}_{\theta,s-1|s}(x_{s-1},x_s)\wedge q^{y_{0:s-1}}_{\varphi,s-1|s}(x_{s-1},x_s)}\,,
-$$
-$\{\mathbb{E}_{q_{\varphi,0:t}}[\log b_{\theta,s-1|s}(X_{s-1},X_s)/q_{\varphi,s-1|s}(X_{s-1},X_s)]\}_{t\geq 1}$ is a uniform Cauchy sequence. Therefore, we can write
-$$
-\lim_{t\to\infty}\mathbb{E}_{q_{\varphi,0:t}}[\log b_{\theta,s-1|s}(X_{s-1},X_s)/q_{\varphi,s-1|s}(X_{s-1},X_s)] = \delta^{\theta,\varphi}_{\infty,s}(\mathsf{Y}_{0:\infty})\,,
-$$  uniformly almost surely.
+%\subsubsection*{Uniform forgetting of the filtering distribution}
+%
+%\begin{lemma}
+%\label{lem:forgetting:filter}
+%Assume that A\ref{assum:transition:hmm} and A\ref{assum:bound:likelihood} hold. For all bounded measurable functions  $h$, all $\theta\in\Theta$, all $0\leq s\leq t$, and all $1\leq u\leq s$, $m'<m\leq 0$,
+%$$
+%\left| \phi^{y_{m':s}}_{\theta,s|m',\chi}h - \phi^{y_{m:s}}_{\theta,s|m,\chi}h\right|\leq \left(1-\sigma_-/\sigma_+\right)^{s-m}\|h\|_\infty\,.
+%$$
+%\end{lemma}
+%\begin{proof}
+%This is a classical result under the strong mixing assumption A\ref{assum:transition:hmm} and the likelihood assumption A\ref{assum:bound:likelihood}. Consider the distribution
+%$$
+%\tilde \chi (\rmd x_m) \propto  \int \chi(\rmd x_{m'})g_\theta^{y_{m'}}(x_{m'})\left\{\prod_{u=m'+1}^{m-1} m_\theta(x_{u-1},x_u)g_\theta^{y_u}(x_u)\right\}m_\theta(x_{m-1},x_m)\rmd x_{m'+1:m}\,,
+%$$
+%so that $\phi^{y_{m':s}}_{\theta,s|m',\chi} = \phi^{y_{m:s}}_{\theta,s|m,\tilde\chi}$.
+%This is a direct consequence of \cite[Corollary 1]{douc2004asymptotic} which states, under A\ref{assum:transition:hmm} and A\ref{assum:bound:likelihood},  that 
+%$$
+%\left\|\phi^{y_{m:s}}_{\theta,s|m,\tilde\chi}-\phi^{y_{m:s}}_{\theta,s|m,\chi}\right\|_{\mathrm{tv}}\leq \left(1-\sigma_-/\sigma_+\right)^{s-m}\,.
+%$$
+%\end{proof}
+%By Lemma~\ref{lem:forgetting:filter}, for all $0\leq s\leq t$, $(\phi^{Y_{m:s}}_{\theta,s|m,\chi}h)_{m\leq s}$ is a uniform Cauchy sequence with respect to $\theta$ and $(\phi^{Y_{m:s}}_{\theta,s|m,\chi}h)_{m\leq s}$ converges uniformly a.s. The limit of this sequence is denoted by $(\phi^{Y_{-\infty:s}}_{\theta,s,\infty}h)_{m\leq s}$ and does not depend on $\chi$.
+%
+%
+%\subsubsection*{Uniform forgetting of the variational smoothing distribution}
+%\begin{lemma}
+%\label{lem:forgetting:elbo}
+%Assume that A\ref{assum:transition:variational} holds. For all bounded measurable functions  $h$, all $\theta\in\Theta$, $\varphi\in\Phi$, all $0\leq s\leq t$, and all $1\leq u\leq s$, 
+%$$
+%\left| \mathbb{E}_{q^{y_{0:t}}_{\varphi,0:t}}\left[h(X_{u-1},X_u)\right] - \mathbb{E}_{q^{y_{0:s}}_{\varphi,0:s}}\left[h(X_{u-1},X_u)\right]\right|\leq \left(1-\varpi_-/\varpi_+\right)^{s-u}\|h\|_\infty\,.
+%$$
+%\end{lemma}
+%
+%
+%\begin{proof}
+%Define the probability density function $q_{\varphi,s|t}$ by:
+%$$
+%q^{y_{0:t}}_{\varphi,s|t}: x_s \mapsto \int   \phi^{y_{0:t}}_{\varphi,t}(x_t)\prod_{r=s+1}^tq^{y_{0:r-1}}_{\varphi,r-1|r}(x_r,x_{r-1}) \rmd x_{s+1:t}\,,
+%$$
+%i.e. $q^{y_{0:t}}_{\varphi,s|t}$ is the marginal density of $X_s$ under $q^{y_{0:t}}_{\varphi,0:t}$. Then,
+%$$
+%\mathbb{E}_{q^{y_{0:t}}_{\varphi,0:t}}\left[h(X_{u-1},X_u)\right]  = \int q^{y_{0:t}}_{\varphi,s|t}(x_s)\prod_{r = u+1}^{s}q^{y_{0:r-1}}_{\varphi,r-1|r}(x_r,x_{r-1})  h(x_{u-1},x_u)\prod_{r = 1}^{u}q^{y_{0:r-1}}_{\varphi,r-1|r}(x_r,x_{r-1}) \rmd x_{0:s}\,.
+%$$
+%Therefore, under A\ref{assum:transition:variational},
+%$$
+%\left| \mathbb{E}_{q^{y_{0:t}}_{\varphi,0:t}}\left[h(X_{u-1},X_u)\right] - \mathbb{E}_{q^{y_{0:s}}_{\varphi,0:s}}\left[h(X_{u-1},X_u)\right]\right|\leq \left(1-\varpi_-/\varpi_+\right)^{s-u}\|\tilde h_{u}\|_\infty\,,
+%$$
+%where $\tilde h_{u}: x_{u}\mapsto \int  h(x_{u-1},x_u)\prod_{r = 1}^{u}q^{y_{0:r-1}}_{\varphi,r-1|r}(x_r,x_{r-1}) \rmd x_{0:u-1}$. The proof is completed by noting that
+%$ \|\tilde h_{u}\|_\infty \leq \|h\|_\infty$.
+%\end{proof}
+%
+%\begin{lemma}
+%\label{lem:bound:filter}
+%Assume that A\ref{assum:transition:hmm} and A\ref{assum:bound:likelihood} hold. For all $\theta\in\Theta$,  all $t\geq 0$, all $y_{0:t}$,
+%$$
+%\sigma_- c_-(y_t)/c_+(y_t)\leq \phi^{y_{0:t}}_{\theta,t}(x_{t})\leq \sigma_+ c_+(y_t)/c_-(y_t)\,.
+%$$
+%\end{lemma}
+%\begin{proof}
+%At time 0, we have $\phi^{y_{0}}_{\theta,0}(x_{0}) \propto \mu(x_0)g^{y_0}_\theta(x_0)$, so that $\sigma_- c_-(y_t)/c_+(y_t)\leq \phi^{y_{0}}_{\theta,0}(x_{0})\leq \sigma_+ c_+(y_t)/c_-(y_t)$. Similarly, 
+%$$
+%\phi^{y_{0:t}}_{\theta,t}(x_{t}) \propto g^{y_t}_\theta(x_t)\int \phi^{y_{0:t-1}}_{\theta,t-1}(x_{t-1})m_\theta(x_{t-1},x_t)\rmd x_{t-1}\,,
+%$$
+%so that $\sigma_- c_-(y_t)/c_+(y_t)\leq \phi^{y_{0:t}}_{\theta,t}(x_{t})\leq \sigma_+ c_+(y_t)/c_-(y_t)$.
+%\end{proof}
+%
+%By Lemma~\ref{lem:forgetting:elbo} and Lemma~\ref{lem:bound:filter}, using that
+%$$
+%\left|\log \frac{b^{y_{0:s-1}}_{\theta,s-1|s}(x_{s-1},x_s)}{q^{y_{0:s-1}}_{\varphi,s-1|s}(x_{s-1},x_s)}\right|\leq \frac{\left|\log b^{y_{0:s-1}}_{\theta,s-1|s}(x_{s-1},x_s) - \log q^{y_{0:s-1}}_{\varphi,s-1|s}(x_{s-1},x_s)\right|}{b^{y_{0:s-1}}_{\theta,s-1|s}(x_{s-1},x_s)\wedge q^{y_{0:s-1}}_{\varphi,s-1|s}(x_{s-1},x_s)}\,,
+%$$
+%$\{\mathbb{E}_{q_{\varphi,0:t}}[\log b_{\theta,s-1|s}(X_{s-1},X_s)/q_{\varphi,s-1|s}(X_{s-1},X_s)]\}_{t\geq 1}$ is a uniform Cauchy sequence. Therefore, we can write
+%$$
+%\lim_{t\to\infty}\mathbb{E}_{q_{\varphi,0:t}}[\log b_{\theta,s-1|s}(X_{s-1},X_s)/q_{\varphi,s-1|s}(X_{s-1},X_s)] = \delta^{\theta,\varphi}_{\infty,s}(\mathsf{Y}_{0:\infty})\,,
+%$$  uniformly almost surely.
 %$\{\mathbb{E}_{q_{\varphi,0:t}}[\log b_{\theta,s-1|s}(X_{s-1},X_s)/q_{\varphi,s-1|s}(X_{s-1},X_s})]\}$
 
-\begin{lemma}
-\label{lem:bound:limit}
-Assume that A\ref{assum:transition:variational} holds. For all all $\theta\in\Theta$, $\varphi\in\Phi$, all $s\geq 0$, and all $1\leq u\leq s$,
-$$
-\left| \delta^{\theta,\varphi}_{\infty,s}(\mathsf{Y}_{0:\infty}) - \mathbb{E}_{q_{\varphi,0:s}}\left[\log \frac{b_{\theta,u-1|u}(X_{u-1},X_u)}{q_{\varphi,u-1|u}(X_{u-1},X_u)}\right] \right|\leq \left(1-\varpi_-/\varpi_+\right)^{s-u}\|h\|_\infty\,.
-$$
-\end{lemma}
-\begin{proof}
-By Lemma~\ref{lem:forgetting:elbo},
-$$
-\left| \mathbb{E}_{q_{\varphi,0:t}}\left[\log \frac{b_{\theta,u-1|u}(X_{u-1},X_u)}{q_{\varphi,u-1|u}(X_{u-1},X_u)}\right] - \mathbb{E}_{q_{\varphi,0:s}}\left[\log \frac{b_{\theta,u-1|u}(X_{u-1},X_u)}{q_{\varphi,u-1|u}(X_{u-1},X_u)}\right]\right|\leq \left(1-\varpi_-/\varpi_+\right)^{s-u}\|h\|_\infty\,.
-$$
-Then, when $t$ grows to $\infty$, this yields
-$$
-\left| \delta^{\theta,\varphi}_{\infty,u}(\mathsf{Y}_{0:\infty}) - \mathbb{E}_{q_{\varphi,0:s}}\left[\log \frac{b_{\theta,u-1|u}(X_{u-1},X_u)}{q_{\varphi,u-1|u}(X_{u-1},X_u)}\right]\right|\leq \left(1-\varpi_-/\varpi_+\right)^{s-u}\|h\|_\infty\,.
-$$
-\end{proof}
-Then,
-$$
-\sum_{s=1}^t\mathrm{sup}_{\theta\in\Theta}\mathrm{sup}_{\phi\in\Phi}\left|\mathbb{E}_{q_{\varphi,0:t}}\left[\log \frac{b_{\theta,s-1|s}(X_{s-1},X_s)}{q_{\varphi,s-1|s}(X_{s-1},X_s)}\right]- \delta^{\theta,\varphi}_{\infty,s}(\mathsf{Y}_{0:\infty})\right| \leq \frac{\varpi_+}{\varpi_-}\,. 
-$$
-Since $\delta^{\theta,\varphi}_{\infty,s}(\mathsf{Y}_{0:\infty})$ is integrable, the ergodic theorem implies that $\pi$-almost surely and in $\mathrm{L}^1(\pi)$,
-$$
-\lim_{t\to \infty}\frac{1}{t}\mathcal{L}(\theta,\varphi) = \mathbb{E}\left[\delta^{\theta,\varphi}_{\infty,s}(\mathsf{Y}_{0:\infty})\right]
-$$
+%\begin{lemma}
+%\label{lem:bound:limit}
+%Assume that A\ref{assum:transition:variational} holds. For all all $\theta\in\Theta$, $\varphi\in\Phi$, all $s\geq 0$, and all $1\leq u\leq s$,
+%$$
+%\left| \delta^{\theta,\varphi}_{\infty,s}(\mathsf{Y}_{0:\infty}) - \mathbb{E}_{q_{\varphi,0:s}}\left[\log \frac{b_{\theta,u-1|u}(X_{u-1},X_u)}{q_{\varphi,u-1|u}(X_{u-1},X_u)}\right] \right|\leq \left(1-\varpi_-/\varpi_+\right)^{s-u}\|h\|_\infty\,.
+%$$
+%\end{lemma}
+%\begin{proof}
+%By Lemma~\ref{lem:forgetting:elbo},
+%$$
+%\left| \mathbb{E}_{q_{\varphi,0:t}}\left[\log \frac{b_{\theta,u-1|u}(X_{u-1},X_u)}{q_{\varphi,u-1|u}(X_{u-1},X_u)}\right] - \mathbb{E}_{q_{\varphi,0:s}}\left[\log \frac{b_{\theta,u-1|u}(X_{u-1},X_u)}{q_{\varphi,u-1|u}(X_{u-1},X_u)}\right]\right|\leq \left(1-\varpi_-/\varpi_+\right)^{s-u}\|h\|_\infty\,.
+%$$
+%Then, when $t$ grows to $\infty$, this yields
+%$$
+%\left| \delta^{\theta,\varphi}_{\infty,u}(\mathsf{Y}_{0:\infty}) - \mathbb{E}_{q_{\varphi,0:s}}\left[\log \frac{b_{\theta,u-1|u}(X_{u-1},X_u)}{q_{\varphi,u-1|u}(X_{u-1},X_u)}\right]\right|\leq \left(1-\varpi_-/\varpi_+\right)^{s-u}\|h\|_\infty\,.
+%$$
+%\end{proof}
+%Then,
+%$$
+%\sum_{s=1}^t\mathrm{sup}_{\theta\in\Theta}\mathrm{sup}_{\phi\in\Phi}\left|\mathbb{E}_{q_{\varphi,0:t}}\left[\log \frac{b_{\theta,s-1|s}(X_{s-1},X_s)}{q_{\varphi,s-1|s}(X_{s-1},X_s)}\right]- \delta^{\theta,\varphi}_{\infty,s}(\mathsf{Y}_{0:\infty})\right| \leq \frac{\varpi_+}{\varpi_-}\,. 
+%$$
+%Since $\delta^{\theta,\varphi}_{\infty,s}(\mathsf{Y}_{0:\infty})$ is integrable, the ergodic theorem implies that $\pi$-almost surely and in $\mathrm{L}^1(\pi)$,
+%$$
+%\lim_{t\to \infty}\frac{1}{t}\mathcal{L}(\theta,\varphi) = \mathbb{E}\left[\delta^{\theta,\varphi}_{\infty,s}(\mathsf{Y}_{0:\infty})\right]
+%$$
 
 
 
