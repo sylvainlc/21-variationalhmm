@@ -67,6 +67,8 @@
 \newcommand{\noshift}{\shiftsymbol^{\precpar}}
 \newcommand{\udlow}{\sigma_-}
 \newcommand{\udup}{\sigma_+}
+\newcommand{\udlowvar}{\vartheta_-}
+\newcommand{\udupvar}{\vartheta_+}
 \newcommand{\retrok}{\boldsymbol{\mathcal{L}}}
 %\newcommand{\intvect}[2]{\llbracket #1, #2 \rrbracket}
 \newcommandx{\bkw}[2][1=]{ 
@@ -328,14 +330,14 @@ $$
 $$
 where $\phi^{y_{0:T}}_{\theta,T}(x_{T})$ is the filtering distribution at time $T$ and for all $1\leq t \leq T$, $b^{y_{0:t-1}}_{\theta,t-1|t}(x_t,x_{t-1})$ is the backward kernel at time $t$: $b^{y_{0:t-1}}_{\theta,t-1|t}(x_t,x_{t-1})\propto \phi^{y_{0:t-1}}_{\theta,t-1}(x_{t-1})m_\theta(x_{t-1},x_t)$. The backward variational formulation is given by:
 $$
-q_{\varphi,0:T}^{y_{0:T}}(x_{0:T}) = q_{\varphi,T}(x_T)\prod_{t=1}^Tq_{\varphi,t-1|t}(x_t,x_{t-1})\,,
+q_{\varphi,0:T}^{y_{0:T}}(x_{0:T}) = q_{\varphi,T}^{y_{0:T}}(x_T)\prod_{t=1}^Tq^{y_{0:T}}_{\varphi,t-1|t}(x_t,x_{t-1})\,,
 $$
 so that the ELBO writes
 \begin{align*}
-\mathcal{L}(\theta,\varphi) &= \mathbb{E}_{q^{y_{0:T}}_{\varphi,0:T}}\left[\log \frac{p_{\theta,0:T}(X_{0:T},Y_{0:T})}{q_{\varphi,0:T}(X_{0:T})}\right]\\
+\mathcal{L}(\theta,\varphi) &= \mathbb{E}_{q^{Y_{0:T}}_{\varphi,0:T}}\left[\log \frac{p_{\theta,0:T}(X_{0:T},Y_{0:T})}{q^{y_{0:T}}_{\varphi,0:T}(X_{0:T})}\right]\\
 &= \log \int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y_{0:T}|x_{0:T}) \rmd x_{0:T}\\
-&\hspace{3cm}-\mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})\int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y_{0:T}|x_{0:T})\rmd x_{0:T})}{p_{\theta,0:T}(X_{0:T},Y_{0:T})}\right]\,,\\
-&= \log \int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y_{0:T}|x_{0:T}) \rmd x_{0:T}- \mathrm{KL}\left(q_{\varphi,0:T}\middle\| \frac{p_{\theta,0:T}(\cdot)p_{\theta,0:T}(Y_{0:T}|\cdot)}{\int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y_{0:T}|x_{0:T})}\right)\,.
+&\hspace{3cm}-\mathbb{E}_{q^{Y_{0:T}}_{\varphi,0:T}}\left[\log \frac{q^{Y_{0:T}}_{\varphi,0:T}(X_{0:T})\int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y_{0:T}|x_{0:T})\rmd x_{0:T})}{p_{\theta,0:T}(X_{0:T},Y_{0:T})}\right]\,,\\
+&= \log \int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y_{0:T}|x_{0:T}) \rmd x_{0:T}- \mathrm{KL}\left(q^{Y_{0:T}}_{\varphi,0:T}\middle\| \frac{p_{\theta,0:T}(\cdot)p_{\theta,0:T}(Y_{0:T}|\cdot)}{\int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y_{0:T}|x_{0:T})}\right)\,.
 \end{align*}
 Following \cite{tang21a}, we define the following loss function to be minimized
 $$
@@ -343,18 +345,18 @@ $$
 $$
 where
 $$
-m(\theta,\varphi,Y^i_{0:T}) = \log \frac{p_{\mathcal{D}}(Y^i_{0:T})}{\int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y^i_{0:T}|x_{0:T}) \rmd x_{0:T}} + \mathrm{KL}\left(q_{\varphi,0:T}\middle\| \frac{p_{\theta,0:T}(\cdot)p_{\theta,0:T}(Y^i_{0:T}|\cdot)}{\int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y^i_{0:T}|x_{0:T})}\right)\,.
+m(\theta,\varphi,Y^i_{0:T}) = \log \frac{p_{\mathcal{D}}(Y^i_{0:T})}{\int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y^i_{0:T}|x_{0:T}) \rmd x_{0:T}} + \mathrm{KL}\left(q^{Y^i_{0:T}}_{\varphi,0:T}\middle\| \frac{p_{\theta,0:T}(\cdot)p_{\theta,0:T}(Y^i_{0:T}|\cdot)}{\int p_{\theta,0:T}(x_{0:T})p_{\theta,0:T}(Y^i_{0:T}|x_{0:T})}\right)\,.
 $$
 
 \begin{hypH}
 \label{assum:strong:mixing}
-There exist constants $0 < \udlow < \udup < \infty$ such that for all $k \in \nset$, $\parvec\in\Theta$, $\parvar\in\parvarspace$ and $(x_k, x_{k + 1}) \in \mathbb{R}^d \times \mathbb{R}^d$, 
+There exist constants $0 < \udlow < \udup < \infty$ such that for all $k \in \nset$, $\parvec\in\Theta$, $\parvar\in\parvarspace$ and $(x_k, x_{k + 1}) \in \mathbb{R}^d \times \mathbb{R}^d$, $y_{0:T}$,
 $$
     \udlow \leq m_{\parvec}(x_k, x_{k + 1}) \leq \udup
 $$ 
 and 
 $$
-    \udlow \leq  \vd{k\vert k+1}(x_{k+1}, x_{k}) \leq \udup. 
+    \udlowvar(y_{0:T}) \leq  \vd{k\vert k+1}^{y_{0:T}}(x_{k+1}, x_{k}) \leq \udupvar(y_{0:T}). 
 $$ 
 \end{hypH}
 
@@ -371,10 +373,19 @@ There exists $M$ such that for all $\theta, \theta'$ and $x,x'$,
 $$
 \left| m_{\theta}(x,x') - m_{\theta'}(x,x')\right| \leq  M(x,x')\|\theta-\theta'\|_2\eqsp.
 $$
-For all $1\leq t \leq T$, there exists $K_{t-1|t}$ such that for all $\varphi, \varphi'$ and $x,x'$,
+For all $1\leq t \leq T$, $y_{0:T}$, there exists $K^{y_{0:T}}_{t-1|t}$ such that for all $\varphi, \varphi'$ and $x,x'$,
 $$
-\left| q_{\varphi,t-1|t}(x,x') - q_{\varphi',t-1|t}(x,x')\right| \leq  K_{t-1|t}(x',x)\|\varphi-\varphi'\|_2\eqsp.
+\left| q^{y_{0:T}}_{\varphi,t-1|t}(x,x') - q^{y_{0:T}}_{\varphi',t-1|t}(x,x')\right| \leq  K^{y_{0:T}}_{t-1|t}(x',x)\|\varphi-\varphi'\|_2\eqsp.
 $$
+\end{hypH}
+
+\begin{hypH}
+\label{assum:moments}
+For all $1\leq t \leq T$, $y_{0:T}$,
+$$
+\mu\otimes\mu(K^{y_{0:T}}_{t-1|t})<\infty\eqsp,
+$$
+where $K^{y_{0:T}}_{t-1|t}$ is defined in H\ref{assum:lip}.
 \end{hypH}
 
 
@@ -386,31 +397,31 @@ $$
 Note that
 \begin{align*}
 \Delta(\theta, \theta', \varphi, \varphi', y_{0:T}) &= \left|m(\theta,\varphi,y_{0:T})  - m(\theta',\varphi',y_{0:T}) \right|\\
-&\leq \left|\ell_T^{y_{0:T}}(\theta) - \ell_T^{y_{0:T}}(\theta')\right| + \left|\mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi',0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta',0:T|T}(X_{0:T})}\right]\right|\,.
+&\leq \left|\ell_T^{y_{0:T}}(\theta) - \ell_T^{y_{0:T}}(\theta')\right| + \left|\mathbb{E}_{q^{y_{0:T}}_{\varphi,0:T}}\left[\log \frac{q^{y_{0:T}}_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right] - \mathbb{E}_{q^{y_{0:T}}_{\varphi',0:T}}\left[\log \frac{q^{y_{0:T}}_{\varphi',0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta',0:T|T}(X_{0:T})}\right]\right|\,.
 \end{align*}
 Write
 \begin{multline*}
-\left|\mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi',0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta',0:T|T}(X_{0:T})}\right]\right| \leq \Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T}) + \Delta_2(\theta, \theta', \varphi, \varphi', y_{0:T})\,,
+\left|\mathbb{E}_{q^{y_{0:T}}_{\varphi,0:T}}\left[\log \frac{q^{y_{0:T}}_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right] - \mathbb{E}_{q^{y_{0:T}}_{\varphi',0:T}}\left[\log \frac{q^{y_{0:T}}_{\varphi',0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta',0:T|T}(X_{0:T})}\right]\right| \leq \Delta_1(\theta, \varphi, \varphi', y_{0:T}) + \Delta_2(\theta, \theta', \varphi, \varphi', y_{0:T})\,,
 \end{multline*}
 where
 \begin{align*}
-\Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T})  &= \left|\mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right]\right|\,,\\
-\Delta_2(\theta, \theta', \varphi, \varphi', y_{0:T})&= \left|\mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[\log \frac{q_{\varphi',0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta',0:T|T}(X_{0:T})}\right]\right|
+\Delta_1(\theta, \varphi, \varphi', y_{0:T})  &= \left|\mathbb{E}_{q_{\varphi,0:T}}\left[\log \frac{q^{y_{0:T}}_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right] - \mathbb{E}_{q^{y_{0:T}}_{\varphi',0:T}}\left[\log \frac{q^{y_{0:T}}_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right]\right|\,,\\
+\Delta_2(\theta, \theta', \varphi, \varphi', y_{0:T})&= \left|\mathbb{E}_{q^{y_{0:T}}_{\varphi',0:T}}\left[\log \frac{q^{y_{0:T}}_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})}\right] - \mathbb{E}_{q^{y_{0:T}}_{\varphi',0:T}}\left[\log \frac{q^{y_{0:T}}_{\varphi',0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta',0:T|T}(X_{0:T})}\right]\right|
 \end{align*}
 Therefore, 
 $$
-\Delta(\theta, \theta', \varphi, \varphi', y_{0:T}) \leq \left|\ell_T^{y_{0:T}}(\theta) - \ell_T^{y_{0:T}}(\theta')\right| + \Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T}) + \Delta_2(\theta, \theta', \varphi, \varphi', y_{0:T}) \,.
+\Delta(\theta, \theta', \varphi, \varphi', y_{0:T}) \leq \left|\ell_T^{y_{0:T}}(\theta) - \ell_T^{y_{0:T}}(\theta')\right| + \Delta_1(\theta, \varphi, \varphi', y_{0:T}) + \Delta_2(\theta, \theta', \varphi, \varphi', y_{0:T}) \,.
 $$
 Note that
 $$
-\log \frac{q_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})} = \sum_{t=1}^Th_{t,\theta,\varphi}(X_{t-1},X_t)\eqsp,
+\log \frac{q^{y_{0:T}}_{\varphi,0:T}(X_{0:T})}{\phi^{y_{0:T}}_{\theta,0:T|T}(X_{0:T})} = \sum_{t=1}^Th^{y_{0:T}}_{t,\theta,\varphi}(X_{t-1},X_t)\eqsp,
 $$
 where for $1\leq t \leq T-1$, 
 \begin{equation}
 \label{eq:def:addfunc}
-h_{t,\theta,\varphi}(X_{t-1},X_t) = \log q_{\varphi,t-1|t}(X_t,X_{t-1}) - \log b_{\theta,t-1|t}(X_t,X_{t-1})
+h^{y_{0:T}}_{t,\theta,\varphi}(X_{t-1},X_t) = \log q^{y_{0:T}}_{\varphi,t-1|t}(X_t,X_{t-1}) - \log b^{y_{0:t-1}}_{\theta,t-1|t}(X_t,X_{t-1})
 \end{equation} 
-and, by convention,  $h_{T,\theta,\varphi}(X_{T-1},X_T) = \log q_{\varphi,T}(x_T) - \log \phi_{\theta,T}(x_T)$. 
+and, by convention,  $h^{y_{0:T}}_{T,\theta,\varphi}(X_{T-1},X_T) = \log q^{y_{0:T}}_{\varphi,T}(x_T) - \log \phi^{y_{0:T}}_{\theta,T}(x_T)$. 
 \begin{proposition}
 \label{prop:loglikelihood:lipschitz}
 For all $\theta$, $\theta'$, and all $y_{0:T}$,
@@ -423,47 +434,47 @@ Results already derived in the literature. Checking "good" conditions since \cit
 \end{proof}
 
 \begin{proposition}
-Assume that H\ref{assum:strong:mixing} and H\ref{assum:lip} hold. Then,
+Assume that H\ref{assum:strong:mixing}, H\ref{assum:lip} and H\ref{assum:moments} hold. Then,
 $$
-\Delta_1(\theta, \theta', \varphi, \varphi', y_{0:T}) \leq \frac{\|\varphi-\varphi'\|_2}{2}\sum_{t=1}^T\sum_{s=t-1}^T \left(q_{\varphi,T}\prod_{u=s+1}^Tq_{\varphi,u-1|u}K_{s|s+1}\right) \rho^{s-t}\mathrm{osc}\left(q_{\varphi',t-1|t}h_{t,\theta,\varphi}\right) \eqsp,
+\Delta_1(\theta, \varphi, \varphi', y_{0:T}) \leq \frac{ \udupvar(y_{0:T})\|\varphi-\varphi'\|_2}{2}\sum_{t=1}^T\sum_{s=t-1}^T\mu\otimes\mu (K_{s|s+1}) \rho(y_{0:T})^{s-t}\mathrm{osc}\left(q^{y_{0:T}}_{\varphi',t-1|t}h^{y_{0:T}}_{t,\theta,\varphi}\right) \eqsp,
 $$
-where $\rho = 1-\udlow/\udup$ and $h_{t,\theta,\varphi}$ is defined in \eqref{eq:def:addfunc}.
+where $\rho(y_{0:T}) = 1-\udlowvar(y_{0:T})/\udupvar(y_{0:T})$ and $h^{y_{0:T}}_{t,\theta,\varphi}$ is defined in \eqref{eq:def:addfunc}.
 \end{proposition}
 \begin{proof}
 For all $\varphi,\varphi'$, $0\leq s \leq T-1$, define
 \begin{multline*}
-\tilde q_{\varphi,\varphi',t|T}(x_{0:T}) = q_{\varphi,T}(x_T)\prod_{s=t+1}^Tq_{\varphi,s-1|s}(x_s,x_{s-1})\prod_{s=1}^tq_{\varphi',s-1|s}(x_s,x_{s-1}) \\
-- q_{\varphi,T}(x_T)\prod_{s=t+2}^Tq_{\varphi,s-1|s}(x_s,x_{s-1})\prod_{s=1}^{t+1}q_{\varphi',s-1|s}(x_s,x_{s-1})
+\tilde q^{y_{0:T}}_{\varphi,\varphi',t|T}(x_{0:T}) = q^{y_{0:T}}_{\varphi,T}(x_T)\prod_{s=t+1}^Tq^{y_{0:T}}_{\varphi,s-1|s}(x_s,x_{s-1})\prod_{s=1}^tq^{y_{0:T}}_{\varphi',s-1|s}(x_s,x_{s-1}) \\
+- q^{y_{0:T}}_{\varphi,T}(x_T)\prod_{s=t+2}^Tq^{y_{0:T}}_{\varphi,s-1|s}(x_s,x_{s-1})\prod_{s=1}^{t+1}q^{y_{0:T}}_{\varphi',s-1|s}(x_s,x_{s-1})
 \end{multline*}
 and for $s=T$,
 $$
-\tilde q_{\varphi,\varphi',T|T}(x_{0:T}) = q_{\varphi,T}(x_T)\prod_{s=1}^Tq_{\varphi',s-1|s}(x_s,x_{s-1}) 
-- q_{\varphi',T}(x_T)\prod_{s=1}^Tq_{\varphi',s-1|s}(x_s,x_{s-1})\eqsp.
+\tilde q^{y_{0:T}}_{\varphi,\varphi',T|T}(x_{0:T}) = q^{y_{0:T}}_{\varphi,T}(x_T)\prod_{s=1}^Tq^{y_{0:T}}_{\varphi',s-1|s}(x_s,x_{s-1}) 
+- q^{y_{0:T}}_{\varphi',T}(x_T)\prod_{s=1}^Tq^{y_{0:T}}_{\varphi',s-1|s}(x_s,x_{s-1})\eqsp.
 $$
 Therefore,
 $$
-\mathbb{E}_{q_{\varphi,0:T}}\left[h_{t,\theta,\varphi}(X_{t-1},X_t)\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[h_{t,\theta,\varphi}(X_{t-1},X_t)\right] = \sum_{s=0}^T \mathbb{E}_{\tilde q_{\varphi,\varphi',s|T}}\left[h_{t,\theta,\varphi}(X_{t-1},X_t)\right] \eqsp.
+\mathbb{E}_{q^{y_{0:T}}_{\varphi,0:T}}\left[h^{y_{0:T}}_{t,\theta,\varphi}(X_{t-1},X_t)\right] - \mathbb{E}_{q^{y_{0:T}}_{\varphi',0:T}}\left[h^{y_{0:T}}_{t,\theta,\varphi}(X_{t-1},X_t)\right] = \sum_{s=0}^T \mathbb{E}_{\tilde q^{y_{0:T}}_{\varphi,\varphi',s|T}}\left[h^{y_{0:T}}_{t,\theta,\varphi}(X_{t-1},X_t)\right] \eqsp.
 $$
-Note first that if $t> s+1$, then $\mathbb{E}_{\tilde q_{\varphi,\varphi',s|T}}\left[h_{t,\theta,\varphi}(X_{t-1},X_t)\right] = 0$ so that
+Note first that if $t> s+1$, then $\mathbb{E}_{\tilde q^{y_{0:T}}_{\varphi,\varphi',s|T}}\left[h^{y_{0:T}}_{t,\theta,\varphi}(X_{t-1},X_t)\right] = 0$ so that
 $$
-\mathbb{E}_{q_{\varphi,0:T}}\left[h_{t,\theta,\varphi}(X_{t-1},X_t)\right] - \mathbb{E}_{q_{\varphi',0:T}}\left[h_{t,\theta,\varphi}(X_{t-1},X_t)\right] = \sum_{s=t-1}^T \mathbb{E}_{\tilde q_{\varphi,\varphi',s|T}}\left[h_{t,\theta,\varphi}(X_{t-1},X_t)\right] \eqsp.
+\mathbb{E}_{q^{y_{0:T}}_{\varphi,0:T}}\left[h^{y_{0:T}}_{t,\theta,\varphi}(X_{t-1},X_t)\right] - \mathbb{E}_{q^{y_{0:T}}_{\varphi',0:T}}\left[h^{y_{0:T}}_{t,\theta,\varphi}(X_{t-1},X_t)\right] = \sum_{s=t-1}^T \mathbb{E}_{\tilde q^{y_{0:T}}_{\varphi,\varphi',s|T}}\left[h^{y_{0:T}}_{t,\theta,\varphi}(X_{t-1},X_t)\right] \eqsp.
 $$
 For all $t\leq s+1$, write for all measurable set $A$
 \begin{align*}
-\mu_{\varphi,s}(A) &= \int \mathds{1}_A(x_s) q_{\varphi,T}(\rmd x_T)\prod_{t=s+1}^Tq_{\varphi,t-1|t}(x_t,\rmd x_{t-1})\eqsp,\\
-\tilde\mu_{\varphi,\varphi',s}(A) &= \int \mathds{1}_A(x_s) q_{\varphi,T}(\rmd x_T)\prod_{t=s+2}^Tq_{\varphi,t-1|t}(x_t,\rmd x_{t-1})q_{\varphi',s|s+1}(x_{s+1},\rmd x_{s})\eqsp.
+\mu^{y_{0:T}}_{\varphi,s}(A) &= \int \mathds{1}_A(x_s) q^{y_{0:T}}_{\varphi,T}(\rmd x_T)\prod_{u=s+1}^Tq^{y_{0:T}}_{\varphi,u-1|u}(x_u,\rmd x_{u-1})\eqsp,\\
+\tilde\mu^{y_{0:T}}_{\varphi,\varphi',s}(A) &= \int \mathds{1}_A(x_s) q^{y_{0:T}}_{\varphi,T}(\rmd x_T)\prod_{u=s+2}^Tq^{y_{0:T}}_{\varphi,u-1|u}(x_u,\rmd x_{u-1})q^{y_{0:T}}_{\varphi',s|s+1}(x_{s+1},\rmd x_{s})\eqsp.
 \end{align*}
 Therefore,
 $$
-\mathbb{E}_{\tilde q_{\varphi,\varphi',s|T}}\left[h_{t,\theta,\varphi}(X_{t-1},X_t)\right] = \left(\mu_{\varphi,s} - \tilde\mu_{\varphi,\varphi',s}\right)\left\{\prod_{u=s}^{t+1}q_{\varphi',u-1|u}\right\}q_{\varphi',t-1|t}h_{t,\theta,\varphi}
+\mathbb{E}_{\tilde q^{y_{0:T}}_{\varphi,\varphi',s|T}}\left[h^{y_{0:T}}_{t,\theta,\varphi}(X_{t-1},X_t)\right] = \left(\mu^{y_{0:T}}_{\varphi,s} - \tilde\mu^{y_{0:T}}_{\varphi,\varphi',s}\right)\left\{\prod_{u=t+1}^{s}q^{y_{0:T}}_{\varphi',u-1|u}\right\}q^{y_{0:T}}_{\varphi',t-1|t}h^{y_{0:T}}_{t,\theta,\varphi}
 $$
 and, using A\ref{assum:strong:mixing},
 $$
-\mathbb{E}_{\tilde q_{\varphi,\varphi',s|T}}\left[h_{t,\theta,\varphi}(X_{t-1},X_t)\right]  \leq \frac{1}{2}\|\mu_{\varphi,s}-\tilde\mu_{\varphi,\varphi',s}\|_{\mathrm{tv}}\rho^{s-t}\mathrm{osc}\left(q_{\varphi',t-1|t}h_{t,\theta,\varphi}\right)\eqsp.
+\mathbb{E}_{\tilde q^{y_{0:T}}_{\varphi,\varphi',s|T}}\left[h^{y_{0:T}}_{t,\theta,\varphi}(X_{t-1},X_t)\right]  \leq \frac{1}{2}\|\mu^{y_{0:T}}_{\varphi,s}-\tilde\mu^{y_{0:T}}_{\varphi,\varphi',s}\|_{\mathrm{tv}}\rho(y_{0:T})^{s-t}\mathrm{osc}\left(q^{y_{0:T}}_{\varphi',t-1|t}h^{y_{0:T}}_{t,\theta,\varphi}\right)\eqsp.
 $$
 Noting that by H\ref{assum:lip},
 $$
-\|\mu_{\varphi,s}-\tilde\mu_{\varphi,\varphi',s}\|_{\mathrm{tv}} \leq q_{\varphi,T}\prod_{s=t+1}^Tq_{\varphi,s-1|s}K_{s|s+1}\|\varphi-\varphi'\|_2\eqsp,
+\|\mu_{\varphi,s}-\tilde\mu_{\varphi,\varphi',s}\|_{\mathrm{tv}} \leq q^{y_{0:T}}_{\varphi,T}\prod_{s=t+1}^Tq_{\varphi,s-1|s}K_{s|s+1}\|\varphi-\varphi'\|_2\leq \udupvar(y_{0:T})\mu\otimes\mu (K_{s|s+1})\|\varphi-\varphi'\|_2\eqsp,
 $$
 concludes the proof.
 \end{proof}
@@ -554,17 +565,29 @@ This yields
 \section{Technical results}
 \begin{lemma}
 \label{lem:bound:filter}
-Assume that A\ref{assum:transition:hmm} and A\ref{assum:bound:likelihood} hold. For all $\theta\in\Theta$,  all $t\geq 0$, all $y_{0:t}$,
+Assume that H\ref{assum:transition:hmm} and H\ref{assum:bound:likelihood} hold. For all $\theta\in\Theta$,  all $t\geq 0$, all $y_{0:t}$,
 $$
 \sigma_- c_-(y_t)/c_+(y_t)\leq \phi^{y_{0:t}}_{\theta,t}(x_{t})\leq \sigma_+ c_+(y_t)/c_-(y_t)\,.
 $$
 \end{lemma}
 \begin{proof}
-At time 0, we have $\phi^{y_{0}}_{\theta,0}(x_{0}) \propto \chi(x_0)g^{y_0}_\theta(x_0)$, so that $\sigma_- c_-(y_t)/c_+(y_t)\leq \phi^{y_{0}}_{\theta,0}(x_{0})\leq \sigma_+ c_+(y_0)/c_-(y_0)$. Similarly, 
+At time 0, we have $\phi^{y_{0}}_{\theta,0}(x_{0}) \propto \chi(x_0)g^{y_0}_\theta(x_0)$, so that $\sigma_- c_-(y_0)/c_+(y_0)\leq \phi^{y_{0}}_{\theta,0}(x_{0})\leq \sigma_+ c_+(y_0)/c_-(y_0)$. Similarly, 
 $$
 \phi^{y_{0:t}}_{\theta,t}(x_{t}) \propto g^{y_t}_\theta(x_t)\int \phi^{y_{0:t-1}}_{\theta,t-1}(x_{t-1})m_\theta(x_{t-1},x_t)\rmd x_{t-1}\,,
 $$
 so that $\sigma_- c_-(y_t)/c_+(y_t)\leq \phi^{y_{0:t}}_{\theta,t}(x_{t})\leq \sigma_+ c_+(y_t)/c_-(y_t)$.
+\end{proof}
+
+\begin{lemma}
+\label{lem:bound:addfunc}
+Assume that H\ref{assum:transition:hmm} and H\ref{assum:bound:likelihood} hold. For all $\theta$, $\varphi$  all $1\leq t\leq T$, all $y_{0:t}$,
+$$
+\|h^{y_{0:T}}_{t,\theta,\varphi}\|_\infty \leq \eqsp,
+$$
+where $h_{t,\theta,\varphi}$, $1\leq t\leq T$,  are defined in \eqref{eq:def:addfunc}.
+\end{lemma}
+\begin{proof}
+Note that by \eqref{eq:def:addfunc} $h^{y_{0:T}}_{t,\theta,\varphi}(X_{t-1},X_t) = \log q^{y_{0:T}}_{\varphi,t-1|t}(X_t,X_{t-1}) - \log b^{y_{0:t-1}}_{\theta,t-1|t}(X_t,X_{t-1})$ and, by convention,  $h^{y_{0:T}}_{T,\theta,\varphi}(X_{T-1},X_T) = \log q^{y_{0:T}}_{\varphi,T}(x_T) - \log \phi^{y_{0:T}}_{\theta,T}(x_T)$. 
 \end{proof}
 
 \clearpage
