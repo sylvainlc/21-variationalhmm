@@ -618,11 +618,11 @@ At time $t=0$, note that $\phi_{\theta,0}^{y_{0}}(x_{0})\propto \chi(x_0)g_\thet
 &=\left|\frac{\chi(x_0)\left(g_\theta^{y_0}(x_0)-g_{\theta'}^{y_0}(x_0)\right)}{\int \chi(x_0)g_\theta^{y_0}(x_0)\mu(\rmd x_0)} + \chi(x_0)g_{\theta'}^{y_0}(x_0)\left(\frac{1}{\int \chi(x_0)g_{\theta}^{y_0}(x_0)\mu(\rmd x_0)}-\frac{1}{\int \chi(x_0)g_{\theta'}^{y_0}(x_0)\mu(\rmd x_0)}\right)\right|\eqsp,\\
 &\leq \left(\frac{\udup}{\udlow c_-(y_0)}G^{y_{0}}_{0}(x_0)+ \frac{\udup\mu\left(G^{y_{0}}_{0}\right)}{\udlow^2c^2_-(y_0)}\right)\|\theta-\theta'\|_2\eqsp. 
 \end{align*}
-For $t>0$, note that $\phi_{\theta,t}^{y_{0:t}}(x_{t}) =  g_\theta^{y_t}(x_t)\int \phi_{\theta,t-1}^{y_{0:t-1}}(x_{t-1})m_\theta(x_{t-1},x_t)\mu(\rmd x_{t-1})/c_{\theta,t}(y_{0:t})$ where $c_{\theta,t}(y_{0:t}) = \int g_\theta^{y_t}(x_t) \phi_{\theta,t-1}^{y_{0:t-1}}(x_{t-1})m_\theta(x_{t-1},x_t)\mu(\rmd x_{t-1})\mu(\rmd x_{t})$. Therefore,
+For $t>0$, note that $\phi_{\theta,t}^{y_{0:t}}(x_{t}) =  g_\theta^{y_t}(x_t)\int \phi_{\theta,t-1}^{y_{0:t-1}}(x_{t-1})m_\theta(x_{t-1},x_t)\mu(\rmd x_{t-1})/c_{\theta,t}(y_{0:t})$ where $c_{\theta,t}(y_{0:t}) = \int g_\theta^{y_t}(x_t) \phi_{\theta,t-1}^{y_{0:t-1}}(x_{t-1})m_\theta(x_{t-1},x_t)\mu(\rmd x_{t-1})\mu(\rmd x_{t})$. Therefore, using that $c_{\theta,t}(y_{0:t})\wedge c_{\theta',t}(y_{0:t})\geq \udlow c_-(y_t)$,
 \begin{align*}
 \left|\phi_{\theta,t}^{y_{0:t}}(x_{t}) - \phi_{\theta',t}^{y_{0:t}}(x_{t})\right|&=\left|\frac{g_\theta^{y_t}(x_t)\phi_{\theta,t-1}^{y_{0:t-1}}(m_\theta(\cdot,x_t))}{c_{\theta,t}(y_{0:t})} - \frac{g_{\theta'}^{y_t}(x_t)\phi_{\theta',t-1}^{y_{0:t-1}}(m_{\theta'}(\cdot,x_t))}{c_{\theta',t}(y_{0:t})}\right|\eqsp,\\
 &=\left|\frac{g_\theta^{y_t}(x_t)\phi_{\theta,t-1}^{y_{0:t-1}}(m_\theta(\cdot,x_t))-g_{\theta'}^{y_t}(x_t)\phi_{\theta',t-1}^{y_{0:t-1}}(m_{\theta'}(\cdot,x_t))}{c_{\theta,t}(y_{0:t})}+g_{\theta'}^{y_t}(x_t)\phi_{\theta',t-1}^{y_{0:t-1}}(m_{\theta'}(\cdot,x_t))\frac{c_{\theta',t}(y_{0:t})-c_{\theta,t}(y_{0:t})}{c_{\theta,t}(y_{0:t})c_{\theta',t}(y_{0:t})}\right|\eqsp,\\
-&\leq \left(\frac{\udup}{\udlow c_-(y_0)}G^{y_{0}}_{0}(x_0)+ \frac{\udup\mu\left(G^{y_{0}}_{0}\right)}{\udlow^2c^2_-(y_0)}\right)\|\theta-\theta'\|_2\eqsp. 
+&\leq \left(\frac{\udup G^{y_t}(x_t) + g^{y_t}_{\theta'}(x_t)}{\udlow c_-(y_t)}+ \frac{}{\udlow^2c^2_-(y_t)}\right)\|\theta-\theta'\|_2\eqsp. 
 \end{align*}
 \end{proof}
 
