@@ -436,7 +436,7 @@ Results already derived in the literature. Checking "good" conditions since \cit
 \begin{proposition}
 Assume that H\ref{assum:strong:mixing}, H\ref{assum:lip} and H\ref{assum:moments} hold. Then,
 $$
-\Delta_1(\theta, \varphi, \varphi', y_{0:T}) \leq \frac{ \udupvar(y_{0:T})\|\varphi-\varphi'\|_2}{2}\sum_{t=1}^T\sum_{s=t-1}^T\mu\otimes\mu (K_{s|s+1}) \rho(y_{0:T})^{s-t}\mathrm{osc}\left(q^{y_{0:T}}_{\varphi',t-1|t}h^{y_{0:T}}_{t,\theta,\varphi}\right) \eqsp,
+\Delta_1(\theta, \varphi, \varphi', y_{0:T}) \leq \udupvar(y_{0:T})\|\varphi-\varphi'\|_2\sum_{t=1}^T\left\|h^{y_{0:T}}_{t,\theta,\varphi}\right\|_\infty\sum_{s=t-1}^T\mu\otimes\mu (K_{s|s+1}) \rho(y_{0:T})^{s-t} \eqsp,
 $$
 where $\rho(y_{0:T}) = 1-\udlowvar(y_{0:T})/\udupvar(y_{0:T})$ and $h^{y_{0:T}}_{t,\theta,\varphi}$ is defined in \eqref{eq:def:addfunc}.
 \end{proposition}
@@ -476,7 +476,7 @@ Noting that by H\ref{assum:lip},
 $$
 \|\mu_{\varphi,s}-\tilde\mu_{\varphi,\varphi',s}\|_{\mathrm{tv}} \leq q^{y_{0:T}}_{\varphi,T}\prod_{s=t+1}^Tq_{\varphi,s-1|s}K_{s|s+1}\|\varphi-\varphi'\|_2\leq \udupvar(y_{0:T})\mu\otimes\mu (K_{s|s+1})\|\varphi-\varphi'\|_2\eqsp,
 $$
-concludes the proof.
+concludes the proof with Lemma~\ref{lem:bound:addfunc}.
 \end{proof}
 
 \begin{lemma}
@@ -580,16 +580,32 @@ so that $\sigma_- c_-(y_t)/c_+(y_t)\leq \phi^{y_{0:t}}_{\theta,t}(x_{t})\leq \si
 
 \begin{lemma}
 \label{lem:bound:addfunc}
-Assume that H\ref{assum:transition:hmm} and H\ref{assum:bound:likelihood} hold. For all $\theta$, $\varphi$  all $1\leq t\leq T$, all $y_{0:t}$,
+Assume that H\ref{assum:strong:mixing} and H\ref{assum:bound:likelihood} hold. For all $\theta$, $\varphi$  all $1\leq t\leq T$, all $y_{0:T}$, $x_{t-1}$, $x_t$,
 $$
-\|h^{y_{0:T}}_{t,\theta,\varphi}\|_\infty \leq \eqsp,
+\frac{\sigma^2_-c_-(y_{t-1})}{\sigma_+c_+(y_{t-1})}\leq b^{y_{0:t-1}}_{\theta,t-1|t}(x_t,x_{t-1}) \leq \frac{\sigma^2_-+c_+(y_{t-1})}{\sigma_-c_-(y_{t-1})}
+$$
+and for $1\leq t \leq T-1$,
+$$
+\|h^{y_{0:T}}_{t,\theta,\varphi}\|_\infty \leq \frac{\sigma_+c_+(y_{t-1})}{\sigma_-c_-(y_{t-1})}\frac{\sigma^2_+c_+(y_{t-1})+\sigma_-c_-(y_{t-1})\udupvar(y_{0:T})}{ \sigma^2_-c_-(y_{t-1}) \wedge \sigma_+c_+(y_{t-1})\udlowvar(y_{0:T})}\eqsp,
+$$
+and 
+$$
+\|h^{y_{0:T}}_{T,\theta,\varphi}\|_\infty \leq \frac{c_+(y_T)}{c_-(y_T)}\frac{c_-(y_T)\udupvar(y_{0:T}) +  \udup c_+(y_T)}{c_+(y_T)\udlowvar(y_{0:T})\wedge \udlow c_-(y_T)}\eqsp,
 $$
 where $h_{t,\theta,\varphi}$, $1\leq t\leq T$,  are defined in \eqref{eq:def:addfunc}.
 \end{lemma}
 \begin{proof}
-Note that by \eqref{eq:def:addfunc}, for $1\leq t \leq T-1$,  $h^{y_{0:T}}_{t,\theta,\varphi}(X_{t-1},X_t) = \log q^{y_{0:T}}_{\varphi,t-1|t}(X_t,X_{t-1}) - \log b^{y_{0:t-1}}_{\theta,t-1|t}(X_t,X_{t-1})$ and, by convention,  $h^{y_{0:T}}_{T,\theta,\varphi}(X_{T-1},X_T) = \log q^{y_{0:T}}_{\varphi,T}(x_T) - \log \phi^{y_{0:T}}_{\theta,T}(x_T)$. Note that, by Lemma~\ref{lem:bound:filter},
+Note that by \eqref{eq:def:addfunc}, for $1\leq t \leq T-1$,  $h^{y_{0:T}}_{t,\theta,\varphi}(X_{t-1},X_t) = \log q^{y_{0:T}}_{\varphi,t-1|t}(X_t,X_{t-1}) - \log b^{y_{0:t-1}}_{\theta,t-1|t}(X_t,X_{t-1})$ and, by convention,  $h^{y_{0:T}}_{T,\theta,\varphi}(X_{T-1},X_T) = \log q^{y_{0:T}}_{\varphi,T}(x_T) - \log \phi^{y_{0:T}}_{\theta,T}(x_T)$. Note that, by Lemma~\ref{lem:bound:filter}, for $1\leq t\leq T-1$,
 $$
-\frac{\sigma^2_-c_-(y_t)}{\sigma_+c_+(y_t)}\leq b^{y_{0:t-1}}_{\theta,t-1|t}(X_t,X_{t-1}) = \frac{\phi_{\theta,t-1}^{y_{0:t-1}}(X_{t-1})m_\theta(X_{t-1},X_t)}{\int \phi_{\theta,t-1}^{y_{0:t-1}}(x_{t-1})m_\theta(x_{t-1},X_t)\mu(\rmd x_{t-1})}\leq \frac{\sigma^2_-+c_+(y_t)}{\sigma_-c_-(y_t)}\eqsp.
+\frac{\sigma^2_-c_-(y_{t-1})}{\sigma_+c_+(y_{t-1})}\leq b^{y_{0:t-1}}_{\theta,t-1|t}(X_t,X_{t-1}) = \frac{\phi_{\theta,t-1}^{y_{0:t-1}}(X_{t-1})m_\theta(X_{t-1},X_t)}{\int \phi_{\theta,t-1}^{y_{0:t-1}}(x_{t-1})m_\theta(x_{t-1},X_t)\mu(\rmd x_{t-1})}\leq \frac{\sigma^2_+c_+(y_{t-1})}{\sigma_-c_-(y_{t-1})}\eqsp,
+$$
+so that
+$$
+\|h^{y_{0:T}}_{t,\theta,\varphi}\|_\infty \leq \frac{\frac{\sigma^2_+c_+(y_{t-1})}{\sigma_-c_-(y_{t-1})}+\udupvar(y_{0:T})}{ \frac{\sigma^2_-c_-(y_{t-1})}{\sigma_+c_+(y_{t-1})} \wedge \udlowvar(y_{0:T})}\eqsp,
+$$
+which concludes the proof. In addition, by Lemma~\ref{lem:bound:filter},
+$$
+\|h^{y_{0:T}}_{t,\theta,\varphi}\|_\infty \leq \frac{\udupvar(y_{0:T}) +  \udup c_+(y_T)/c_-(y_T)}{\udlowvar(y_{0:T})\wedge \udlow c_-(y_T)/c_+(y_T)}\eqsp.
 $$
 
 \end{proof}
