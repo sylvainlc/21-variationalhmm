@@ -377,15 +377,15 @@ For all $1\leq t \leq T$, $y_{0:T}$, there exists $K^{y_{0:T}}_{t-1|t}$ such tha
 $$
 \left| q^{y_{0:T}}_{\varphi,t-1|t}(x,x') - q^{y_{0:T}}_{\varphi',t-1|t}(x,x')\right| \leq  K^{y_{0:T}}_{t-1|t}(x',x)\|\varphi-\varphi'\|_2\eqsp.
 $$
+For all $0\leq t \leq T$, $y_{0:T}$, there exists $G^{y_{t}}_{t}$ such that for all $\theta, \theta'$ and $x$,
+$$
+\left| g_\theta^{y_{t}}(x) - g_{\theta'}^{y_{t}}(x)\right| \leq  G^{y_{t}}_{t}(x)\|\theta-\theta'\|_2\eqsp.
+$$
 \end{hypH}
 
 \begin{hypH}
 \label{assum:moments}
-For all $1\leq t \leq T$, $y_{0:T}$,
-$$
-\mu\otimes\mu(K^{y_{0:T}}_{t-1|t})<\infty\eqsp,
-$$
-where $K^{y_{0:T}}_{t-1|t}$ is defined in H\ref{assum:lip}.
+For all $1\leq t \leq T$, $y_{0:T}$, $\mu\otimes\mu(K^{y_{0:T}}_{t-1|t})<\infty$, where $K^{y_{0:T}}_{t-1|t}$ is defined in H\ref{assum:lip}. For all $0\leq t \leq T$, $y_{t}$, $\mu(G^{y_{t}}_{t})<\infty$, where $G^{y_{t}}_{t}$ is defined in H\ref{assum:lip}.
 \end{hypH}
 
 
@@ -479,19 +479,6 @@ $$
 concludes the proof with Lemma~\ref{lem:bound:addfunc}.
 \end{proof}
 
-\begin{lemma}
-Assume that H\ref{assum:strong:mixing}, H\ref{assum:bound:likelihood} and H\ref{assum:lip} hold. Then, for all $\theta$, $\theta'$, $t\geq 0$
-$$
-\left|\phi_{\theta,t}^{y_{0:t}}(x_{t}) - \phi_{\theta',t}^{y_{0:t}}(x_{t})\right| \leq  L_t(x_t,y_{0:t})\|\theta-\theta'\|_2\eqsp,
-$$
-where
-$$
-L_t(x_t,y_{0:t}) = \eqsp.
-$$
-\end{lemma}
-\begin{proof}
-
-\end{proof}
 
 \begin{proposition}
 Assume that H\ref{assum:strong:mixing}, H\ref{assum:bound:likelihood} and H\ref{assum:lip} hold. Then,
@@ -538,7 +525,7 @@ In addition,
 \end{align*}
 This yields
 \begin{multline*}
-\left|b^{y_{0:t-1}}_{\theta,t-1|t}(X_t,X_{t-1})- \log b^{y_{0:t-1}}_{\theta',t-1|t}(X_t,X_{t-1})\right| \leq \left(\frac{\sigma_+c_+(y_t)}{\sigma_-c_-(y_t)}M(X_{t-1},X_t) + \frac{\sigma_+}{\sigma_-}L_{t-1}(x_{t-1},y_{0:t-1})\right)\|\theta-\theta'\|_2\\
+\left|\log b^{y_{0:t-1}}_{\theta,t-1|t}(X_t,X_{t-1})- \log b^{y_{0:t-1}}_{\theta',t-1|t}(X_t,X_{t-1})\right| \leq \left(\frac{\sigma_+c_+(y_t)}{\sigma_-c_-(y_t)}M(X_{t-1},X_t) + \frac{\sigma_+}{\sigma_-}L_{t-1}(x_{t-1},y_{0:t-1})\right)\|\theta-\theta'\|_2\\
 + \frac{\sigma^2_+c_+(y_t)}{\sigma^2_-c_-(y_t)}\left(\int \phi_{\theta',t-1}^{y_{0:t-1}}(x_{t-1})M(x_{t-1},X_t)\mu(\rmd x_{t-1}) + \int L_{t-1}(x_{t-1},y_{0:t-1})m_{\theta'}(x_{t-1},X_t)\mu(\rmd x_{t-1})\right)\|\theta-\theta'\|_2
 \end{multline*}
 \end{proof}
@@ -595,9 +582,9 @@ $$
 where $h_{t,\theta,\varphi}$, $1\leq t\leq T$,  are defined in \eqref{eq:def:addfunc}.
 \end{lemma}
 \begin{proof}
-Note that by \eqref{eq:def:addfunc}, for $1\leq t \leq T-1$,  $h^{y_{0:T}}_{t,\theta,\varphi}(X_{t-1},X_t) = \log q^{y_{0:T}}_{\varphi,t-1|t}(X_t,X_{t-1}) - \log b^{y_{0:t-1}}_{\theta,t-1|t}(X_t,X_{t-1})$ and, by convention,  $h^{y_{0:T}}_{T,\theta,\varphi}(X_{T-1},X_T) = \log q^{y_{0:T}}_{\varphi,T}(x_T) - \log \phi^{y_{0:T}}_{\theta,T}(x_T)$. Note that, by Lemma~\ref{lem:bound:filter}, for $1\leq t\leq T-1$,
+Note that by \eqref{eq:def:addfunc}, for $1\leq t \leq T-1$,  $h^{y_{0:T}}_{t,\theta,\varphi}(x_{t-1},x_t) = \log q^{y_{0:T}}_{\varphi,t-1|t}(x_t,x_{t-1}) - \log b^{y_{0:t-1}}_{\theta,t-1|t}(x_t,x_{t-1})$ and, by convention,  $h^{y_{0:T}}_{T,\theta,\varphi}(x_{T-1},x_T) = \log q^{y_{0:T}}_{\varphi,T}(x_T) - \log \phi^{y_{0:T}}_{\theta,T}(x_T)$. Note that, by Lemma~\ref{lem:bound:filter}, for $1\leq t\leq T-1$,
 $$
-\frac{\sigma^2_-c_-(y_{t-1})}{\sigma_+c_+(y_{t-1})}\leq b^{y_{0:t-1}}_{\theta,t-1|t}(X_t,X_{t-1}) = \frac{\phi_{\theta,t-1}^{y_{0:t-1}}(X_{t-1})m_\theta(X_{t-1},X_t)}{\int \phi_{\theta,t-1}^{y_{0:t-1}}(x_{t-1})m_\theta(x_{t-1},X_t)\mu(\rmd x_{t-1})}\leq \frac{\sigma^2_+c_+(y_{t-1})}{\sigma_-c_-(y_{t-1})}\eqsp,
+\frac{\sigma^2_-c_-(y_{t-1})}{\sigma_+c_+(y_{t-1})}\leq b^{y_{0:t-1}}_{\theta,t-1|t}(x_t,x_{t-1}) = \frac{\phi_{\theta,t-1}^{y_{0:t-1}}(x_{t-1})m_\theta(x_{t-1},x_t)}{\int \phi_{\theta,t-1}^{y_{0:t-1}}(x_{t-1})m_\theta(x_{t-1},x_t)\mu(\rmd x_{t-1})}\leq \frac{\sigma^2_+c_+(y_{t-1})}{\sigma_-c_-(y_{t-1})}\eqsp,
 $$
 so that
 $$
@@ -608,6 +595,35 @@ $$
 \|h^{y_{0:T}}_{t,\theta,\varphi}\|_\infty \leq \frac{\udupvar(y_{0:T}) +  \udup c_+(y_T)/c_-(y_T)}{\udlowvar(y_{0:T})\wedge \udlow c_-(y_T)/c_+(y_T)}\eqsp.
 $$
 
+\end{proof}
+
+\begin{lemma}
+Assume that H\ref{assum:strong:mixing}, H\ref{assum:bound:likelihood} and H\ref{assum:lip} hold. Then, for all $\theta$, $\theta'$, $t\geq 1$
+$$
+\left|\phi_{\theta,t}^{y_{0:t}}(x_{t}) - \phi_{\theta',t}^{y_{0:t}}(x_{t})\right| \leq  L_t(x_t,y_{0:t})\|\theta-\theta'\|_2\eqsp,
+$$
+where for $t\geq 1$,
+$$
+L_t(x_t,y_{0:t}) = \eqsp,
+$$
+and
+$$
+L_0(x_0,y_{0}) = \frac{\udup}{\udlow c_-(y_0)}G^{y_{0}}_{0}(x_0)+ \frac{\udup\mu\left(G^{y_{0}}_{0}\right)}{\udlow^2c^2_-(y_0)}\eqsp.
+$$
+\end{lemma}
+\begin{proof}
+At time $t=0$, note that $\phi_{\theta,0}^{y_{0}}(x_{0})\propto \chi(x_0)g_\theta^{y_0}(x_0)$. Therefore,
+\begin{align*}
+\left|\phi_{\theta,0}^{y_{0}}(x_{0}) - \phi_{\theta',0}^{y_{0}}(x_{0})\right|&=\left|\frac{\chi(x_0)g_\theta^{y_0}(x_0)}{\int \chi(x_0)g_\theta^{y_0}(x_0)\mu(\rmd x_0)} - \frac{\chi(x_0)g_{\theta'}^{y_0}(x_0)}{\int \chi(x_0)g_{\theta'}^{y_0}(x_0)\mu(\rmd x_0)}\right|\eqsp,\\
+&=\left|\frac{\chi(x_0)\left(g_\theta^{y_0}(x_0)-g_{\theta'}^{y_0}(x_0)\right)}{\int \chi(x_0)g_\theta^{y_0}(x_0)\mu(\rmd x_0)} + \chi(x_0)g_{\theta'}^{y_0}(x_0)\left(\frac{1}{\int \chi(x_0)g_{\theta}^{y_0}(x_0)\mu(\rmd x_0)}-\frac{1}{\int \chi(x_0)g_{\theta'}^{y_0}(x_0)\mu(\rmd x_0)}\right)\right|\eqsp,\\
+&\leq \left(\frac{\udup}{\udlow c_-(y_0)}G^{y_{0}}_{0}(x_0)+ \frac{\udup\mu\left(G^{y_{0}}_{0}\right)}{\udlow^2c^2_-(y_0)}\right)\|\theta-\theta'\|_2\eqsp. 
+\end{align*}
+For $t>0$, note that $\phi_{\theta,t}^{y_{0:t}}(x_{t}) =  g_\theta^{y_t}(x_t)\int \phi_{\theta,t-1}^{y_{0:t-1}}(x_{t-1})m_\theta(x_{t-1},x_t)\mu(\rmd x_{t-1})/c_{\theta,t}(y_{0:t})$ where $c_{\theta,t}(y_{0:t}) = \int g_\theta^{y_t}(x_t) \phi_{\theta,t-1}^{y_{0:t-1}}(x_{t-1})m_\theta(x_{t-1},x_t)\mu(\rmd x_{t-1})\mu(\rmd x_{t})$. Therefore,
+\begin{align*}
+\left|\phi_{\theta,t}^{y_{0:t}}(x_{t}) - \phi_{\theta',t}^{y_{0:t}}(x_{t})\right|&=\left|\frac{g_\theta^{y_t}(x_t)\phi_{\theta,t-1}^{y_{0:t-1}}(m_\theta(\cdot,x_t))}{c_{\theta,t}(y_{0:t})} - \frac{g_{\theta'}^{y_t}(x_t)\phi_{\theta',t-1}^{y_{0:t-1}}(m_{\theta'}(\cdot,x_t))}{c_{\theta',t}(y_{0:t})}\right|\eqsp,\\
+&=\left|\frac{g_\theta^{y_t}(x_t)\phi_{\theta,t-1}^{y_{0:t-1}}(m_\theta(\cdot,x_t))-g_{\theta'}^{y_t}(x_t)\phi_{\theta',t-1}^{y_{0:t-1}}(m_{\theta'}(\cdot,x_t))}{c_{\theta,t}(y_{0:t})}+g_{\theta'}^{y_t}(x_t)\phi_{\theta',t-1}^{y_{0:t-1}}(m_{\theta'}(\cdot,x_t))\frac{c_{\theta',t}(y_{0:t})-c_{\theta,t}(y_{0:t})}{c_{\theta,t}(y_{0:t})c_{\theta',t}(y_{0:t})}\right|\eqsp,\\
+&\leq \left(\frac{\udup}{\udlow c_-(y_0)}G^{y_{0}}_{0}(x_0)+ \frac{\udup\mu\left(G^{y_{0}}_{0}\right)}{\udlow^2c^2_-(y_0)}\right)\|\theta-\theta'\|_2\eqsp. 
+\end{align*}
 \end{proof}
 
 %\clearpage
